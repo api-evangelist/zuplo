@@ -6,8 +6,8 @@ apis:
     name: Zuplo
     tags:
       - Gateways
-    humanURL: https://zuplo.com/
     baseURL: https://dev.zuplo.com
+    humanURL: https://zuplo.com/
     properties:
       - url: https://zuplo.com/
         type: Documentation
@@ -32,3 +32,67 @@ maintainers:
   - FN: Kin Lane
     email: info@apievangelist.com
 specificationVersion: '0.19'
+common:
+  - name: What is Zuplo? - Zuplo Docs
+    description: 'null'
+    url: https://zuplo.com/docs/articles/what-is-zuplo
+    type: Documentation
+  - name: Affordable Plans for Every Team | Zuplo
+    description: 'null'
+    url: https://zuplo.com/pricing
+    type: Pricing
+  - name: Zuplo Blog - Articles on API Development and Best Practices
+    description: 'null'
+    url: https://zuplo.com/blog
+    type: Blog
+  - name: Log in | Zuplo
+    description: 'null'
+    url: >-
+      https://auth.zuplo.com/u/login/identifier?state=hKFo2SBsS3lvSFljTDZFaDlCSHRici14ZnlYVmNxcERFb2V0WaFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIDB0dGdQU0drOE1tVVNWNGJHVjg3RWVkUjNmWjhJaE8wo2NpZNkga09PNDNSUnpibmJlSWxaMG0xN1RacFpBVmhWMURtRUc
+    type: Login
+  - name: Log in | Zuplo
+    description: 'null'
+    url: >-
+      https://auth.zuplo.com/u/signup/identifier?state=hKFo2SBsS3lvSFljTDZFaDlCSHRici14ZnlYVmNxcERFb2V0WaFur3VuaXZlcnNhbC1sb2dpbqN0aWTZIDB0dGdQU0drOE1tVVNWNGJHVjg3RWVkUjNmWjhJaE8wo2NpZNkga09PNDNSUnpibmJlSWxaMG0xN1RacFpBVmhWMURtRUc
+    type: SignUp
+  - name: Support - Zuplo Docs
+    description: 'null'
+    url: https://zuplo.com/docs/articles/support
+    type: Support
+  - name: Zuplo Resources
+    description: 'null'
+    url: https://zuplo.com/resources
+    type: Customers
+  - name: Zuplo Changelog - Latest platform updates and new features
+    description: 'null'
+    url: https://zuplo.com/changelog
+    type: ChangeLog
+  - name: Zuplo Integrations
+    description: 'null'
+    url: https://zuplo.com/integrations
+    type: Integrations
+  - name: About  Zuplo
+    description: 'null'
+    url: https://zuplo.com/about
+    type: About
+  - name: Zuplo Status
+    description: 'null'
+    url: >-
+      https://status.zuplo.com/?_gl=1*1x35saf*_gcl_au*NTA0MDQ3NzM2LjE3MzYzODUyNTY.*_ga*MTY2ODkxOTc1My4xNzM2Mzg1MjU2*_ga_FJ4E4W746T*MTczNjQzMDI4NC4zLjEuMTczNjQzMDQwMS4wLjAuNjI2NTA3NzYx
+    type: Status
+  - name: Privacy Policy - Zuplo
+    description: 'null'
+    url: https://zuplo.com/legal/privacy-policy
+    type: PrivacyPolicy
+  - name: Terms of Service - Zuplo
+    description: 'null'
+    url: https://zuplo.com/legal/terms
+    type: TermsOfService
+  - name: Security Policies - Zuplo
+    description: 'null'
+    url: https://zuplo.com/legal/security-policy
+    type: Security
+  - name: Trust Center - Zuplo
+    description: 'null'
+    url: https://trust.zuplo.com/
+    type: Trust
