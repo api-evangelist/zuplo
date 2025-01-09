@@ -1,0 +1,12 @@
+openapi: 3.0.0
+info:
+  title: Zuplo
+  version: 1.0.0
+  description: >-
+    Zuplo is the API management platform for developers. Build, deploy, and
+    scale APIs faster with Zuplo.
+  termsOfService: https://zuplo.com/legal/terms
+  contact:
+    name: Zuplo
+    url: https://zuplo.com/
+
