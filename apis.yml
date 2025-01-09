@@ -7,6 +7,7 @@ apis:
     tags:
       - Gateways
     humanURL: https://zuplo.com/
+    baseURL: https://dev.zuplo.com
     properties:
       - url: https://zuplo.com/
         type: Documentation
@@ -22,7 +23,7 @@ type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 access: 3rd-Party
 created: '2025-01-08'
-modified: '2025-01-08'
+modified: '2025-01-09'
 position: Consumer
 description: >-
   Zuplo is the API management platform for developers. Build, deploy, and scale
