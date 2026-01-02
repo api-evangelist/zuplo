@@ -61,7 +61,7 @@ common:
     type: Integrations
     description: 'null'
   - url: https://zuplo.com/about
-    name: About  Zuplo
+    name: About Zuplo
     type: About
     description: 'null'
   - url: https://status.zuplo.com/
