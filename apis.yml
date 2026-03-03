@@ -87,6 +87,8 @@ common:
 created: '2025-01-08'
 modified: '2025-01-13'
 position: Consumer
+segments:
+  - Gateways
 description: >-
   Zuplo is the API management platform for developers. Build, deploy, and scale
   APIs faster with Zuplo.
