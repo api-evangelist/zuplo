@@ -5,9 +5,9 @@ apis:
   - aid: zuplo:zuplo
     name: Zuplo Developer API
     tags:
-      - Gateways
-      - API Management
       - API Keys
+      - API Management
+      - Gateways
     baseURL: https://dev.zuplo.com
     humanURL: https://zuplo.com/docs/articles/developer-api
     properties:
@@ -28,10 +28,10 @@ apis:
       account and integrations.
 name: Zuplo
 tags:
+  - AI Gateway
+  - API Management
   - Gateways
   - Platform
-  - API Management
-  - AI Gateway
 type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 access: 3rd-Party
