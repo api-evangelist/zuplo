@@ -1,0 +1,33 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "zuplo": "https://zuplo.com/ontology/",
+    "ApiKey": "zuplo:ApiKey",
+    "Consumer": "zuplo:Consumer",
+    "Bucket": "zuplo:Bucket",
+    "Tunnel": "zuplo:Tunnel",
+    "Deployment": "zuplo:Deployment",
+    "AuditLog": "zuplo:AuditLog",
+    "Meter": "zuplo:Meter",
+    "Plan": "zuplo:Plan",
+    "Feature": "zuplo:Feature",
+    "Variable": "zuplo:Variable",
+    "id": "@id",
+    "name": "schema:name",
+    "description": "schema:description",
+    "createdOn": "schema:dateCreated",
+    "updatedOn": "schema:dateModified",
+    "expiresOn": "schema:expires",
+    "tags": "schema:keywords",
+    "status": "zuplo:status",
+    "url": "schema:url",
+    "accountName": "zuplo:accountName",
+    "bucketName": "zuplo:bucketName",
+    "consumerId": "zuplo:consumerId",
+    "projectName": "zuplo:projectName",
+    "branchName": "zuplo:branchName",
+    "token": "zuplo:token",
+    "key": "zuplo:key",
+    "sub": "zuplo:sub"
+  }
+}

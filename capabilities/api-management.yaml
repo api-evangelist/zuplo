@@ -1,0 +1,468 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "Zuplo API Management"
+  description: >-
+    Unified API management workflow combining API key lifecycle management,
+    consumer administration, deployment management, and tunnel configuration.
+    Used by platform engineers and API product teams to programmatically
+    manage their Zuplo infrastructure.
+  tags:
+    - API Management
+    - API Keys
+    - Gateways
+    - Deployments
+    - Platform
+  created: "2026-05-03"
+  modified: "2026-05-03"
+
+binds:
+  - namespace: env
+    keys:
+      ZUPLO_API_KEY: ZUPLO_API_KEY
+
+capability:
+  consumes:
+    - import: zuplo
+      location: ./shared/zuplo-developer-api.yaml
+
+  exposes:
+    - type: rest
+      port: 8080
+      namespace: zuplo-management-api
+      description: "Unified REST API for Zuplo API management workflows."
+      resources:
+        - path: /v1/buckets
+          name: buckets
+          description: "Manage API key buckets"
+          operations:
+            - method: GET
+              name: list-buckets
+              description: "List all API key buckets"
+              call: "zuplo.list-buckets"
+              with:
+                accountName: "rest.accountName"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: create-bucket
+              description: "Create an API key bucket"
+              call: "zuplo.create-bucket"
+              with:
+                accountName: "rest.accountName"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/consumers
+          name: consumers
+          description: "Manage API consumers"
+          operations:
+            - method: GET
+              name: list-consumers
+              description: "List consumers in a bucket"
+              call: "zuplo.list-consumers"
+              with:
+                accountName: "rest.accountName"
+                bucketName: "rest.bucketName"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: create-consumer
+              description: "Create a new consumer"
+              call: "zuplo.create-consumer"
+              with:
+                accountName: "rest.accountName"
+                bucketName: "rest.bucketName"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/keys
+          name: api-keys
+          description: "Manage API keys for consumers"
+          operations:
+            - method: GET
+              name: list-keys
+              description: "List API keys for a consumer"
+              call: "zuplo.list-keys"
+              with:
+                accountName: "rest.accountName"
+                bucketName: "rest.bucketName"
+                consumerName: "rest.consumerName"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: create-api-key
+              description: "Issue a new API key"
+              call: "zuplo.create-api-key"
+              with:
+                accountName: "rest.accountName"
+                bucketName: "rest.bucketName"
+                consumerName: "rest.consumerName"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/keys/{keyId}
+          name: api-key
+          description: "Individual API key operations"
+          operations:
+            - method: DELETE
+              name: delete-api-key
+              description: "Delete an API key"
+              call: "zuplo.delete-api-key"
+              with:
+                accountName: "rest.accountName"
+                bucketName: "rest.bucketName"
+                consumerName: "rest.consumerName"
+                keyId: "rest.keyId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/tunnels
+          name: tunnels
+          description: "Manage tunnels to private backends"
+          operations:
+            - method: GET
+              name: list-tunnels
+              description: "List all tunnels"
+              call: "zuplo.list-tunnels"
+              with:
+                accountName: "rest.accountName"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: create-tunnel
+              description: "Create a tunnel"
+              call: "zuplo.create-tunnel"
+              with:
+                accountName: "rest.accountName"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/tunnels/{tunnelId}
+          name: tunnel
+          description: "Individual tunnel operations"
+          operations:
+            - method: GET
+              name: get-tunnel
+              description: "Get tunnel details"
+              call: "zuplo.get-tunnel"
+              with:
+                accountName: "rest.accountName"
+                tunnelId: "rest.tunnelId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: DELETE
+              name: delete-tunnel
+              description: "Delete a tunnel"
+              call: "zuplo.delete-tunnel"
+              with:
+                accountName: "rest.accountName"
+                tunnelId: "rest.tunnelId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/deployments
+          name: deployments
+          description: "Deployment management"
+          operations:
+            - method: GET
+              name: list-deployments
+              description: "List project deployments"
+              call: "zuplo.list-deployments"
+              with:
+                accountName: "rest.accountName"
+                projectName: "rest.projectName"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/audit-logs
+          name: audit-logs
+          description: "Audit log access for compliance"
+          operations:
+            - method: GET
+              name: query-audit-logs
+              description: "Query audit logs"
+              call: "zuplo.query-audit-logs"
+              with:
+                accountName: "rest.accountName"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9090
+      namespace: zuplo-management-mcp
+      transport: http
+      description: "MCP server for AI-assisted Zuplo API management."
+      tools:
+        - name: list-buckets
+          description: "List all API key buckets in a Zuplo account"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "zuplo.list-buckets"
+          with:
+            accountName: "tools.accountName"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: create-bucket
+          description: "Create a new API key bucket for grouping consumers"
+          hints:
+            readOnly: false
+            destructive: false
+            idempotent: false
+          call: "zuplo.create-bucket"
+          with:
+            accountName: "tools.accountName"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: list-consumers
+          description: "List all API consumers within a bucket"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "zuplo.list-consumers"
+          with:
+            accountName: "tools.accountName"
+            bucketName: "tools.bucketName"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: create-consumer
+          description: "Create a new API key consumer in a bucket"
+          hints:
+            readOnly: false
+            destructive: false
+            idempotent: false
+          call: "zuplo.create-consumer"
+          with:
+            accountName: "tools.accountName"
+            bucketName: "tools.bucketName"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-consumer
+          description: "Get details for a specific API consumer"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "zuplo.get-consumer"
+          with:
+            accountName: "tools.accountName"
+            bucketName: "tools.bucketName"
+            consumerName: "tools.consumerName"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: delete-consumer
+          description: "Delete an API consumer and all their keys"
+          hints:
+            readOnly: false
+            destructive: true
+            idempotent: true
+          call: "zuplo.delete-consumer"
+          with:
+            accountName: "tools.accountName"
+            bucketName: "tools.bucketName"
+            consumerName: "tools.consumerName"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: list-api-keys
+          description: "List all API keys issued to a consumer"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "zuplo.list-keys"
+          with:
+            accountName: "tools.accountName"
+            bucketName: "tools.bucketName"
+            consumerName: "tools.consumerName"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: create-api-key
+          description: "Issue a new API key to a consumer"
+          hints:
+            readOnly: false
+            destructive: false
+            idempotent: false
+          call: "zuplo.create-api-key"
+          with:
+            accountName: "tools.accountName"
+            bucketName: "tools.bucketName"
+            consumerName: "tools.consumerName"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: delete-api-key
+          description: "Revoke and delete an API key"
+          hints:
+            readOnly: false
+            destructive: true
+            idempotent: true
+          call: "zuplo.delete-api-key"
+          with:
+            accountName: "tools.accountName"
+            bucketName: "tools.bucketName"
+            consumerName: "tools.consumerName"
+            keyId: "tools.keyId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: roll-consumer-keys
+          description: "Rotate all API keys for a consumer to new values"
+          hints:
+            readOnly: false
+            destructive: false
+            idempotent: false
+          call: "zuplo.roll-consumer-keys"
+          with:
+            accountName: "tools.accountName"
+            bucketName: "tools.bucketName"
+            consumerName: "tools.consumerName"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: list-tunnels
+          description: "List all tunnels connected to private backends"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "zuplo.list-tunnels"
+          with:
+            accountName: "tools.accountName"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: create-tunnel
+          description: "Create a new tunnel for private backend connectivity"
+          hints:
+            readOnly: false
+            destructive: false
+            idempotent: false
+          call: "zuplo.create-tunnel"
+          with:
+            accountName: "tools.accountName"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-tunnel
+          description: "Get tunnel details and connection status"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "zuplo.get-tunnel"
+          with:
+            accountName: "tools.accountName"
+            tunnelId: "tools.tunnelId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: delete-tunnel
+          description: "Delete a tunnel"
+          hints:
+            readOnly: false
+            destructive: true
+            idempotent: true
+          call: "zuplo.delete-tunnel"
+          with:
+            accountName: "tools.accountName"
+            tunnelId: "tools.tunnelId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: rotate-tunnel-token
+          description: "Rotate the authentication token for a tunnel connection"
+          hints:
+            readOnly: false
+            destructive: false
+            idempotent: false
+          call: "zuplo.rotate-tunnel-token"
+          with:
+            accountName: "tools.accountName"
+            tunnelId: "tools.tunnelId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: list-deployments
+          description: "List all deployments for a project"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "zuplo.list-deployments"
+          with:
+            accountName: "tools.accountName"
+            projectName: "tools.projectName"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-deployment
+          description: "Get deployment details and status"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "zuplo.get-deployment"
+          with:
+            deploymentName: "tools.deploymentName"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: redeploy-deployment
+          description: "Trigger a re-deployment of an existing deployment"
+          hints:
+            readOnly: false
+            destructive: false
+            idempotent: true
+          call: "zuplo.redeploy-deployment"
+          with:
+            deploymentName: "tools.deploymentName"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: delete-deployment
+          description: "Delete a Zuplo deployment"
+          hints:
+            readOnly: false
+            destructive: true
+            idempotent: true
+          call: "zuplo.delete-deployment"
+          with:
+            deploymentName: "tools.deploymentName"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: query-audit-logs
+          description: "Query account audit logs for compliance and security review"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "zuplo.query-audit-logs"
+          with:
+            accountName: "tools.accountName"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: who-am-i
+          description: "Identify the current API key caller and account"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "zuplo.who-am-i"
+          outputParameters:
+            - type: object
+              mapping: "$."

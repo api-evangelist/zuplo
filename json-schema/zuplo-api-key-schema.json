@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://api-evangelist.com/zuplo/json-schema/zuplo-api-key-schema.json",
+  "title": "Zuplo API Key",
+  "description": "An API key resource in Zuplo's key management system",
+  "type": "object",
+  "required": ["id", "key", "consumerId", "bucketName"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the API key"
+    },
+    "key": {
+      "type": "string",
+      "description": "The API key value"
+    },
+    "consumerId": {
+      "type": "string",
+      "description": "The consumer this key belongs to"
+    },
+    "bucketName": {
+      "type": "string",
+      "description": "The bucket this key belongs to"
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional description of the API key"
+    },
+    "tags": {
+      "type": "object",
+      "description": "Custom tags associated with the key",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "expiresOn": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Expiration timestamp of the key"
+    },
+    "createdOn": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Creation timestamp"
+    },
+    "updatedOn": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last update timestamp"
+    },
+    "isRolling": {
+      "type": "boolean",
+      "description": "Whether the key is in the process of being rolled"
+    }
+  }
+}

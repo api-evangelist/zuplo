@@ -1,0 +1,127 @@
+name: Zuplo Vocabulary
+description: Domain vocabulary for the Zuplo API management platform
+tags:
+  - API Management
+  - API Gateway
+  - Gateways
+
+terms:
+  - term: API Key
+    definition: >-
+      A credential string used to authenticate requests to APIs managed by Zuplo.
+      Keys are issued to consumers and can be scoped with expiration dates and tags.
+    tags:
+      - Authentication
+      - API Keys
+
+  - term: Bucket
+    definition: >-
+      A named container that groups API key consumers for a Zuplo account. Buckets
+      represent a logical partitioning of API access (e.g., by environment or product).
+    tags:
+      - API Keys
+      - Organization
+
+  - term: Consumer
+    definition: >-
+      A named entity representing an API client within a bucket. Each consumer holds
+      one or more API keys and can be tagged with metadata for tracking and segmentation.
+    tags:
+      - API Keys
+      - Consumers
+
+  - term: Deployment
+    definition: >-
+      A running instance of a Zuplo project in a specific environment. Deployments are
+      triggered from source uploads and go through build, deploy, and active states.
+    tags:
+      - Deployments
+      - Infrastructure
+
+  - term: Tunnel
+    definition: >-
+      A secure, outbound connection from Zuplo's edge to a private backend service running
+      in a customer's network (e.g., behind a VPC or firewall). Tunnels enable Zuplo to
+      proxy traffic to private origins without inbound firewall rules.
+    tags:
+      - Tunnels
+      - Networking
+
+  - term: Variable
+    definition: >-
+      An environment variable stored in Zuplo and injected into deployments. Variables
+      hold secrets, configuration values, and feature flags scoped to a project branch.
+    tags:
+      - Configuration
+      - Deployments
+
+  - term: Meter
+    definition: >-
+      A metering unit used to track API usage for billing and quota enforcement.
+      Meters can be queried for aggregated usage data and grouped by custom dimensions.
+    tags:
+      - Metering
+      - Billing
+
+  - term: Plan
+    definition: >-
+      A named set of metering limits, quotas, and features that can be assigned to
+      consumers for monetization and access control. Plans support versioning and publishing.
+    tags:
+      - Metering
+      - Monetization
+
+  - term: Feature
+    definition: >-
+      A boolean gate or capability flag within a Zuplo metering plan that enables
+      or disables specific API capabilities for a consumer or subscription.
+    tags:
+      - Metering
+      - Features
+
+  - term: Manager
+    definition: >-
+      A user or service account that has management permissions over a Zuplo consumer,
+      allowing them to rotate keys or update consumer settings.
+    tags:
+      - API Keys
+      - Access Control
+
+  - term: Audit Log
+    definition: >-
+      A timestamped record of management actions taken on a Zuplo account, used for
+      compliance, security review, and change tracking.
+    tags:
+      - Security
+      - Compliance
+
+  - term: Custom Domain
+    definition: >-
+      A customer-owned domain name mapped to a Zuplo deployment, enabling branded
+      API endpoints (e.g., api.acme.com instead of acme.zuplo.app).
+    tags:
+      - Networking
+      - Custom Domains
+
+  - term: ZAPI
+    definition: >-
+      The Zuplo Developer API - the management API at dev.zuplo.com that allows
+      programmatic control of all Zuplo account resources.
+    tags:
+      - API Management
+
+  - term: Roll Keys
+    definition: >-
+      The process of rotating API keys for a consumer, generating a new key while
+      briefly keeping the old key valid to prevent service disruption.
+    tags:
+      - API Keys
+      - Security
+
+  - term: Edge Deployment
+    definition: >-
+      A Zuplo deployment running at the network edge across multiple global regions,
+      providing low-latency API proxying and key validation close to users.
+    tags:
+      - Infrastructure
+      - Deployments

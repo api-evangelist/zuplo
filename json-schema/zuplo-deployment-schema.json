@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://api-evangelist.com/zuplo/json-schema/zuplo-deployment-schema.json",
+  "title": "Zuplo Deployment",
+  "description": "A deployment resource representing a Zuplo project deployment",
+  "type": "object",
+  "required": ["name", "projectName"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Unique deployment name"
+    },
+    "projectName": {
+      "type": "string",
+      "description": "The project this deployment belongs to"
+    },
+    "accountName": {
+      "type": "string",
+      "description": "The account this deployment belongs to"
+    },
+    "branchName": {
+      "type": "string",
+      "description": "The source branch for this deployment"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "building", "deploying", "deployed", "failed"],
+      "description": "Current deployment status"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "The deployed API endpoint URL"
+    },
+    "createdOn": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Creation timestamp"
+    },
+    "updatedOn": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last update timestamp"
+    }
+  }
+}

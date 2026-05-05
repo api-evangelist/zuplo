@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://dev.zuplo.com/v1/accounts/my-account/key-buckets/production-keys/consumers/acme-corp/keys",
+    "headers": {
+      "Authorization": "Bearer zpka_your_api_key_here",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "description": "Production API key for Acme Corp",
+      "tags": {
+        "environment": "production",
+        "team": "backend"
+      },
+      "expiresOn": "2027-01-01T00:00:00Z"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "key_abc123def456",
+      "key": "zpka_live_aabbccddeeff112233445566",
+      "consumerId": "acme-corp",
+      "bucketName": "production-keys",
+      "description": "Production API key for Acme Corp",
+      "tags": {
+        "environment": "production",
+        "team": "backend"
+      },
+      "expiresOn": "2027-01-01T00:00:00Z",
+      "createdOn": "2026-05-03T10:00:00Z",
+      "updatedOn": "2026-05-03T10:00:00Z"
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://dev.zuplo.com/v1/accounts/my-account/key-buckets/production-keys/consumers",
+    "headers": {
+      "Authorization": "Bearer zpka_your_api_key_here",
+      "Content-Type": "application/json"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "name": "acme-corp",
+          "bucketName": "production-keys",
+          "description": "Acme Corporation developer account",
+          "tags": {
+            "plan": "enterprise",
+            "region": "us-east"
+          },
+          "sub": "auth0|acme-corp-001",
+          "createdOn": "2026-01-15T10:30:00Z",
+          "updatedOn": "2026-03-01T14:22:00Z"
+        },
+        {
+          "name": "startup-xyz",
+          "bucketName": "production-keys",
+          "description": "Startup XYZ free tier",
+          "tags": {
+            "plan": "free"
+          },
+          "sub": "auth0|startup-xyz-002",
+          "createdOn": "2026-02-01T09:15:00Z",
+          "updatedOn": "2026-02-01T09:15:00Z"
+        }
+      ],
+      "meta": {
+        "limit": 100,
+        "offset": 0,
+        "total": 2
+      }
+    }
+  }
+}

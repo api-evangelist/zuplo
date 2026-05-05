@@ -1,0 +1,84 @@
+extends:
+  - spectral:oas
+
+rules:
+  zuplo-operation-summary-title-case:
+    description: Operation summaries must use Title Case
+    message: "'{{value}}' should be in Title Case"
+    severity: warn
+    given: "$.paths[*][*].summary"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[A-Z][a-zA-Z0-9 ]*$"
+
+  zuplo-operation-id-required:
+    description: All operations must have an operationId
+    severity: error
+    given: "$.paths[*][*]"
+    then:
+      field: operationId
+      function: truthy
+
+  zuplo-account-name-path-param:
+    description: Account-scoped paths must use {accountName} parameter
+    message: Account-scoped paths should use {accountName} as the path parameter
+    severity: warn
+    given: "$.paths['/v1/accounts/{accountName}/*']"
+    then:
+      function: truthy
+
+  zuplo-kebab-case-paths:
+    description: Path segments must use kebab-case
+    message: "Path segment '{{value}}' should use kebab-case"
+    severity: warn
+    given: "$.paths[*]~"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^(/[a-z0-9{}-]+)+$"
+
+  zuplo-response-200-defined:
+    description: All operations must define a 200 or 201 response
+    severity: error
+    given: "$.paths[*][get,post,put,patch]"
+    then:
+      field: responses
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          anyOf:
+            - required: ["200"]
+            - required: ["201"]
+
+  zuplo-bearer-auth-scheme:
+    description: API uses Bearer token authentication
+    severity: info
+    given: "$.components.securitySchemes.ApiKeyAuth"
+    then:
+      function: truthy
+
+  zuplo-tags-required:
+    description: All operations must have at least one tag
+    severity: warn
+    given: "$.paths[*][*].tags"
+    then:
+      function: length
+      functionOptions:
+        min: 1
+
+  zuplo-delete-no-body:
+    description: DELETE operations should not have a request body
+    severity: warn
+    given: "$.paths[*].delete.requestBody"
+    then:
+      function: undefined
+
+  zuplo-patch-has-request-body:
+    description: PATCH operations should have a request body
+    severity: warn
+    given: "$.paths[*].patch"
+    then:
+      field: requestBody
+      function: truthy

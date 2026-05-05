@@ -1,0 +1,13 @@
+{
+  "name": "Zuplo Consumer",
+  "description": "Structure of a Zuplo consumer resource - a named group of API keys",
+  "fields": [
+    { "name": "name", "type": "string", "required": true, "description": "Consumer name (unique within bucket)" },
+    { "name": "bucketName", "type": "string", "required": true, "description": "Owning bucket name" },
+    { "name": "description", "type": "string", "required": false, "description": "Consumer description" },
+    { "name": "tags", "type": "object", "required": false, "description": "Custom metadata tags" },
+    { "name": "sub", "type": "string", "required": false, "description": "Subject identifier" },
+    { "name": "createdOn", "type": "string (date-time)", "required": false, "description": "Creation time" },
+    { "name": "updatedOn", "type": "string (date-time)", "required": false, "description": "Last update time" }
+  ]
+}

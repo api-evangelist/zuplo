@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://api-evangelist.com/zuplo/json-schema/zuplo-tunnel-schema.json",
+  "title": "Zuplo Tunnel",
+  "description": "A tunnel resource for connecting private backend services to Zuplo",
+  "type": "object",
+  "required": ["id", "name", "accountName"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the tunnel"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable name for the tunnel"
+    },
+    "accountName": {
+      "type": "string",
+      "description": "Account this tunnel belongs to"
+    },
+    "token": {
+      "type": "string",
+      "description": "Authentication token for the tunnel connection"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["provisioning", "active", "degraded", "deleting"],
+      "description": "Current status of the tunnel"
+    },
+    "createdOn": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Creation timestamp"
+    },
+    "updatedOn": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last update timestamp"
+    }
+  }
+}

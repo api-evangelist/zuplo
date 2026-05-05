@@ -1,0 +1,14 @@
+{
+  "name": "Zuplo Deployment",
+  "description": "Structure of a Zuplo deployment resource",
+  "fields": [
+    { "name": "name", "type": "string", "required": true, "description": "Deployment name" },
+    { "name": "projectName", "type": "string", "required": true, "description": "Project name" },
+    { "name": "accountName", "type": "string", "required": false, "description": "Account name" },
+    { "name": "branchName", "type": "string", "required": false, "description": "Source branch" },
+    { "name": "status", "type": "string (enum)", "required": false, "description": "Deployment status" },
+    { "name": "url", "type": "string (uri)", "required": false, "description": "Deployed endpoint URL" },
+    { "name": "createdOn", "type": "string (date-time)", "required": false, "description": "Creation time" },
+    { "name": "updatedOn", "type": "string (date-time)", "required": false, "description": "Last update time" }
+  ]
+}

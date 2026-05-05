@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://api-evangelist.com/zuplo/json-schema/zuplo-consumer-schema.json",
+  "title": "Zuplo Consumer",
+  "description": "A consumer resource representing a group of API keys in a Zuplo bucket",
+  "type": "object",
+  "required": ["name", "bucketName"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Unique name for the consumer within the bucket"
+    },
+    "bucketName": {
+      "type": "string",
+      "description": "The bucket this consumer belongs to"
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of the consumer"
+    },
+    "tags": {
+      "type": "object",
+      "description": "Custom metadata tags for the consumer",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "sub": {
+      "type": "string",
+      "description": "Subject identifier for the consumer"
+    },
+    "createdOn": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Creation timestamp"
+    },
+    "updatedOn": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last update timestamp"
+    }
+  }
+}

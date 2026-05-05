@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://dev.zuplo.com/v1/accounts/my-account/tunnels",
+    "headers": {
+      "Authorization": "Bearer zpka_your_api_key_here",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "name": "backend-service-tunnel",
+      "description": "Tunnel to private backend service in VPC"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "tun_xyz789abc",
+      "name": "backend-service-tunnel",
+      "accountName": "my-account",
+      "token": "ztun_supersecrettoken",
+      "status": "provisioning",
+      "createdOn": "2026-05-03T10:05:00Z",
+      "updatedOn": "2026-05-03T10:05:00Z"
+    }
+  }
+}
