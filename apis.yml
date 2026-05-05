@@ -17,8 +17,24 @@ apis:
         type: APIReference
       - url: https://zuplo.com/docs/api/~endpoints
         type: APIEndpoints
-      - url: properties/zuplo-openapi.yml
+      - url: openapi/zuplo-openapi.yml
         type: OpenAPI
+      - url: rules/zuplo-rules.yml
+        type: SpectralRules
+      - url: capabilities/api-management.yaml
+        type: NaftikoCapabilities
+      - url: json-schema/zuplo-api-key-schema.json
+        type: JSONSchema
+      - url: json-schema/zuplo-consumer-schema.json
+        type: JSONSchema
+      - url: json-schema/zuplo-tunnel-schema.json
+        type: JSONSchema
+      - url: json-schema/zuplo-deployment-schema.json
+        type: JSONSchema
+      - url: json-ld/zuplo-context.jsonld
+        type: JSONLDContext
+      - url: vocabulary/zuplo-vocabulary.yml
+        type: Vocabulary
       - url: https://zuplo.com/docs/articles/api-key-api
         type: GettingStarted
     description: >-
@@ -205,7 +221,7 @@ common:
     type: Overview
     description: 'null'
 created: '2025-01-08'
-modified: '2026-03-03'
+modified: '2026-05-03'
 position: Consumer
 segments:
   - Gateways
