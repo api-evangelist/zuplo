@@ -228,6 +228,46 @@ segments:
 description: >-
   Zuplo is the API management platform for developers. Build, deploy, and scale
   APIs faster with Zuplo.
+integrations:
+  - name: Zuplo
+  - name: GitHub
+  - name: GitLab
+  - name: Bitbucket
+  - name: Auth0
+  - name: Clerk
+  - name: Firebase
+  - name: Supabase
+  - name: Okta
+  - name: AWS Cognito
+  - name: Curity
+  - name: Okta FGA
+  - name: Axiomatics
+  - name: VMware Log Insight
+  - name: Datadog
+  - name: Dynatrace
+  - name: New Relic
+  - name: Splunk
+  - name: GCP Logging
+  - name: AWS CloudWatch
+  - name: Grafana Loki
+  - name: Sumo Logic
+  - name: Moesif
+  - name: Datadog Metrics
+  - name: Dynatrace Metrics
+  - name: New Relic Metrics
+  - name: Cloudflare WAF
+  - name: Fastly WAF
+  - name: AWS WAF
+  - name: Akamai
+  - name: Stripe
+  - name: Amberflo
+  - name: Propel
+  - name: SOC 2 Type 2
+  - name: G2 High Performer
+  - name: G2 Momentum Leader
+  - name: G2 Best ROI
+  - name: G2 Easiest To Use
+  - name: G2 Fastest Implementation
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
