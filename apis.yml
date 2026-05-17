@@ -94,7 +94,7 @@ common:
     description: 'null'
   - url: https://status.zuplo.com/
     name: Zuplo Status
-    type: Status
+    type: StatusPage
     description: 'null'
   - url: https://zuplo.com/legal/privacy-policy
     name: Privacy Policy - Zuplo
