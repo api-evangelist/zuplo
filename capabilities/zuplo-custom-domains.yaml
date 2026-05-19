@@ -1,0 +1,167 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Zuplo Developer API — Custom Domains
+  description: 'Zuplo Developer API — Custom Domains. 4 operations. Lead operation: Get Custom Domains. Self-contained Naftiko
+    capability covering one Zuplo business surface.'
+  tags:
+  - Zuplo
+  - Custom Domains
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    ZUPLO_API_KEY: ZUPLO_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: zuplo-custom-domains
+    baseUri: https://dev.zuplo.com
+    description: Zuplo Developer API — Custom Domains business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-accounts-accountName-custom-domains
+      path: /v1/accounts/{accountName}/custom-domains
+      operations:
+      - name: customdomainsservicelist
+        method: GET
+        description: Get Custom Domains
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: customdomainsservicecreate
+        method: POST
+        description: Create Custom Domain
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: customdomainsserviceupdate
+        method: PATCH
+        description: Update a Custom Domain
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: customdomainsservicedelete
+        method: DELETE
+        description: Delete a Custom Domain
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: apikey
+      key: Authorization
+      value: '{{env.ZUPLO_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: zuplo-custom-domains-rest
+    port: 8080
+    description: REST adapter for Zuplo Developer API — Custom Domains. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/accounts/{accountname}/custom-domains
+      name: v1-accounts-accountname-custom-domains
+      description: REST surface for v1-accounts-accountName-custom-domains.
+      operations:
+      - method: GET
+        name: customdomainsservicelist
+        description: Get Custom Domains
+        call: zuplo-custom-domains.customdomainsservicelist
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: customdomainsservicecreate
+        description: Create Custom Domain
+        call: zuplo-custom-domains.customdomainsservicecreate
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: customdomainsserviceupdate
+        description: Update a Custom Domain
+        call: zuplo-custom-domains.customdomainsserviceupdate
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: customdomainsservicedelete
+        description: Delete a Custom Domain
+        call: zuplo-custom-domains.customdomainsservicedelete
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: zuplo-custom-domains-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Zuplo Developer API — Custom Domains. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: get-custom-domains
+      description: Get Custom Domains
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: zuplo-custom-domains.customdomainsservicelist
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-custom-domain
+      description: Create Custom Domain
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: zuplo-custom-domains.customdomainsservicecreate
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-custom-domain
+      description: Update a Custom Domain
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: zuplo-custom-domains.customdomainsserviceupdate
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-custom-domain
+      description: Delete a Custom Domain
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: zuplo-custom-domains.customdomainsservicedelete
+      outputParameters:
+      - type: object
+        mapping: $.

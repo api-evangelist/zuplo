@@ -1,0 +1,157 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Zuplo Developer API — API Keys - Managers
+  description: 'Zuplo Developer API — API Keys - Managers. 3 operations. Lead operation: Lists Managers. Self-contained Naftiko
+    capability covering one Zuplo business surface.'
+  tags:
+  - Zuplo
+  - API Keys - Managers
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    ZUPLO_API_KEY: ZUPLO_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: zuplo-api-keys-managers
+    baseUri: https://dev.zuplo.com
+    description: Zuplo Developer API — API Keys - Managers business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-accounts-accountName-key-buckets-bucketName-consumers-consumerName-managers
+      path: /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers/{consumerName}/managers
+      operations:
+      - name: apikeyconsumermanagerslist
+        method: GET
+        description: Lists Managers
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: limit
+          in: query
+          type: integer
+          description: 'The maximum number of entries to return. If the value exceeds the maximum, then the maximum value
+            will be used. Default: 1000'
+          required: true
+        - name: offset
+          in: query
+          type: integer
+          description: 'The offset of the first item returned in the collection. Default: 0'
+          required: true
+      - name: apikeyconsumermanagerscreate
+        method: POST
+        description: Creates a Manager
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-accounts-accountName-key-buckets-bucketName-consumers-consumerName-managers-m
+      path: /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers/{consumerName}/managers/{managerId}
+      operations:
+      - name: apikeyconsumermanagersdelete
+        method: DELETE
+        description: Deletes a Manager
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: apikey
+      key: Authorization
+      value: '{{env.ZUPLO_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: zuplo-api-keys-managers-rest
+    port: 8080
+    description: REST adapter for Zuplo Developer API — API Keys - Managers. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/v1/accounts/{accountname}/key-buckets/{bucketname}/consumers/{consumername}/managers
+      name: v1-accounts-accountname-key-buckets-bucketname-consumers-consumername-managers
+      description: REST surface for v1-accounts-accountName-key-buckets-bucketName-consumers-consumerName-managers.
+      operations:
+      - method: GET
+        name: apikeyconsumermanagerslist
+        description: Lists Managers
+        call: zuplo-api-keys-managers.apikeyconsumermanagerslist
+        with:
+          limit: rest.limit
+          offset: rest.offset
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: apikeyconsumermanagerscreate
+        description: Creates a Manager
+        call: zuplo-api-keys-managers.apikeyconsumermanagerscreate
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/accounts/{accountname}/key-buckets/{bucketname}/consumers/{consumername}/managers/{managerid}
+      name: v1-accounts-accountname-key-buckets-bucketname-consumers-consumername-managers-m
+      description: REST surface for v1-accounts-accountName-key-buckets-bucketName-consumers-consumerName-managers-m.
+      operations:
+      - method: DELETE
+        name: apikeyconsumermanagersdelete
+        description: Deletes a Manager
+        call: zuplo-api-keys-managers.apikeyconsumermanagersdelete
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: zuplo-api-keys-managers-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Zuplo Developer API — API Keys - Managers. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: lists-managers
+      description: Lists Managers
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: zuplo-api-keys-managers.apikeyconsumermanagerslist
+      with:
+        limit: tools.limit
+        offset: tools.offset
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: creates-manager
+      description: Creates a Manager
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: zuplo-api-keys-managers.apikeyconsumermanagerscreate
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: deletes-manager
+      description: Deletes a Manager
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: zuplo-api-keys-managers.apikeyconsumermanagersdelete
+      outputParameters:
+      - type: object
+        mapping: $.

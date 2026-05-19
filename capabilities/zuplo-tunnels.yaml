@@ -1,0 +1,228 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Zuplo Developer API — Tunnels
+  description: 'Zuplo Developer API — Tunnels. 6 operations. Lead operation: Lists Tunnels. Self-contained Naftiko capability
+    covering one Zuplo business surface.'
+  tags:
+  - Zuplo
+  - Tunnels
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    ZUPLO_API_KEY: ZUPLO_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: zuplo-tunnels
+    baseUri: https://dev.zuplo.com
+    description: Zuplo Developer API — Tunnels business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-accounts-accountName-tunnels
+      path: /v1/accounts/{accountName}/tunnels
+      operations:
+      - name: tunnelservicelist
+        method: GET
+        description: Lists Tunnels
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: tunnelservicecreate
+        method: POST
+        description: Creates a Tunnel
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-accounts-accountName-tunnels-tunnelId
+      path: /v1/accounts/{accountName}/tunnels/{tunnelId}
+      operations:
+      - name: tunnelserviceread
+        method: GET
+        description: Gets a Tunnel
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: tunnelservicedelete
+        method: DELETE
+        description: Deletes a Tunnel
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: v1-accounts-accountName-tunnels-tunnelId-$rotate-token
+      path: /v1/accounts/{accountName}/tunnels/{tunnelId}/$rotate-token
+      operations:
+      - name: tunnelserviceupdate
+        method: POST
+        description: Rotates the Token
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: v1-accounts-accountName-tunnels-tunnelId-teardown-operations-operationId
+      path: /v1/accounts/{accountName}/tunnels/{tunnelId}/teardown-operations/{operationId}
+      operations:
+      - name: tunnelservicegetprovisioningstatus
+        method: GET
+        description: Gets a Teardown Status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: apikey
+      key: Authorization
+      value: '{{env.ZUPLO_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: zuplo-tunnels-rest
+    port: 8080
+    description: REST adapter for Zuplo Developer API — Tunnels. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v1/accounts/{accountname}/tunnels
+      name: v1-accounts-accountname-tunnels
+      description: REST surface for v1-accounts-accountName-tunnels.
+      operations:
+      - method: GET
+        name: tunnelservicelist
+        description: Lists Tunnels
+        call: zuplo-tunnels.tunnelservicelist
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: tunnelservicecreate
+        description: Creates a Tunnel
+        call: zuplo-tunnels.tunnelservicecreate
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/accounts/{accountname}/tunnels/{tunnelid}
+      name: v1-accounts-accountname-tunnels-tunnelid
+      description: REST surface for v1-accounts-accountName-tunnels-tunnelId.
+      operations:
+      - method: GET
+        name: tunnelserviceread
+        description: Gets a Tunnel
+        call: zuplo-tunnels.tunnelserviceread
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: tunnelservicedelete
+        description: Deletes a Tunnel
+        call: zuplo-tunnels.tunnelservicedelete
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/accounts/{accountname}/tunnels/{tunnelid}/rotate-token
+      name: v1-accounts-accountname-tunnels-tunnelid-rotate-token
+      description: REST surface for v1-accounts-accountName-tunnels-tunnelId-$rotate-token.
+      operations:
+      - method: POST
+        name: tunnelserviceupdate
+        description: Rotates the Token
+        call: zuplo-tunnels.tunnelserviceupdate
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/accounts/{accountname}/tunnels/{tunnelid}/teardown-operations/{operationid}
+      name: v1-accounts-accountname-tunnels-tunnelid-teardown-operations-operationid
+      description: REST surface for v1-accounts-accountName-tunnels-tunnelId-teardown-operations-operationId.
+      operations:
+      - method: GET
+        name: tunnelservicegetprovisioningstatus
+        description: Gets a Teardown Status
+        call: zuplo-tunnels.tunnelservicegetprovisioningstatus
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: zuplo-tunnels-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Zuplo Developer API — Tunnels. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: lists-tunnels
+      description: Lists Tunnels
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: zuplo-tunnels.tunnelservicelist
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: creates-tunnel
+      description: Creates a Tunnel
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: zuplo-tunnels.tunnelservicecreate
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: gets-tunnel
+      description: Gets a Tunnel
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: zuplo-tunnels.tunnelserviceread
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: deletes-tunnel
+      description: Deletes a Tunnel
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: zuplo-tunnels.tunnelservicedelete
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: rotates-token
+      description: Rotates the Token
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: zuplo-tunnels.tunnelserviceupdate
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: gets-teardown-status
+      description: Gets a Teardown Status
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: zuplo-tunnels.tunnelservicegetprovisioningstatus
+      outputParameters:
+      - type: object
+        mapping: $.

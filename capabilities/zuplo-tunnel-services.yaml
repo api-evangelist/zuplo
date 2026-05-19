@@ -1,0 +1,139 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Zuplo Developer API — Tunnel Services
+  description: 'Zuplo Developer API — Tunnel Services. 3 operations. Lead operation: Gets a Provisioning Status. Self-contained
+    Naftiko capability covering one Zuplo business surface.'
+  tags:
+  - Zuplo
+  - Tunnel Services
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    ZUPLO_API_KEY: ZUPLO_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: zuplo-tunnel-services
+    baseUri: https://dev.zuplo.com
+    description: Zuplo Developer API — Tunnel Services business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-accounts-accountName-tunnels-tunnelId-provisioning-operations-operationId
+      path: /v1/accounts/{accountName}/tunnels/{tunnelId}/provisioning-operations/{operationId}
+      operations:
+      - name: tunneledservicesservicegetprovisioningstatus
+        method: GET
+        description: Gets a Provisioning Status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: v1-accounts-accountName-tunnels-tunnelId-services-configuration
+      path: /v1/accounts/{accountName}/tunnels/{tunnelId}/services-configuration
+      operations:
+      - name: tunneledservicesservicegetserviceconfiguration
+        method: GET
+        description: Gets a Service Configuration
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: tunneledservicesserviceputserviceconfiguration
+        method: PUT
+        description: Configures Tunnel Services
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: apikey
+      key: Authorization
+      value: '{{env.ZUPLO_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: zuplo-tunnel-services-rest
+    port: 8080
+    description: REST adapter for Zuplo Developer API — Tunnel Services. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/accounts/{accountname}/tunnels/{tunnelid}/provisioning-operations/{operationid}
+      name: v1-accounts-accountname-tunnels-tunnelid-provisioning-operations-operationid
+      description: REST surface for v1-accounts-accountName-tunnels-tunnelId-provisioning-operations-operationId.
+      operations:
+      - method: GET
+        name: tunneledservicesservicegetprovisioningstatus
+        description: Gets a Provisioning Status
+        call: zuplo-tunnel-services.tunneledservicesservicegetprovisioningstatus
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/accounts/{accountname}/tunnels/{tunnelid}/services-configuration
+      name: v1-accounts-accountname-tunnels-tunnelid-services-configuration
+      description: REST surface for v1-accounts-accountName-tunnels-tunnelId-services-configuration.
+      operations:
+      - method: GET
+        name: tunneledservicesservicegetserviceconfiguration
+        description: Gets a Service Configuration
+        call: zuplo-tunnel-services.tunneledservicesservicegetserviceconfiguration
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: tunneledservicesserviceputserviceconfiguration
+        description: Configures Tunnel Services
+        call: zuplo-tunnel-services.tunneledservicesserviceputserviceconfiguration
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: zuplo-tunnel-services-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Zuplo Developer API — Tunnel Services. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: gets-provisioning-status
+      description: Gets a Provisioning Status
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: zuplo-tunnel-services.tunneledservicesservicegetprovisioningstatus
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: gets-service-configuration
+      description: Gets a Service Configuration
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: zuplo-tunnel-services.tunneledservicesservicegetserviceconfiguration
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: configures-tunnel-services
+      description: Configures Tunnel Services
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: zuplo-tunnel-services.tunneledservicesserviceputserviceconfiguration
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

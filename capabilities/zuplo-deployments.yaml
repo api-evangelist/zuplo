@@ -1,0 +1,245 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Zuplo Developer API — Deployments
+  description: 'Zuplo Developer API — Deployments. 6 operations. Lead operation: Gets a Deployment Status. Self-contained
+    Naftiko capability covering one Zuplo business surface.'
+  tags:
+  - Zuplo
+  - Deployments
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    ZUPLO_API_KEY: ZUPLO_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: zuplo-deployments
+    baseUri: https://dev.zuplo.com
+    description: Zuplo Developer API — Deployments business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-accounts-accountName-projects-projectName-deployment-status-statusId
+      path: /v1/accounts/{accountName}/projects/{projectName}/deployment-status/{statusId}
+      operations:
+      - name: v1deploymentstatus
+        method: GET
+        description: Gets a Deployment Status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: statusId
+          in: path
+          type: string
+          description: The UUID of the uploaded sources.
+          required: true
+    - name: v1-accounts-accountName-projects-projectName-deployments
+      path: /v1/accounts/{accountName}/projects/{projectName}/deployments
+      operations:
+      - name: deploymentsservicelist
+        method: GET
+        description: Lists Deployments
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: v1-deployments-sources
+      path: /v1/deployments/sources
+      operations:
+      - name: deployservicesources
+        method: POST
+        description: Upload Deployment Source
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-deployments-deploymentName
+      path: /v1/deployments/{deploymentName}
+      operations:
+      - name: deploymentsserviceread
+        method: GET
+        description: Get a Deployment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deploymentsservicedelete
+        method: DELETE
+        description: Deletes a Deployment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: v1-deployments-deploymentName-deploy
+      path: /v1/deployments/{deploymentName}/deploy
+      operations:
+      - name: deployserviceredeploy
+        method: POST
+        description: Re-deploy a Deployment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: apikey
+      key: Authorization
+      value: '{{env.ZUPLO_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: zuplo-deployments-rest
+    port: 8080
+    description: REST adapter for Zuplo Developer API — Deployments. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v1/accounts/{accountname}/projects/{projectname}/deployment-status/{statusid}
+      name: v1-accounts-accountname-projects-projectname-deployment-status-statusid
+      description: REST surface for v1-accounts-accountName-projects-projectName-deployment-status-statusId.
+      operations:
+      - method: GET
+        name: v1deploymentstatus
+        description: Gets a Deployment Status
+        call: zuplo-deployments.v1deploymentstatus
+        with:
+          statusId: rest.statusId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/accounts/{accountname}/projects/{projectname}/deployments
+      name: v1-accounts-accountname-projects-projectname-deployments
+      description: REST surface for v1-accounts-accountName-projects-projectName-deployments.
+      operations:
+      - method: GET
+        name: deploymentsservicelist
+        description: Lists Deployments
+        call: zuplo-deployments.deploymentsservicelist
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/deployments/sources
+      name: v1-deployments-sources
+      description: REST surface for v1-deployments-sources.
+      operations:
+      - method: POST
+        name: deployservicesources
+        description: Upload Deployment Source
+        call: zuplo-deployments.deployservicesources
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/deployments/{deploymentname}
+      name: v1-deployments-deploymentname
+      description: REST surface for v1-deployments-deploymentName.
+      operations:
+      - method: GET
+        name: deploymentsserviceread
+        description: Get a Deployment
+        call: zuplo-deployments.deploymentsserviceread
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deploymentsservicedelete
+        description: Deletes a Deployment
+        call: zuplo-deployments.deploymentsservicedelete
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/deployments/{deploymentname}/deploy
+      name: v1-deployments-deploymentname-deploy
+      description: REST surface for v1-deployments-deploymentName-deploy.
+      operations:
+      - method: POST
+        name: deployserviceredeploy
+        description: Re-deploy a Deployment
+        call: zuplo-deployments.deployserviceredeploy
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: zuplo-deployments-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Zuplo Developer API — Deployments. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: gets-deployment-status
+      description: Gets a Deployment Status
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: zuplo-deployments.v1deploymentstatus
+      with:
+        statusId: tools.statusId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: lists-deployments
+      description: Lists Deployments
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: zuplo-deployments.deploymentsservicelist
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: upload-deployment-source
+      description: Upload Deployment Source
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: zuplo-deployments.deployservicesources
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-deployment
+      description: Get a Deployment
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: zuplo-deployments.deploymentsserviceread
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: deletes-deployment
+      description: Deletes a Deployment
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: zuplo-deployments.deploymentsservicedelete
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: re-deploy-deployment
+      description: Re-deploy a Deployment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: zuplo-deployments.deployserviceredeploy
+      outputParameters:
+      - type: object
+        mapping: $.
