@@ -1,0 +1,159 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Provision Zuplo API key consumers from Clerk users
+  description: When a Clerk user signs up, create a matching Zuplo key-bucket consumer and return the issued API key to the Clerk user metadata.
+  tags:
+  - Zuplo
+  - Integration
+  - Identity
+  - clerk
+  created: '2026-05-20'
+  modified: '2026-05-20'
+binds:
+- namespace: env
+  keys:
+    ZUPLO_API_KEY: ZUPLO_API_KEY
+    CLERK_API_KEY: CLERK_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: zuplo
+    baseUri: https://dev.zuplo.com
+    description: Zuplo API operations consumed by this integration.
+    resources:
+    - name: v1-accounts-accountname-key-buckets-bucketname-consumers
+      path: /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers
+      operations:
+      - name: createkeyconsumer
+        method: POST
+        description: Create a Zuplo consumer for the Clerk user.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: accountName
+          in: path
+          type: string
+          description: Path parameter accountName.
+          required: true
+        - name: bucketName
+          in: path
+          type: string
+          description: Path parameter bucketName.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-accounts-accountname-key-buckets-bucketname-consumers-con
+      path: /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers/{consumerName}/keys
+      operations:
+      - name: createapikey
+        method: POST
+        description: Issue a new API key for the Clerk-backed consumer.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: accountName
+          in: path
+          type: string
+          description: Path parameter accountName.
+          required: true
+        - name: bucketName
+          in: path
+          type: string
+          description: Path parameter bucketName.
+          required: true
+        - name: consumerName
+          in: path
+          type: string
+          description: Path parameter consumerName.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  - type: http
+    namespace: clerk
+    baseUri: https://api.clerk.com
+    description: Clerk API operations consumed by this integration.
+    resources:
+    - name: v1-users-user-id-metadata
+      path: /v1/users/{user_id}/metadata
+      operations:
+      - name: updateusermetadata
+        method: PATCH
+        description: 'Clerk API: updateUserMetadata'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: user_id
+          in: path
+          type: string
+          description: Path parameter user_id.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-users-user-id
+      path: /v1/users/{user_id}
+      operations:
+      - name: getuser
+        method: GET
+        description: 'Clerk API: getUser'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: user_id
+          in: path
+          type: string
+          description: Path parameter user_id.
+          required: true
+  exposes:
+  - type: mcp
+    namespace: zuplo-clerk-mcp
+    description: MCP adapter for the zuplo-clerk integration.
+    tools:
+    - name: zuplo_clerk
+      description: Execute the zuplo clerk integration end-to-end.
+      inputSchema:
+        type: object
+        properties:
+          trigger_event:
+            type: object
+            description: Triggering event payload.
+        required:
+        - trigger_event
+  - type: rest
+    namespace: zuplo-clerk-rest
+    port: 8080
+    description: REST adapter for the zuplo-clerk integration.
+    resources:
+    - path: /zuplo-clerk
+      name: zuplo-clerk
+      description: REST surface for the zuplo-clerk integration.
+      operations:
+      - method: POST
+        name: trigger
+        description: Trigger the zuplo-clerk integration.
+        call: zuplo_clerk
+        with:
+          trigger_event: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.

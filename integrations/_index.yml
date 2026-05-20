@@ -1,0 +1,65 @@
+- slug: zuplo-github
+  label: Sync Zuplo route configuration from a GitHub repository
+  partner: github
+  category: DevOps
+  use_case: On push to main, fetch the OpenAPI document from a GitHub repo and trigger a Zuplo deployment so the edge gateway tracks source-of-truth in Git.
+- slug: zuplo-auth0
+  label: Bind Zuplo API key consumers to Auth0 users
+  partner: auth0
+  category: Identity
+  use_case: When an Auth0 user is created, provision a matching Zuplo API key consumer with their tenant metadata so the edge gateway can authorize requests.
+- slug: zuplo-okta
+  label: Map Okta groups to Zuplo API key buckets
+  partner: okta
+  category: Identity
+  use_case: When an Okta user changes group membership, update the corresponding Zuplo key-bucket consumer to scope the edge gateway access to the right tier.
+- slug: zuplo-clerk
+  label: Provision Zuplo API key consumers from Clerk users
+  partner: clerk
+  category: Identity
+  use_case: When a Clerk user signs up, create a matching Zuplo key-bucket consumer and return the issued API key to the Clerk user metadata.
+- slug: zuplo-datadog
+  label: Ship Zuplo edge gateway logs to Datadog
+  partner: datadog
+  category: Observability
+  use_case: Stream Zuplo audit logs and request telemetry to Datadog so the edge gateway shows up alongside the rest of the application stack.
+- slug: zuplo-sentry
+  label: Forward Zuplo deployment failures to Sentry
+  partner: sentry
+  category: Observability
+  use_case: When a Zuplo deployment status reports a failure, create a Sentry issue with the deployment context so the platform team is paged through the existing on-call rotation.
+- slug: zuplo-stripe
+  label: Meter Zuplo API consumption into Stripe usage-based billing
+  partner: stripe
+  category: Billing
+  use_case: For each Zuplo API key consumer, roll up edge request counts and post them to a Stripe metered subscription item so customers are billed for actual API usage at the gateway.
+- slug: zuplo-anthropic
+  label: Proxy Anthropic Claude through a Zuplo edge gateway
+  partner: anthropic
+  category: AI
+  use_case: Front the Anthropic Messages API with a Zuplo edge gateway so per-customer API keys, rate limits, and audit logs are enforced before requests hit Anthropic.
+- slug: zuplo-openai
+  label: Proxy OpenAI through Zuplo with per-consumer rate limits
+  partner: openai
+  category: AI
+  use_case: Front OpenAI's Chat Completions API with a Zuplo edge gateway so each downstream consumer has its own scoped key, quota, and usage record at the edge.
+- slug: zuplo-cloudflare-r2
+  label: Front Cloudflare R2 buckets with a Zuplo edge gateway
+  partner: cloudflare-r2
+  category: Storage
+  use_case: Use Zuplo as the public read/write API in front of a private Cloudflare R2 bucket so API keys, rate limits, and audit logs are enforced before object access.
+- slug: zuplo-aws-lambda
+  label: Route Zuplo edge requests to AWS Lambda upstreams
+  partner: aws-lambda
+  category: Upstream
+  use_case: Treat AWS Lambda functions as upstream handlers for a Zuplo edge route — Zuplo enforces auth, rate limits, and audit logging in front of Lambda.
+- slug: zuplo-graphql-upstream
+  label: Front a GraphQL upstream with a Zuplo edge gateway
+  partner: graphql-upstream
+  category: Upstream
+  use_case: Wrap an internal GraphQL upstream with Zuplo so it gets API key auth, per-consumer rate limits, and a REST + MCP surface generated from its schema.
+- slug: zuplo-tunnel-private-upstream
+  label: Expose a private upstream through a Zuplo tunnel
+  partner: tunnel-private-upstream
+  category: Networking
+  use_case: Use Zuplo tunnels to connect the edge gateway to a private upstream behind a corporate firewall, with all access enforced through Zuplo key buckets.

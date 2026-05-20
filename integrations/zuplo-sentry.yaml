@@ -1,0 +1,115 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Forward Zuplo deployment failures to Sentry
+  description: When a Zuplo deployment status reports a failure, create a Sentry issue with the deployment context so the platform team is paged through the existing on-call rotation.
+  tags:
+  - Zuplo
+  - Integration
+  - Observability
+  - sentry
+  created: '2026-05-20'
+  modified: '2026-05-20'
+binds:
+- namespace: env
+  keys:
+    ZUPLO_API_KEY: ZUPLO_API_KEY
+    SENTRY_API_KEY: SENTRY_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: zuplo
+    baseUri: https://dev.zuplo.com
+    description: Zuplo API operations consumed by this integration.
+    resources:
+    - name: v1-accounts-accountname-projects-projectname-deployment-stat
+      path: /v1/accounts/{accountName}/projects/{projectName}/deployment-status/{statusId}
+      operations:
+      - name: getdeploymentstatus
+        method: GET
+        description: Pull the Zuplo deployment status to inspect for failure.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: accountName
+          in: path
+          type: string
+          description: Path parameter accountName.
+          required: true
+        - name: projectName
+          in: path
+          type: string
+          description: Path parameter projectName.
+          required: true
+        - name: statusId
+          in: path
+          type: string
+          description: Path parameter statusId.
+          required: true
+  - type: http
+    namespace: sentry
+    baseUri: https://sentry.io
+    description: Sentry API operations consumed by this integration.
+    resources:
+    - name: api-0-projects-organization-slug-project-slug-store
+      path: /api/0/projects/{organization_slug}/{project_slug}/store/
+      operations:
+      - name: storeevent
+        method: POST
+        description: 'Sentry API: storeEvent'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: organization_slug
+          in: path
+          type: string
+          description: Path parameter organization_slug.
+          required: true
+        - name: project_slug
+          in: path
+          type: string
+          description: Path parameter project_slug.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  exposes:
+  - type: mcp
+    namespace: zuplo-sentry-mcp
+    description: MCP adapter for the zuplo-sentry integration.
+    tools:
+    - name: zuplo_sentry
+      description: Execute the zuplo sentry integration end-to-end.
+      inputSchema:
+        type: object
+        properties:
+          trigger_event:
+            type: object
+            description: Triggering event payload.
+        required:
+        - trigger_event
+  - type: rest
+    namespace: zuplo-sentry-rest
+    port: 8080
+    description: REST adapter for the zuplo-sentry integration.
+    resources:
+    - path: /zuplo-sentry
+      name: zuplo-sentry
+      description: REST surface for the zuplo-sentry integration.
+      operations:
+      - method: POST
+        name: trigger
+        description: Trigger the zuplo-sentry integration.
+        call: zuplo_sentry
+        with:
+          trigger_event: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.

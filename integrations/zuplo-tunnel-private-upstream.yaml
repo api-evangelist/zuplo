@@ -1,0 +1,134 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Expose a private upstream through a Zuplo tunnel
+  description: Use Zuplo tunnels to connect the edge gateway to a private upstream behind a corporate firewall, with all access enforced through Zuplo key buckets.
+  tags:
+  - Zuplo
+  - Integration
+  - Networking
+  - tunnel-private-upstream
+  created: '2026-05-20'
+  modified: '2026-05-20'
+binds:
+- namespace: env
+  keys:
+    ZUPLO_API_KEY: ZUPLO_API_KEY
+    TUNNEL_PRIVATE_UPSTREAM_API_KEY: TUNNEL_PRIVATE_UPSTREAM_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: zuplo
+    baseUri: https://dev.zuplo.com
+    description: Zuplo API operations consumed by this integration.
+    resources:
+    - name: v1-accounts-accountname-tunnels
+      path: /v1/accounts/{accountName}/tunnels
+      operations:
+      - name: createtunnel
+        method: POST
+        description: Create a Zuplo tunnel to the private upstream.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: accountName
+          in: path
+          type: string
+          description: Path parameter accountName.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-accounts-accountname-tunnels-tunnelid-services-configurat
+      path: /v1/accounts/{accountName}/tunnels/{tunnelId}/services-configuration
+      operations:
+      - name: puttunnelservicesconfig
+        method: PUT
+        description: Configure which private services are reachable through the tunnel.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: accountName
+          in: path
+          type: string
+          description: Path parameter accountName.
+          required: true
+        - name: tunnelId
+          in: path
+          type: string
+          description: Path parameter tunnelId.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  - type: http
+    namespace: tunnel-private-upstream
+    baseUri: https://upstream.private.example.com
+    description: Private Upstream operations consumed by this integration.
+    resources:
+    - name: healthz
+      path: /healthz
+      operations:
+      - name: gethealth
+        method: GET
+        description: 'Private Upstream: getHealth'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters: []
+    - name: api-v1-resources
+      path: /api/v1/resources
+      operations:
+      - name: listresources
+        method: GET
+        description: 'Private Upstream: listResources'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters: []
+  exposes:
+  - type: mcp
+    namespace: zuplo-tunnel-private-upstream-mcp
+    description: MCP adapter for the zuplo-tunnel-private-upstream integration.
+    tools:
+    - name: zuplo_tunnel_private_upstream
+      description: Execute the zuplo tunnel private upstream integration end-to-end.
+      inputSchema:
+        type: object
+        properties:
+          trigger_event:
+            type: object
+            description: Triggering event payload.
+        required:
+        - trigger_event
+  - type: rest
+    namespace: zuplo-tunnel-private-upstream-rest
+    port: 8080
+    description: REST adapter for the zuplo-tunnel-private-upstream integration.
+    resources:
+    - path: /zuplo-tunnel-private-upstream
+      name: zuplo-tunnel-private-upstream
+      description: REST surface for the zuplo-tunnel-private-upstream integration.
+      operations:
+      - method: POST
+        name: trigger
+        description: Trigger the zuplo-tunnel-private-upstream integration.
+        call: zuplo_tunnel_private_upstream
+        with:
+          trigger_event: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.

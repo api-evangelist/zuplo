@@ -1,0 +1,154 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Bind Zuplo API key consumers to Auth0 users
+  description: When an Auth0 user is created, provision a matching Zuplo API key consumer with their tenant metadata so the edge gateway can authorize requests.
+  tags:
+  - Zuplo
+  - Integration
+  - Identity
+  - auth0
+  created: '2026-05-20'
+  modified: '2026-05-20'
+binds:
+- namespace: env
+  keys:
+    ZUPLO_API_KEY: ZUPLO_API_KEY
+    AUTH0_API_KEY: AUTH0_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: zuplo
+    baseUri: https://dev.zuplo.com
+    description: Zuplo API operations consumed by this integration.
+    resources:
+    - name: v1-accounts-accountname-key-buckets-bucketname-consumers
+      path: /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers
+      operations:
+      - name: createkeyconsumer
+        method: POST
+        description: Create a Zuplo key-bucket consumer for the Auth0 user.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: accountName
+          in: path
+          type: string
+          description: Path parameter accountName.
+          required: true
+        - name: bucketName
+          in: path
+          type: string
+          description: Path parameter bucketName.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-accounts-accountname-key-buckets-bucketname-consumers-con
+      path: /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers/{consumerName}/keys
+      operations:
+      - name: createapikey
+        method: POST
+        description: Issue a new API key for the consumer.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: accountName
+          in: path
+          type: string
+          description: Path parameter accountName.
+          required: true
+        - name: bucketName
+          in: path
+          type: string
+          description: Path parameter bucketName.
+          required: true
+        - name: consumerName
+          in: path
+          type: string
+          description: Path parameter consumerName.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  - type: http
+    namespace: auth0
+    baseUri: https://yourdomain.auth0.com
+    description: Auth0 Management API operations consumed by this integration.
+    resources:
+    - name: api-v2-users
+      path: /api/v2/users
+      operations:
+      - name: createuser
+        method: POST
+        description: 'Auth0 Management API: createUser'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: api-v2-users-id
+      path: /api/v2/users/{id}
+      operations:
+      - name: getuser
+        method: GET
+        description: 'Auth0 Management API: getUser'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: Path parameter id.
+          required: true
+  exposes:
+  - type: mcp
+    namespace: zuplo-auth0-mcp
+    description: MCP adapter for the zuplo-auth0 integration.
+    tools:
+    - name: zuplo_auth0
+      description: Execute the zuplo auth0 integration end-to-end.
+      inputSchema:
+        type: object
+        properties:
+          trigger_event:
+            type: object
+            description: Triggering event payload.
+        required:
+        - trigger_event
+  - type: rest
+    namespace: zuplo-auth0-rest
+    port: 8080
+    description: REST adapter for the zuplo-auth0 integration.
+    resources:
+    - path: /zuplo-auth0
+      name: zuplo-auth0
+      description: REST surface for the zuplo-auth0 integration.
+      operations:
+      - method: POST
+        name: trigger
+        description: Trigger the zuplo-auth0 integration.
+        call: zuplo_auth0
+        with:
+          trigger_event: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.

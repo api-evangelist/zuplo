@@ -1,0 +1,137 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Front a GraphQL upstream with a Zuplo edge gateway
+  description: Wrap an internal GraphQL upstream with Zuplo so it gets API key auth, per-consumer rate limits, and a REST + MCP surface generated from its schema.
+  tags:
+  - Zuplo
+  - Integration
+  - Upstream
+  - graphql-upstream
+  created: '2026-05-20'
+  modified: '2026-05-20'
+binds:
+- namespace: env
+  keys:
+    ZUPLO_API_KEY: ZUPLO_API_KEY
+    GRAPHQL_UPSTREAM_API_KEY: GRAPHQL_UPSTREAM_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: zuplo
+    baseUri: https://dev.zuplo.com
+    description: Zuplo API operations consumed by this integration.
+    resources:
+    - name: v1-accounts-accountname-projects-projectname-deployments
+      path: /v1/accounts/{accountName}/projects/{projectName}/deployments
+      operations:
+      - name: createdeployment
+        method: POST
+        description: Deploy a Zuplo route fronting the GraphQL upstream.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: accountName
+          in: path
+          type: string
+          description: Path parameter accountName.
+          required: true
+        - name: projectName
+          in: path
+          type: string
+          description: Path parameter projectName.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-accounts-accountname-projects-projectname-branches-branch
+      path: /v1/accounts/{accountName}/projects/{projectName}/branches/{branchName}/variables
+      operations:
+      - name: createvariable
+        method: POST
+        description: Store the GraphQL upstream URL as a Zuplo deployment variable.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: accountName
+          in: path
+          type: string
+          description: Path parameter accountName.
+          required: true
+        - name: projectName
+          in: path
+          type: string
+          description: Path parameter projectName.
+          required: true
+        - name: branchName
+          in: path
+          type: string
+          description: Path parameter branchName.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  - type: http
+    namespace: graphql-upstream
+    baseUri: https://graphql.internal.example.com
+    description: GraphQL Upstream operations consumed by this integration.
+    resources:
+    - name: graphql
+      path: /graphql
+      operations:
+      - name: executequery
+        method: POST
+        description: 'GraphQL Upstream: executeQuery'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  exposes:
+  - type: mcp
+    namespace: zuplo-graphql-upstream-mcp
+    description: MCP adapter for the zuplo-graphql-upstream integration.
+    tools:
+    - name: zuplo_graphql_upstream
+      description: Execute the zuplo graphql upstream integration end-to-end.
+      inputSchema:
+        type: object
+        properties:
+          trigger_event:
+            type: object
+            description: Triggering event payload.
+        required:
+        - trigger_event
+  - type: rest
+    namespace: zuplo-graphql-upstream-rest
+    port: 8080
+    description: REST adapter for the zuplo-graphql-upstream integration.
+    resources:
+    - path: /zuplo-graphql-upstream
+      name: zuplo-graphql-upstream
+      description: REST surface for the zuplo-graphql-upstream integration.
+      operations:
+      - method: POST
+        name: trigger
+        description: Trigger the zuplo-graphql-upstream integration.
+        call: zuplo_graphql_upstream
+        with:
+          trigger_event: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.

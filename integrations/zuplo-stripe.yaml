@@ -1,0 +1,122 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Meter Zuplo API consumption into Stripe usage-based billing
+  description: For each Zuplo API key consumer, roll up edge request counts and post them to a Stripe metered subscription item so customers are billed for actual API usage at the gateway.
+  tags:
+  - Zuplo
+  - Integration
+  - Billing
+  - stripe
+  created: '2026-05-20'
+  modified: '2026-05-20'
+binds:
+- namespace: env
+  keys:
+    ZUPLO_API_KEY: ZUPLO_API_KEY
+    STRIPE_API_KEY: STRIPE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: zuplo
+    baseUri: https://dev.zuplo.com
+    description: Zuplo API operations consumed by this integration.
+    resources:
+    - name: v1-accounts-accountname-key-buckets-bucketname-consumers
+      path: /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers
+      operations:
+      - name: listkeyconsumers
+        method: GET
+        description: List Zuplo key-bucket consumers to bill.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: accountName
+          in: path
+          type: string
+          description: Path parameter accountName.
+          required: true
+        - name: bucketName
+          in: path
+          type: string
+          description: Path parameter bucketName.
+          required: true
+    - name: v1-accounts-accountname-audit-logs
+      path: /v1/accounts/{accountName}/audit-logs
+      operations:
+      - name: listauditlogs
+        method: GET
+        description: Read Zuplo audit logs as the usage source for billing.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: accountName
+          in: path
+          type: string
+          description: Path parameter accountName.
+          required: true
+  - type: http
+    namespace: stripe
+    baseUri: https://api.stripe.com
+    description: Stripe API operations consumed by this integration.
+    resources:
+    - name: v1-subscription-items-subscription-item-usage-records
+      path: /v1/subscription_items/{subscription_item}/usage_records
+      operations:
+      - name: createusagerecord
+        method: POST
+        description: 'Stripe API: createUsageRecord'
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: subscription_item
+          in: path
+          type: string
+          description: Path parameter subscription_item.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  exposes:
+  - type: mcp
+    namespace: zuplo-stripe-mcp
+    description: MCP adapter for the zuplo-stripe integration.
+    tools:
+    - name: zuplo_stripe
+      description: Execute the zuplo stripe integration end-to-end.
+      inputSchema:
+        type: object
+        properties:
+          trigger_event:
+            type: object
+            description: Triggering event payload.
+        required:
+        - trigger_event
+  - type: rest
+    namespace: zuplo-stripe-rest
+    port: 8080
+    description: REST adapter for the zuplo-stripe integration.
+    resources:
+    - path: /zuplo-stripe
+      name: zuplo-stripe
+      description: REST surface for the zuplo-stripe integration.
+      operations:
+      - method: POST
+        name: trigger
+        description: Trigger the zuplo-stripe integration.
+        call: zuplo_stripe
+        with:
+          trigger_event: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.

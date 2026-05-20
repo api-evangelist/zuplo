@@ -1,0 +1,278 @@
+# Curated top Zuplo integrations.
+# Zuplo is an edge API gateway on Cloudflare Workers, MCP-ready.
+# Each entry becomes one Naftiko capability YAML in integrations/.
+
+# Source-of-truth / GitOps (1)
+- partner: github
+  name: Sync Zuplo route configuration from a GitHub repository
+  category: DevOps
+  use_case: On push to main, fetch the OpenAPI document from a GitHub repo and trigger a Zuplo deployment so the edge gateway tracks source-of-truth in Git.
+  partner_baseUri: https://api.github.com
+  partner_api: GitHub REST API
+  provider_ops:
+    - method: POST
+      path: /v1/deployments/sources
+      name: createDeploymentSource
+      description: Create a new Zuplo deployment source from the GitHub spec.
+    - method: POST
+      path: /v1/deployments/{deploymentName}/deploy
+      name: deployZuplo
+      description: Trigger a Zuplo deployment after the GitHub spec changes.
+  partner_ops:
+    - method: GET
+      path: /repos/{owner}/{repo}/contents/{path}
+      name: getRepoContent
+    - method: GET
+      path: /repos/{owner}/{repo}/commits/{ref}
+      name: getCommit
+
+# Identity / auth (3)
+- partner: auth0
+  name: Bind Zuplo API key consumers to Auth0 users
+  category: Identity
+  use_case: When an Auth0 user is created, provision a matching Zuplo API key consumer with their tenant metadata so the edge gateway can authorize requests.
+  partner_baseUri: https://yourdomain.auth0.com
+  partner_api: Auth0 Management API
+  provider_ops:
+    - method: POST
+      path: /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers
+      name: createKeyConsumer
+      description: Create a Zuplo key-bucket consumer for the Auth0 user.
+    - method: POST
+      path: /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers/{consumerName}/keys
+      name: createApiKey
+      description: Issue a new API key for the consumer.
+  partner_ops:
+    - method: POST
+      path: /api/v2/users
+      name: createUser
+    - method: GET
+      path: /api/v2/users/{id}
+      name: getUser
+
+- partner: okta
+  name: Map Okta groups to Zuplo API key buckets
+  category: Identity
+  use_case: When an Okta user changes group membership, update the corresponding Zuplo key-bucket consumer to scope the edge gateway access to the right tier.
+  partner_baseUri: https://yourdomain.okta.com
+  partner_api: Okta API
+  provider_ops:
+    - method: PATCH
+      path: /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers/{consumerName}
+      name: updateKeyConsumer
+      description: Update a Zuplo key-bucket consumer when the Okta group changes.
+    - method: POST
+      path: /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers/{consumerName}/roll-key
+      name: rollKey
+      description: Roll the API key when the user is removed from the group.
+  partner_ops:
+    - method: GET
+      path: /api/v1/groups/{groupId}/users
+      name: listGroupUsers
+    - method: GET
+      path: /api/v1/users/{userId}
+      name: getUser
+
+- partner: clerk
+  name: Provision Zuplo API key consumers from Clerk users
+  category: Identity
+  use_case: When a Clerk user signs up, create a matching Zuplo key-bucket consumer and return the issued API key to the Clerk user metadata.
+  partner_baseUri: https://api.clerk.com
+  partner_api: Clerk API
+  provider_ops:
+    - method: POST
+      path: /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers
+      name: createKeyConsumer
+      description: Create a Zuplo consumer for the Clerk user.
+    - method: POST
+      path: /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers/{consumerName}/keys
+      name: createApiKey
+      description: Issue a new API key for the Clerk-backed consumer.
+  partner_ops:
+    - method: PATCH
+      path: /v1/users/{user_id}/metadata
+      name: updateUserMetadata
+    - method: GET
+      path: /v1/users/{user_id}
+      name: getUser
+
+# Observability (2)
+- partner: datadog
+  name: Ship Zuplo edge gateway logs to Datadog
+  category: Observability
+  use_case: Stream Zuplo audit logs and request telemetry to Datadog so the edge gateway shows up alongside the rest of the application stack.
+  partner_baseUri: https://http-intake.logs.datadoghq.com
+  partner_api: Datadog Logs API
+  provider_ops:
+    - method: GET
+      path: /v1/accounts/{accountName}/audit-logs
+      name: listAuditLogs
+      description: Read recent Zuplo audit log entries to forward to Datadog.
+  partner_ops:
+    - method: POST
+      path: /api/v2/logs
+      name: submitLogs
+
+- partner: sentry
+  name: Forward Zuplo deployment failures to Sentry
+  category: Observability
+  use_case: When a Zuplo deployment status reports a failure, create a Sentry issue with the deployment context so the platform team is paged through the existing on-call rotation.
+  partner_baseUri: https://sentry.io
+  partner_api: Sentry API
+  provider_ops:
+    - method: GET
+      path: /v1/accounts/{accountName}/projects/{projectName}/deployment-status/{statusId}
+      name: getDeploymentStatus
+      description: Pull the Zuplo deployment status to inspect for failure.
+  partner_ops:
+    - method: POST
+      path: /api/0/projects/{organization_slug}/{project_slug}/store/
+      name: storeEvent
+
+# Billing / metering (1)
+- partner: stripe
+  name: Meter Zuplo API consumption into Stripe usage-based billing
+  category: Billing
+  use_case: For each Zuplo API key consumer, roll up edge request counts and post them to a Stripe metered subscription item so customers are billed for actual API usage at the gateway.
+  partner_baseUri: https://api.stripe.com
+  partner_api: Stripe API
+  provider_ops:
+    - method: GET
+      path: /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers
+      name: listKeyConsumers
+      description: List Zuplo key-bucket consumers to bill.
+    - method: GET
+      path: /v1/accounts/{accountName}/audit-logs
+      name: listAuditLogs
+      description: Read Zuplo audit logs as the usage source for billing.
+  partner_ops:
+    - method: POST
+      path: /v1/subscription_items/{subscription_item}/usage_records
+      name: createUsageRecord
+
+# AI proxy (2)
+- partner: anthropic
+  name: Proxy Anthropic Claude through a Zuplo edge gateway
+  category: AI
+  use_case: Front the Anthropic Messages API with a Zuplo edge gateway so per-customer API keys, rate limits, and audit logs are enforced before requests hit Anthropic.
+  partner_baseUri: https://api.anthropic.com
+  partner_api: Anthropic Messages API
+  provider_ops:
+    - method: GET
+      path: /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers/{consumerName}/keys
+      name: listConsumerKeys
+      description: Resolve the calling Zuplo consumer's API keys before proxying.
+    - method: GET
+      path: /v1/accounts/{accountName}/audit-logs
+      name: listAuditLogs
+      description: Capture the proxied request in Zuplo audit logs.
+  partner_ops:
+    - method: POST
+      path: /v1/messages
+      name: createMessage
+
+- partner: openai
+  name: Proxy OpenAI through Zuplo with per-consumer rate limits
+  category: AI
+  use_case: Front OpenAI's Chat Completions API with a Zuplo edge gateway so each downstream consumer has its own scoped key, quota, and usage record at the edge.
+  partner_baseUri: https://api.openai.com
+  partner_api: OpenAI API
+  provider_ops:
+    - method: GET
+      path: /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers/{consumerName}
+      name: getKeyConsumer
+      description: Resolve the Zuplo consumer making the OpenAI call.
+    - method: POST
+      path: /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers/{consumerName}/keys
+      name: createApiKey
+      description: Mint a per-consumer key used to call OpenAI through Zuplo.
+  partner_ops:
+    - method: POST
+      path: /v1/chat/completions
+      name: createChatCompletion
+
+# Storage upstream (1)
+- partner: cloudflare-r2
+  name: Front Cloudflare R2 buckets with a Zuplo edge gateway
+  category: Storage
+  use_case: Use Zuplo as the public read/write API in front of a private Cloudflare R2 bucket so API keys, rate limits, and audit logs are enforced before object access.
+  partner_baseUri: https://{account_id}.r2.cloudflarestorage.com
+  partner_api: Cloudflare R2 S3-Compatible API
+  provider_ops:
+    - method: GET
+      path: /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers/{consumerName}
+      name: getKeyConsumer
+      description: Resolve the Zuplo consumer requesting an R2 object.
+  partner_ops:
+    - method: GET
+      path: /{bucket}/{object}
+      name: getObject
+    - method: PUT
+      path: /{bucket}/{object}
+      name: putObject
+
+# Upstream compute (1)
+- partner: aws-lambda
+  name: Route Zuplo edge requests to AWS Lambda upstreams
+  category: Upstream
+  use_case: Treat AWS Lambda functions as upstream handlers for a Zuplo edge route — Zuplo enforces auth, rate limits, and audit logging in front of Lambda.
+  partner_baseUri: https://lambda.us-east-1.amazonaws.com
+  partner_api: AWS Lambda API
+  provider_ops:
+    - method: POST
+      path: /v1/accounts/{accountName}/projects/{projectName}/deployments
+      name: createDeployment
+      description: Deploy or update the Zuplo route that proxies to Lambda.
+    - method: POST
+      path: /v1/accounts/{accountName}/projects/{projectName}/branches/{branchName}/variables
+      name: createVariable
+      description: Set the Lambda upstream ARN as a Zuplo deployment variable.
+  partner_ops:
+    - method: POST
+      path: /2015-03-31/functions/{FunctionName}/invocations
+      name: invokeFunction
+
+# Upstream GraphQL (1)
+- partner: graphql-upstream
+  name: Front a GraphQL upstream with a Zuplo edge gateway
+  category: Upstream
+  use_case: Wrap an internal GraphQL upstream with Zuplo so it gets API key auth, per-consumer rate limits, and a REST + MCP surface generated from its schema.
+  partner_baseUri: https://graphql.internal.example.com
+  partner_api: GraphQL Upstream
+  provider_ops:
+    - method: POST
+      path: /v1/accounts/{accountName}/projects/{projectName}/deployments
+      name: createDeployment
+      description: Deploy a Zuplo route fronting the GraphQL upstream.
+    - method: POST
+      path: /v1/accounts/{accountName}/projects/{projectName}/branches/{branchName}/variables
+      name: createVariable
+      description: Store the GraphQL upstream URL as a Zuplo deployment variable.
+  partner_ops:
+    - method: POST
+      path: /graphql
+      name: executeQuery
+
+# Private upstream tunnel (1)
+- partner: tunnel-private-upstream
+  name: Expose a private upstream through a Zuplo tunnel
+  category: Networking
+  use_case: Use Zuplo tunnels to connect the edge gateway to a private upstream behind a corporate firewall, with all access enforced through Zuplo key buckets.
+  partner_baseUri: https://upstream.private.example.com
+  partner_api: Private Upstream
+  provider_ops:
+    - method: POST
+      path: /v1/accounts/{accountName}/tunnels
+      name: createTunnel
+      description: Create a Zuplo tunnel to the private upstream.
+    - method: PUT
+      path: /v1/accounts/{accountName}/tunnels/{tunnelId}/services-configuration
+      name: putTunnelServicesConfig
+      description: Configure which private services are reachable through the tunnel.
+  partner_ops:
+    - method: GET
+      path: /healthz
+      name: getHealth
+    - method: GET
+      path: /api/v1/resources
+      name: listResources
