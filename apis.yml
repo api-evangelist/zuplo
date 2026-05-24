@@ -241,6 +241,8 @@ common:
   name: Zuplo API Management Overview
   type: Overview
   description: 'null'
+- type: LLMsTxt
+  url: https://zuplo.com/llms.txt
 created: '2025-01-08'
 modified: '2026-05-19'
 position: Consumer
