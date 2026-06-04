@@ -1,0 +1,129 @@
+arazzo: 1.0.1
+info:
+  title: Zuplo Bulk-Issue API Keys to a Consumer
+  summary: Create a consumer, bulk-create multiple API keys for it, then list the keys.
+  description: >-
+    Issues several API keys to a consumer in one shot, useful when seeding a
+    consumer with rotation-ready credentials. The workflow creates the consumer,
+    bulk-creates a set of API keys via the keys $bulk endpoint, and lists the
+    consumer's keys to confirm the batch was issued. Every step spells out its
+    request inline so the flow can be read and executed without opening the
+    underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: zuploApi
+  url: ../openapi/zuplo-openapi.yml
+  type: openapi
+workflows:
+- workflowId: bulk-issue-consumer-keys
+  summary: Create a consumer, bulk-create keys, and list them.
+  description: >-
+    Registers a consumer, bulk-creates the supplied set of API keys for it, and
+    lists the keys to verify the batch was issued.
+  inputs:
+    type: object
+    required:
+    - accountName
+    - apiKey
+    - bucketName
+    - consumerName
+    - keys
+    properties:
+      accountName:
+        type: string
+        description: The Zuplo account name (Settings > Project Information).
+      apiKey:
+        type: string
+        description: The Zuplo Developer API key, sent as a Bearer token.
+      bucketName:
+        type: string
+        description: The name of an existing bucket to create the consumer in.
+      consumerName:
+        type: string
+        description: A friendly name for the consumer, matching ^[a-z0-9-]{1,128}$.
+      keys:
+        type: array
+        description: An array of API key bodies (description/expiresOn) to create.
+        items:
+          type: object
+          properties:
+            description:
+              type: string
+            expiresOn:
+              type: string
+  steps:
+  - stepId: createConsumer
+    description: Create the consumer that the keys will be issued to.
+    operationId: ApiKeyConsumersService_create
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: bucketName
+      in: path
+      value: $inputs.bucketName
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.consumerName
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      consumerName: $response.body#/name
+  - stepId: bulkCreateKeys
+    description: >-
+      Bulk-create the supplied set of API keys for the consumer. The request
+      body is an array of key bodies.
+    operationId: ApiKeyKeysService_bulkCreate
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: bucketName
+      in: path
+      value: $inputs.bucketName
+    - name: consumerName
+      in: path
+      value: $steps.createConsumer.outputs.consumerName
+    requestBody:
+      contentType: application/json
+      payload: $inputs.keys
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      keys: $response.body#/data
+  - stepId: listKeys
+    description: List the consumer's keys to confirm the batch was issued.
+    operationId: ApiKeyKeysService_list
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: bucketName
+      in: path
+      value: $inputs.bucketName
+    - name: consumerName
+      in: path
+      value: $steps.createConsumer.outputs.consumerName
+    - name: limit
+      in: query
+      value: 1000
+    - name: offset
+      in: query
+      value: 0
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      keys: $response.body#/data
+  outputs:
+    consumerName: $steps.createConsumer.outputs.consumerName
+    keys: $steps.listKeys.outputs.keys

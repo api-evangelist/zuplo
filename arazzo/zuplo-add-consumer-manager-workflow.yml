@@ -1,0 +1,126 @@
+arazzo: 1.0.1
+info:
+  title: Zuplo Add a Manager to a Consumer
+  summary: Create a consumer, add a manager to it, then list the consumer's managers.
+  description: >-
+    Managers are users who can administer a consumer's API keys in the developer
+    portal. This workflow creates a consumer, adds a manager by email and
+    identity-provider subject, and then lists the consumer's managers to confirm
+    the manager was attached. Every step spells out its request inline so the
+    flow can be read and executed without opening the underlying OpenAPI
+    description.
+  version: 1.0.0
+sourceDescriptions:
+- name: zuploApi
+  url: ../openapi/zuplo-openapi.yml
+  type: openapi
+workflows:
+- workflowId: add-consumer-manager
+  summary: Create a consumer and attach a manager, then list its managers.
+  description: >-
+    Registers a consumer, adds a manager by email and sub, and lists the
+    consumer's managers to verify the attachment.
+  inputs:
+    type: object
+    required:
+    - accountName
+    - apiKey
+    - bucketName
+    - consumerName
+    - managerEmail
+    - managerSub
+    properties:
+      accountName:
+        type: string
+        description: The Zuplo account name (Settings > Project Information).
+      apiKey:
+        type: string
+        description: The Zuplo Developer API key, sent as a Bearer token.
+      bucketName:
+        type: string
+        description: The name of the bucket the consumer belongs to.
+      consumerName:
+        type: string
+        description: A friendly name for the consumer, matching ^[a-z0-9-]{1,128}$.
+      managerEmail:
+        type: string
+        description: The email address of the manager to add.
+      managerSub:
+        type: string
+        description: The manager's subject identifier in the identity provider.
+  steps:
+  - stepId: createConsumer
+    description: Create the consumer that the manager will be attached to.
+    operationId: ApiKeyConsumersService_create
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: bucketName
+      in: path
+      value: $inputs.bucketName
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.consumerName
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      consumerName: $response.body#/name
+  - stepId: addManager
+    description: Add a manager to the consumer using the supplied email and sub.
+    operationId: ApiKeyConsumerManagers_create
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: bucketName
+      in: path
+      value: $inputs.bucketName
+    - name: consumerName
+      in: path
+      value: $steps.createConsumer.outputs.consumerName
+    requestBody:
+      contentType: application/json
+      payload:
+        email: $inputs.managerEmail
+        sub: $inputs.managerSub
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      managerId: $response.body#/id
+  - stepId: listManagers
+    description: List the consumer's managers to confirm the manager was added.
+    operationId: ApiKeyConsumerManagers_list
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: bucketName
+      in: path
+      value: $inputs.bucketName
+    - name: consumerName
+      in: path
+      value: $steps.createConsumer.outputs.consumerName
+    - name: limit
+      in: query
+      value: 1000
+    - name: offset
+      in: query
+      value: 0
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      managers: $response.body#/data
+  outputs:
+    managerId: $steps.addManager.outputs.managerId
+    managers: $steps.listManagers.outputs.managers

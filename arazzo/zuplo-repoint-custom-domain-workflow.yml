@@ -1,0 +1,94 @@
+arazzo: 1.0.1
+info:
+  title: Zuplo Repoint a Custom Domain to a New Deployment
+  summary: List custom domains, confirm one exists, and update it to a new deployment.
+  description: >-
+    Repoints an existing custom domain at a different deployment, which is how a
+    new release is promoted behind a stable hostname. The workflow lists the
+    account's custom domains, branches on whether any domains are registered,
+    and updates the hostname to target the new deployment. Every step spells out
+    its request inline so the flow can be read and executed without opening the
+    underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: zuploApi
+  url: ../openapi/zuplo-openapi.yml
+  type: openapi
+workflows:
+- workflowId: repoint-custom-domain
+  summary: Find a custom domain and update it to point at a new deployment.
+  description: >-
+    Lists custom domains, branches when at least one is present, and updates the
+    hostname to associate it with the supplied deployment.
+  inputs:
+    type: object
+    required:
+    - accountName
+    - apiKey
+    - hostname
+    - deploymentName
+    properties:
+      accountName:
+        type: string
+        description: The Zuplo account name (Settings > Project Information).
+      apiKey:
+        type: string
+        description: The Zuplo Developer API key, sent as a Bearer token.
+      hostname:
+        type: string
+        description: The hostname of the custom domain to repoint.
+      deploymentName:
+        type: string
+        description: The new deployment to associate with the hostname.
+      isDefault:
+        type: boolean
+        description: Whether this domain should be the default for the deployment.
+  steps:
+  - stepId: listCustomDomains
+    description: List the account's custom domains to confirm the target exists.
+    operationId: CustomDomainsService_list
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      domains: $response.body#/data
+    onSuccess:
+    - name: domainsPresent
+      type: goto
+      stepId: updateCustomDomain
+      criteria:
+      - context: $response.body
+        condition: $.data.length > 0
+        type: jsonpath
+  - stepId: updateCustomDomain
+    description: Update the custom domain to point at the new deployment.
+    operationId: CustomDomainsService_update
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    requestBody:
+      contentType: application/json
+      payload:
+        hostname: $inputs.hostname
+        deploymentName: $inputs.deploymentName
+        isDefault: $inputs.isDefault
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      hostname: $response.body#/hostname
+      deploymentName: $response.body#/deploymentName
+      cname: $response.body#/cname
+  outputs:
+    hostname: $steps.updateCustomDomain.outputs.hostname
+    deploymentName: $steps.updateCustomDomain.outputs.deploymentName
+    cname: $steps.updateCustomDomain.outputs.cname

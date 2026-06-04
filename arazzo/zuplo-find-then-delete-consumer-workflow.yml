@@ -1,0 +1,96 @@
+arazzo: 1.0.1
+info:
+  title: Zuplo Find and Delete a Consumer
+  summary: List consumers in a bucket, confirm a match exists, and delete the consumer.
+  description: >-
+    Offboards an API consumer. The workflow lists the consumers in a bucket,
+    branches on whether any consumers were returned, and deletes the named
+    consumer along with its related keys and managers. Every step spells out its
+    request inline so the flow can be read and executed without opening the
+    underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: zuploApi
+  url: ../openapi/zuplo-openapi.yml
+  type: openapi
+workflows:
+- workflowId: find-then-delete-consumer
+  summary: Locate a consumer by listing the bucket and delete it.
+  description: >-
+    Lists consumers, branches when at least one consumer is present, and deletes
+    the named consumer and its related resources.
+  inputs:
+    type: object
+    required:
+    - accountName
+    - apiKey
+    - bucketName
+    - consumerName
+    properties:
+      accountName:
+        type: string
+        description: The Zuplo account name (Settings > Project Information).
+      apiKey:
+        type: string
+        description: The Zuplo Developer API key, sent as a Bearer token.
+      bucketName:
+        type: string
+        description: The name of the bucket whose consumers are listed.
+      consumerName:
+        type: string
+        description: The name of the consumer to delete.
+  steps:
+  - stepId: listConsumers
+    description: List the consumers in the bucket to confirm the target exists.
+    operationId: ApiKeyConsumersService_list
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: bucketName
+      in: path
+      value: $inputs.bucketName
+    - name: limit
+      in: query
+      value: 1000
+    - name: offset
+      in: query
+      value: 0
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      consumers: $response.body#/data
+    onSuccess:
+    - name: consumersPresent
+      type: goto
+      stepId: deleteConsumer
+      criteria:
+      - context: $response.body
+        condition: $.data.length > 0
+        type: jsonpath
+  - stepId: deleteConsumer
+    description: >-
+      Delete the named consumer along with any related keys and managers.
+    operationId: ApiKeyConsumersService_delete
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: bucketName
+      in: path
+      value: $inputs.bucketName
+    - name: consumerName
+      in: path
+      value: $inputs.consumerName
+    successCriteria:
+    - condition: $statusCode == 204
+    outputs:
+      deletedConsumerName: $inputs.consumerName
+  outputs:
+    deletedConsumerName: $steps.deleteConsumer.outputs.deletedConsumerName

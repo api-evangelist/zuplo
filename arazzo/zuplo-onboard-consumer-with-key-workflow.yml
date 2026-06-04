@@ -1,0 +1,124 @@
+arazzo: 1.0.1
+info:
+  title: Zuplo Onboard a Consumer With an API Key
+  summary: Create a bucket, create a consumer with an API key, and list the consumer's keys.
+  description: >-
+    The full onboarding path for a new API consumer in Zuplo. The workflow
+    provisions a bucket, creates a consumer in that bucket while requesting that
+    an API key be generated at the same time (with-api-key), and then lists the
+    consumer's keys to confirm a key was issued. Every step spells out its
+    request inline so the flow can be read and executed without opening the
+    underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: zuploApi
+  url: ../openapi/zuplo-openapi.yml
+  type: openapi
+workflows:
+- workflowId: onboard-consumer-with-key
+  summary: Provision a bucket, create a consumer with a key, then list its keys.
+  description: >-
+    Creates a bucket, registers a consumer inside it with an API key generated
+    inline, and lists the consumer's keys to verify the issued key.
+  inputs:
+    type: object
+    required:
+    - accountName
+    - apiKey
+    - bucketName
+    - consumerName
+    properties:
+      accountName:
+        type: string
+        description: The Zuplo account name (Settings > Project Information).
+      apiKey:
+        type: string
+        description: The Zuplo Developer API key, sent as a Bearer token.
+      bucketName:
+        type: string
+        description: A friendly name for the bucket, matching ^[a-z0-9-]{5,128}$.
+      consumerName:
+        type: string
+        description: A friendly name for the consumer, matching ^[a-z0-9-]{1,128}$.
+      consumerDescription:
+        type: string
+        description: An optional description of the consumer.
+  steps:
+  - stepId: createBucket
+    description: Create the API key bucket that will hold the consumer.
+    operationId: ApiKeyBucketsService_create
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.bucketName
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      bucketName: $response.body#/name
+  - stepId: createConsumer
+    description: >-
+      Create a consumer in the bucket and request that an API key be generated
+      at the same time via the with-api-key query parameter.
+    operationId: ApiKeyConsumersService_create
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: bucketName
+      in: path
+      value: $steps.createBucket.outputs.bucketName
+    - name: with-api-key
+      in: query
+      value: true
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.consumerName
+        description: $inputs.consumerDescription
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      consumerId: $response.body#/id
+      consumerName: $response.body#/name
+  - stepId: listKeys
+    description: >-
+      List the API keys for the new consumer to confirm a key was issued during
+      consumer creation.
+    operationId: ApiKeyKeysService_list
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: bucketName
+      in: path
+      value: $steps.createBucket.outputs.bucketName
+    - name: consumerName
+      in: path
+      value: $steps.createConsumer.outputs.consumerName
+    - name: limit
+      in: query
+      value: 1000
+    - name: offset
+      in: query
+      value: 0
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      firstKeyId: $response.body#/data/0/id
+  outputs:
+    consumerId: $steps.createConsumer.outputs.consumerId
+    consumerName: $steps.createConsumer.outputs.consumerName
+    firstKeyId: $steps.listKeys.outputs.firstKeyId

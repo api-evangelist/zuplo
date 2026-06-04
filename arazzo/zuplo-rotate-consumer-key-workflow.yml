@@ -1,0 +1,123 @@
+arazzo: 1.0.1
+info:
+  title: Zuplo Rotate a Consumer's API Keys
+  summary: Read a consumer, roll its keys to set an expiration and issue a fresh key, then list the keys.
+  description: >-
+    Rotates the credentials for an existing consumer. The workflow reads the
+    consumer to confirm it exists, calls roll-key to set an expiration on the
+    consumer's current keys while issuing a new key, and then lists the keys so
+    the caller can pick up the freshly created key. Every step spells out its
+    request inline so the flow can be read and executed without opening the
+    underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: zuploApi
+  url: ../openapi/zuplo-openapi.yml
+  type: openapi
+workflows:
+- workflowId: rotate-consumer-key
+  summary: Roll a consumer's keys and list the resulting keys.
+  description: >-
+    Confirms the consumer exists, rolls its keys to expire the old ones and
+    create a new key, then lists the keys to surface the new key id.
+  inputs:
+    type: object
+    required:
+    - accountName
+    - apiKey
+    - bucketName
+    - consumerName
+    - expiresOn
+    properties:
+      accountName:
+        type: string
+        description: The Zuplo account name (Settings > Project Information).
+      apiKey:
+        type: string
+        description: The Zuplo Developer API key, sent as a Bearer token.
+      bucketName:
+        type: string
+        description: The name of the bucket the consumer belongs to.
+      consumerName:
+        type: string
+        description: The name of the consumer whose keys are being rotated.
+      expiresOn:
+        type: string
+        description: ISO-8601 date-time to set as the expiration on existing keys.
+  steps:
+  - stepId: readConsumer
+    description: Read the consumer to confirm it exists before rolling its keys.
+    operationId: ApiKeyConsumersService_read
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: bucketName
+      in: path
+      value: $inputs.bucketName
+    - name: consumerName
+      in: path
+      value: $inputs.consumerName
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      consumerName: $response.body#/name
+  - stepId: rollKey
+    description: >-
+      Roll the consumer's keys: set the supplied expiration on keys that have no
+      expiration and create a new key.
+    operationId: ApiKeyConsumersService_rollKey
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: bucketName
+      in: path
+      value: $inputs.bucketName
+    - name: consumerName
+      in: path
+      value: $steps.readConsumer.outputs.consumerName
+    requestBody:
+      contentType: application/json
+      payload:
+        expiresOn: $inputs.expiresOn
+    successCriteria:
+    - condition: $statusCode == 204
+  - stepId: listKeys
+    description: >-
+      List the consumer's keys after rolling to surface the newly created key
+      id.
+    operationId: ApiKeyKeysService_list
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: bucketName
+      in: path
+      value: $inputs.bucketName
+    - name: consumerName
+      in: path
+      value: $steps.readConsumer.outputs.consumerName
+    - name: limit
+      in: query
+      value: 1000
+    - name: offset
+      in: query
+      value: 0
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      keys: $response.body#/data
+      newestKeyId: $response.body#/data/0/id
+  outputs:
+    keys: $steps.listKeys.outputs.keys
+    newestKeyId: $steps.listKeys.outputs.newestKeyId

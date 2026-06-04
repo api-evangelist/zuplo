@@ -1,0 +1,88 @@
+arazzo: 1.0.1
+info:
+  title: Zuplo Provision an API Key Bucket
+  summary: Create a new API key bucket and read it back to confirm it exists.
+  description: >-
+    API keys in Zuplo live inside buckets, so provisioning a bucket is the first
+    step before any consumers or keys can be created. This workflow creates a
+    bucket on the account and then reads the bucket back to confirm the
+    provisioned record, returning the bucket id and name. Every step spells out
+    its request inline so the flow can be read and executed without opening the
+    underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: zuploApi
+  url: ../openapi/zuplo-openapi.yml
+  type: openapi
+workflows:
+- workflowId: provision-api-key-bucket
+  summary: Create an API key bucket and confirm it by reading it back.
+  description: >-
+    Creates a new bucket for the account, then fetches the bucket detail to
+    verify the provisioned record and surface the bucket id and name.
+  inputs:
+    type: object
+    required:
+    - accountName
+    - apiKey
+    - name
+    properties:
+      accountName:
+        type: string
+        description: The Zuplo account name (Settings > Project Information).
+      apiKey:
+        type: string
+        description: The Zuplo Developer API key, sent as a Bearer token.
+      name:
+        type: string
+        description: A friendly name for the bucket, matching ^[a-z0-9-]{5,128}$.
+      description:
+        type: string
+        description: An optional description of the bucket.
+  steps:
+  - stepId: createBucket
+    description: >-
+      Create a new API key bucket on the account with the supplied name and
+      optional description.
+    operationId: ApiKeyBucketsService_create
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.name
+        description: $inputs.description
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      bucketId: $response.body#/id
+      bucketName: $response.body#/name
+  - stepId: readBucket
+    description: >-
+      Read the bucket detail back using the name returned from creation to
+      confirm the bucket was provisioned.
+    operationId: ApiKeyBucketsService_read
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: bucketName
+      in: path
+      value: $steps.createBucket.outputs.bucketName
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      bucketId: $response.body#/id
+      bucketName: $response.body#/name
+      createdOn: $response.body#/createdOn
+  outputs:
+    bucketId: $steps.readBucket.outputs.bucketId
+    bucketName: $steps.readBucket.outputs.bucketName

@@ -1,0 +1,113 @@
+arazzo: 1.0.1
+info:
+  title: Zuplo Update an Environment Variable and Redeploy
+  summary: Update an existing branch variable value, find the deployment, and redeploy it.
+  description: >-
+    Rotates the value of an existing environment variable and applies it. The
+    workflow patches the variable's value in a project branch, lists the
+    project's deployments to find the live deployment, and triggers a redeploy
+    so the updated value takes effect. Every step spells out its request inline
+    so the flow can be read and executed without opening the underlying OpenAPI
+    description.
+  version: 1.0.0
+sourceDescriptions:
+- name: zuploApi
+  url: ../openapi/zuplo-openapi.yml
+  type: openapi
+workflows:
+- workflowId: update-variable-and-redeploy
+  summary: Update a variable value, find the deployment, and redeploy it.
+  description: >-
+    Patches an existing branch variable, lists the project's deployments, and
+    redeploys the first deployment so the new value is applied.
+  inputs:
+    type: object
+    required:
+    - accountName
+    - apiKey
+    - projectName
+    - branchName
+    - variableName
+    - value
+    properties:
+      accountName:
+        type: string
+        description: The Zuplo account name (Settings > Project Information).
+      apiKey:
+        type: string
+        description: The Zuplo Developer API key, sent as a Bearer token.
+      projectName:
+        type: string
+        description: The name of the project.
+      branchName:
+        type: string
+        description: The source-control branch the variable lives in.
+      variableName:
+        type: string
+        description: The name of the variable to update.
+      value:
+        type: string
+        description: The new value of the variable.
+  steps:
+  - stepId: updateVariable
+    description: Patch the value of the existing environment variable.
+    operationId: VariablesService_update
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: projectName
+      in: path
+      value: $inputs.projectName
+    - name: branchName
+      in: path
+      value: $inputs.branchName
+    - name: variableName
+      in: path
+      value: $inputs.variableName
+    requestBody:
+      contentType: application/json
+      payload:
+        value: $inputs.value
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      variableName: $response.body#/name
+  - stepId: listDeployments
+    description: List the project's deployments to find the live deployment.
+    operationId: DeploymentsService_list
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: projectName
+      in: path
+      value: $inputs.projectName
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      deploymentName: $response.body#/data/0/name
+  - stepId: redeploy
+    description: Redeploy the deployment so it picks up the updated variable value.
+    operationId: DeployService_redeploy
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: deploymentName
+      in: path
+      value: $steps.listDeployments.outputs.deploymentName
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+  outputs:
+    variableName: $steps.updateVariable.outputs.variableName
+    deploymentName: $steps.listDeployments.outputs.deploymentName
+    status: $steps.redeploy.outputs.status

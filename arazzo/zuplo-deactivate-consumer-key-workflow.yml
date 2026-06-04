@@ -1,0 +1,101 @@
+arazzo: 1.0.1
+info:
+  title: Zuplo Deactivate a Consumer's API Key
+  summary: List a consumer's keys, find one, and delete it to revoke access.
+  description: >-
+    Revokes a single API key from a consumer. The workflow lists the consumer's
+    keys, branches on whether any keys exist, and deletes the first returned key
+    to immediately revoke that credential. Every step spells out its request
+    inline so the flow can be read and executed without opening the underlying
+    OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: zuploApi
+  url: ../openapi/zuplo-openapi.yml
+  type: openapi
+workflows:
+- workflowId: deactivate-consumer-key
+  summary: Find a consumer's API key and delete it.
+  description: >-
+    Lists the consumer's keys, branches when at least one key is present, and
+    deletes that key to revoke it.
+  inputs:
+    type: object
+    required:
+    - accountName
+    - apiKey
+    - bucketName
+    - consumerName
+    properties:
+      accountName:
+        type: string
+        description: The Zuplo account name (Settings > Project Information).
+      apiKey:
+        type: string
+        description: The Zuplo Developer API key, sent as a Bearer token.
+      bucketName:
+        type: string
+        description: The name of the bucket the consumer belongs to.
+      consumerName:
+        type: string
+        description: The name of the consumer whose key is being revoked.
+  steps:
+  - stepId: listKeys
+    description: List the consumer's API keys to find a key to revoke.
+    operationId: ApiKeyKeysService_list
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: bucketName
+      in: path
+      value: $inputs.bucketName
+    - name: consumerName
+      in: path
+      value: $inputs.consumerName
+    - name: limit
+      in: query
+      value: 1000
+    - name: offset
+      in: query
+      value: 0
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      keyId: $response.body#/data/0/id
+    onSuccess:
+    - name: keyPresent
+      type: goto
+      stepId: deleteKey
+      criteria:
+      - context: $response.body
+        condition: $.data.length > 0
+        type: jsonpath
+  - stepId: deleteKey
+    description: Delete the located API key to revoke the credential.
+    operationId: ApiKeyKeysService_delete
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: bucketName
+      in: path
+      value: $inputs.bucketName
+    - name: consumerName
+      in: path
+      value: $inputs.consumerName
+    - name: keyId
+      in: path
+      value: $steps.listKeys.outputs.keyId
+    successCriteria:
+    - condition: $statusCode == 204
+    outputs:
+      deletedKeyId: $steps.listKeys.outputs.keyId
+  outputs:
+    deletedKeyId: $steps.deleteKey.outputs.deletedKeyId

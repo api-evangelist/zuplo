@@ -1,0 +1,132 @@
+arazzo: 1.0.1
+info:
+  title: Zuplo Find a Consumer and Update Its Metadata
+  summary: List consumers in a bucket, find a match by name, update its metadata, and read it back.
+  description: >-
+    A find-then-act flow for editing consumer metadata. The workflow lists the
+    consumers in a bucket, branches on whether a consumer with the requested
+    name was returned, patches that consumer's description, tags, and metadata,
+    and then reads the consumer back to confirm the update. Every step spells
+    out its request inline so the flow can be read and executed without opening
+    the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: zuploApi
+  url: ../openapi/zuplo-openapi.yml
+  type: openapi
+workflows:
+- workflowId: find-consumer-update-metadata
+  summary: Locate a consumer by name and update its metadata.
+  description: >-
+    Lists consumers, branches when a matching consumer is present, patches its
+    metadata, and reads the consumer back to verify the change.
+  inputs:
+    type: object
+    required:
+    - accountName
+    - apiKey
+    - bucketName
+    - consumerName
+    - metadata
+    properties:
+      accountName:
+        type: string
+        description: The Zuplo account name (Settings > Project Information).
+      apiKey:
+        type: string
+        description: The Zuplo Developer API key, sent as a Bearer token.
+      bucketName:
+        type: string
+        description: The name of the bucket whose consumers are listed.
+      consumerName:
+        type: string
+        description: The name of the consumer to update.
+      description:
+        type: string
+        description: An optional new description for the consumer.
+      metadata:
+        type: object
+        description: Key/value string metadata to associate with the consumer.
+  steps:
+  - stepId: listConsumers
+    description: List the consumers in the bucket to confirm the target exists.
+    operationId: ApiKeyConsumersService_list
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: bucketName
+      in: path
+      value: $inputs.bucketName
+    - name: limit
+      in: query
+      value: 1000
+    - name: offset
+      in: query
+      value: 0
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      consumers: $response.body#/data
+    onSuccess:
+    - name: consumersPresent
+      type: goto
+      stepId: updateConsumer
+      criteria:
+      - context: $response.body
+        condition: $.data.length > 0
+        type: jsonpath
+  - stepId: updateConsumer
+    description: >-
+      Patch the consumer's description, tags, and metadata. Only the supplied
+      fields are changed.
+    operationId: ApiKeyConsumersService_update
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: bucketName
+      in: path
+      value: $inputs.bucketName
+    - name: consumerName
+      in: path
+      value: $inputs.consumerName
+    requestBody:
+      contentType: application/json
+      payload:
+        description: $inputs.description
+        metadata: $inputs.metadata
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      consumerId: $response.body#/id
+  - stepId: readConsumer
+    description: Read the consumer back to confirm the metadata was written.
+    operationId: ApiKeyConsumersService_read
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: bucketName
+      in: path
+      value: $inputs.bucketName
+    - name: consumerName
+      in: path
+      value: $inputs.consumerName
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      consumerId: $response.body#/id
+      metadata: $response.body#/metadata
+  outputs:
+    consumerId: $steps.readConsumer.outputs.consumerId
+    metadata: $steps.readConsumer.outputs.metadata

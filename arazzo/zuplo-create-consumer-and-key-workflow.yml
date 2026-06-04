@@ -1,0 +1,126 @@
+arazzo: 1.0.1
+info:
+  title: Zuplo Create a Consumer and Issue an API Key
+  summary: Create a consumer in an existing bucket, issue an API key, then read the key back.
+  description: >-
+    Issues an API key to a brand new consumer inside an existing bucket. The
+    workflow creates the consumer, creates an API key for that consumer with an
+    optional expiration and description, and then reads the key back to surface
+    its id and value. Every step spells out its request inline so the flow can
+    be read and executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: zuploApi
+  url: ../openapi/zuplo-openapi.yml
+  type: openapi
+workflows:
+- workflowId: create-consumer-and-key
+  summary: Create a consumer, issue an API key, and read the key back.
+  description: >-
+    Registers a consumer in an existing bucket, creates an API key for it, and
+    retrieves the key detail to confirm the issued key.
+  inputs:
+    type: object
+    required:
+    - accountName
+    - apiKey
+    - bucketName
+    - consumerName
+    properties:
+      accountName:
+        type: string
+        description: The Zuplo account name (Settings > Project Information).
+      apiKey:
+        type: string
+        description: The Zuplo Developer API key, sent as a Bearer token.
+      bucketName:
+        type: string
+        description: The name of an existing bucket to create the consumer in.
+      consumerName:
+        type: string
+        description: A friendly name for the consumer, matching ^[a-z0-9-]{1,128}$.
+      keyDescription:
+        type: string
+        description: An optional description for the API key.
+      expiresOn:
+        type: string
+        description: An optional ISO-8601 date-time when the key expires.
+  steps:
+  - stepId: createConsumer
+    description: Create a consumer in the existing bucket.
+    operationId: ApiKeyConsumersService_create
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: bucketName
+      in: path
+      value: $inputs.bucketName
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.consumerName
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      consumerId: $response.body#/id
+      consumerName: $response.body#/name
+  - stepId: createKey
+    description: >-
+      Create an API key for the new consumer with an optional description and
+      expiration date.
+    operationId: ApiKeyKeysService_create
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: bucketName
+      in: path
+      value: $inputs.bucketName
+    - name: consumerName
+      in: path
+      value: $steps.createConsumer.outputs.consumerName
+    requestBody:
+      contentType: application/json
+      payload:
+        description: $inputs.keyDescription
+        expiresOn: $inputs.expiresOn
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      keyId: $response.body#/id
+  - stepId: getKey
+    description: >-
+      Read the API key back by id to confirm it was created and surface its
+      metadata.
+    operationId: ApiKeyKeysService_get
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: bucketName
+      in: path
+      value: $inputs.bucketName
+    - name: consumerName
+      in: path
+      value: $steps.createConsumer.outputs.consumerName
+    - name: keyId
+      in: path
+      value: $steps.createKey.outputs.keyId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      keyId: $response.body#/id
+      expiresOn: $response.body#/expiresOn
+  outputs:
+    consumerId: $steps.createConsumer.outputs.consumerId
+    keyId: $steps.getKey.outputs.keyId

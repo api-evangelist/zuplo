@@ -1,0 +1,118 @@
+arazzo: 1.0.1
+info:
+  title: Zuplo Set an Environment Variable and Redeploy
+  summary: Create a branch variable, list the project's deployments, and redeploy so the variable takes effect.
+  description: >-
+    Environment variable changes only take effect after a redeploy. This
+    workflow creates a new environment variable in a project branch, lists the
+    project's deployments to discover the live deployment, and triggers a
+    redeploy so the running deployment picks up the new variable. Every step
+    spells out its request inline so the flow can be read and executed without
+    opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: zuploApi
+  url: ../openapi/zuplo-openapi.yml
+  type: openapi
+workflows:
+- workflowId: set-variable-and-redeploy
+  summary: Create a variable, find the deployment, and redeploy it.
+  description: >-
+    Creates a branch environment variable, lists the project's deployments, and
+    redeploys the first deployment so the variable is applied.
+  inputs:
+    type: object
+    required:
+    - accountName
+    - apiKey
+    - projectName
+    - branchName
+    - variableName
+    - isSecret
+    - value
+    properties:
+      accountName:
+        type: string
+        description: The Zuplo account name (Settings > Project Information).
+      apiKey:
+        type: string
+        description: The Zuplo Developer API key, sent as a Bearer token.
+      projectName:
+        type: string
+        description: The name of the project.
+      branchName:
+        type: string
+        description: The source-control branch to create the variable in.
+      variableName:
+        type: string
+        description: The variable name in SCREAMING_SNAKE_CASE.
+      isSecret:
+        type: boolean
+        description: Whether the variable value is a secret.
+      value:
+        type: string
+        description: The value of the variable.
+  steps:
+  - stepId: createVariable
+    description: Create the environment variable in the project branch.
+    operationId: VariablesService_create
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: projectName
+      in: path
+      value: $inputs.projectName
+    - name: branchName
+      in: path
+      value: $inputs.branchName
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.variableName
+        isSecret: $inputs.isSecret
+        value: $inputs.value
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      variableName: $response.body#/name
+  - stepId: listDeployments
+    description: List the project's deployments to find the live deployment.
+    operationId: DeploymentsService_list
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: projectName
+      in: path
+      value: $inputs.projectName
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      deploymentName: $response.body#/data/0/name
+  - stepId: redeploy
+    description: >-
+      Redeploy the deployment so it picks up the newly created environment
+      variable.
+    operationId: DeployService_redeploy
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: deploymentName
+      in: path
+      value: $steps.listDeployments.outputs.deploymentName
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      status: $response.body#/status
+  outputs:
+    variableName: $steps.createVariable.outputs.variableName
+    deploymentName: $steps.listDeployments.outputs.deploymentName
+    status: $steps.redeploy.outputs.status

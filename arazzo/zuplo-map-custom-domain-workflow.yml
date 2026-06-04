@@ -1,0 +1,89 @@
+arazzo: 1.0.1
+info:
+  title: Zuplo Map a Custom Domain to a Deployment
+  summary: Create a custom domain for a deployment and list the account's domains to confirm it.
+  description: >-
+    Maps a custom hostname to a Zuplo deployment. The workflow creates the
+    custom domain, capturing the DNS ownership-verification record and CNAME
+    target that must be configured at the registrar, and then lists the
+    account's custom domains to confirm the mapping was registered. Every step
+    spells out its request inline so the flow can be read and executed without
+    opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: zuploApi
+  url: ../openapi/zuplo-openapi.yml
+  type: openapi
+workflows:
+- workflowId: map-custom-domain
+  summary: Create a custom domain and confirm it by listing account domains.
+  description: >-
+    Registers a custom hostname against a deployment, returns the DNS records
+    needed to verify it, and lists the account domains to confirm registration.
+  inputs:
+    type: object
+    required:
+    - accountName
+    - apiKey
+    - hostname
+    - deploymentName
+    properties:
+      accountName:
+        type: string
+        description: The Zuplo account name (Settings > Project Information).
+      apiKey:
+        type: string
+        description: The Zuplo Developer API key, sent as a Bearer token.
+      hostname:
+        type: string
+        description: The hostname to configure as a custom domain.
+      deploymentName:
+        type: string
+        description: The deployment to associate with the hostname.
+      isDefault:
+        type: boolean
+        description: Whether this domain should be the default for the deployment.
+  steps:
+  - stepId: createCustomDomain
+    description: >-
+      Create the custom domain mapping and capture the ownership-verification
+      record and CNAME target.
+    operationId: CustomDomainsService_create
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    requestBody:
+      contentType: application/json
+      payload:
+        hostname: $inputs.hostname
+        deploymentName: $inputs.deploymentName
+        isDefault: $inputs.isDefault
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      hostname: $response.body#/hostname
+      cname: $response.body#/cname
+      ownershipVerification: $response.body#/ownershipVerification
+  - stepId: listCustomDomains
+    description: List the account's custom domains to confirm the new mapping.
+    operationId: CustomDomainsService_list
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      domains: $response.body#/data
+  outputs:
+    hostname: $steps.createCustomDomain.outputs.hostname
+    cname: $steps.createCustomDomain.outputs.cname
+    ownershipVerification: $steps.createCustomDomain.outputs.ownershipVerification
+    domains: $steps.listCustomDomains.outputs.domains

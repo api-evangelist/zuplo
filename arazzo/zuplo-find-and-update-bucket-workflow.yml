@@ -1,0 +1,111 @@
+arazzo: 1.0.1
+info:
+  title: Zuplo Find and Update an API Key Bucket
+  summary: List the account's buckets, confirm a match exists, update one, and read it back.
+  description: >-
+    Edits the description and tags on an existing API key bucket. The workflow
+    lists the account's buckets, branches on whether any buckets are present,
+    patches the named bucket's description and tags, and reads it back to
+    confirm the update. Every step spells out its request inline so the flow can
+    be read and executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: zuploApi
+  url: ../openapi/zuplo-openapi.yml
+  type: openapi
+workflows:
+- workflowId: find-and-update-bucket
+  summary: Locate a bucket, update its description and tags, and read it back.
+  description: >-
+    Lists buckets, branches when at least one is present, patches the named
+    bucket, and reads it back to verify the change.
+  inputs:
+    type: object
+    required:
+    - accountName
+    - apiKey
+    - bucketName
+    properties:
+      accountName:
+        type: string
+        description: The Zuplo account name (Settings > Project Information).
+      apiKey:
+        type: string
+        description: The Zuplo Developer API key, sent as a Bearer token.
+      bucketName:
+        type: string
+        description: The name of the bucket to update.
+      description:
+        type: string
+        description: A new description for the bucket.
+      tags:
+        type: object
+        description: Key/value string tags to associate with the bucket.
+  steps:
+  - stepId: listBuckets
+    description: List the account's buckets to confirm the target exists.
+    operationId: ApiKeyBucketsService_list
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      buckets: $response.body#/data
+    onSuccess:
+    - name: bucketsPresent
+      type: goto
+      stepId: updateBucket
+      criteria:
+      - context: $response.body
+        condition: $.data.length > 0
+        type: jsonpath
+  - stepId: updateBucket
+    description: >-
+      Patch the named bucket's description and tags. Only the supplied fields
+      are changed.
+    operationId: ApiKeyBucketsService_update
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: bucketName
+      in: path
+      value: $inputs.bucketName
+    requestBody:
+      contentType: application/json
+      payload:
+        description: $inputs.description
+        tags: $inputs.tags
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      bucketId: $response.body#/id
+  - stepId: readBucket
+    description: Read the bucket back to confirm the description and tags were written.
+    operationId: ApiKeyBucketsService_read
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: bucketName
+      in: path
+      value: $inputs.bucketName
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      bucketId: $response.body#/id
+      name: $response.body#/name
+  outputs:
+    bucketId: $steps.readBucket.outputs.bucketId
+    name: $steps.readBucket.outputs.name

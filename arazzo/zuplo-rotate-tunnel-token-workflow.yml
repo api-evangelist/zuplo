@@ -1,0 +1,76 @@
+arazzo: 1.0.1
+info:
+  title: Zuplo Rotate a Tunnel Token
+  summary: Read a tunnel to confirm it exists, then rotate its connection token.
+  description: >-
+    Rotates the secret token a tunnel agent uses to connect, invalidating the
+    previous token. The workflow reads the tunnel to confirm it exists and then
+    rotates its token, returning the freshly issued token to be applied to the
+    agent. Every step spells out its request inline so the flow can be read and
+    executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: zuploApi
+  url: ../openapi/zuplo-openapi.yml
+  type: openapi
+workflows:
+- workflowId: rotate-tunnel-token
+  summary: Confirm a tunnel exists and rotate its connection token.
+  description: >-
+    Reads the tunnel to confirm it exists, then rotates its token and returns
+    the new token value.
+  inputs:
+    type: object
+    required:
+    - accountName
+    - apiKey
+    - tunnelId
+    properties:
+      accountName:
+        type: string
+        description: The Zuplo account name (Settings > Project Information).
+      apiKey:
+        type: string
+        description: The Zuplo Developer API key, sent as a Bearer token.
+      tunnelId:
+        type: string
+        description: The id of the tunnel whose token is being rotated.
+  steps:
+  - stepId: readTunnel
+    description: Read the tunnel to confirm it exists before rotating its token.
+    operationId: TunnelService_read
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: tunnelId
+      in: path
+      value: $inputs.tunnelId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      tunnelId: $response.body#/tunnelId
+  - stepId: rotateToken
+    description: Rotate the tunnel's token and return the newly issued token.
+    operationId: TunnelService_update
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: tunnelId
+      in: path
+      value: $steps.readTunnel.outputs.tunnelId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      tunnelId: $response.body#/tunnelId
+      token: $response.body#/token
+  outputs:
+    tunnelId: $steps.rotateToken.outputs.tunnelId
+    token: $steps.rotateToken.outputs.token

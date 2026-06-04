@@ -1,0 +1,80 @@
+arazzo: 1.0.1
+info:
+  title: Zuplo Provision a Secure Tunnel
+  summary: Create a tunnel and read it back to retrieve the connection token.
+  description: >-
+    Tunnels expose services running on bare metal, on-premises, or non-cloud
+    providers to the Zuplo platform. This workflow creates a tunnel for the
+    account and reads it back to retrieve the token that the tunnel agent uses
+    to connect. Every step spells out its request inline so the flow can be read
+    and executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: zuploApi
+  url: ../openapi/zuplo-openapi.yml
+  type: openapi
+workflows:
+- workflowId: provision-tunnel
+  summary: Create a tunnel and read its connection token.
+  description: >-
+    Creates a tunnel for the account, then reads it back to surface the tunnel
+    id and the token used to connect the tunnel agent.
+  inputs:
+    type: object
+    required:
+    - accountName
+    - apiKey
+    - name
+    properties:
+      accountName:
+        type: string
+        description: The Zuplo account name (Settings > Project Information).
+      apiKey:
+        type: string
+        description: The Zuplo Developer API key, sent as a Bearer token.
+      name:
+        type: string
+        description: A friendly name for the tunnel, matching ^[a-zA-Z0-9-]{3,24}$.
+  steps:
+  - stepId: createTunnel
+    description: Create the tunnel for the account.
+    operationId: TunnelService_create
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.name
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      tunnelId: $response.body#/tunnelId
+  - stepId: readTunnel
+    description: >-
+      Read the tunnel back to retrieve the token used to connect the tunnel
+      agent.
+    operationId: TunnelService_read
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.apiKey
+    - name: accountName
+      in: path
+      value: $inputs.accountName
+    - name: tunnelId
+      in: path
+      value: $steps.createTunnel.outputs.tunnelId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      tunnelId: $response.body#/tunnelId
+      name: $response.body#/name
+      token: $response.body#/token
+  outputs:
+    tunnelId: $steps.readTunnel.outputs.tunnelId
+    token: $steps.readTunnel.outputs.token
