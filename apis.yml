@@ -20,8 +20,6 @@ apis:
     type: OpenAPI
   - url: rules/zuplo-rules.yml
     type: SpectralRules
-  - url: capabilities/api-management.yaml
-    type: NaftikoCapabilities
   - url: json-schema/zuplo-api-key-schema.json
     type: JSONSchema
   - url: json-schema/zuplo-consumer-schema.json
@@ -36,33 +34,11 @@ apis:
     type: Vocabulary
   - url: https://zuplo.com/docs/articles/api-key-api
     type: GettingStarted
-  - type: NaftikoCapability
-    url: capabilities/zuplo-general.yaml
-  - type: NaftikoCapability
-    url: capabilities/zuplo-api-keys-buckets.yaml
-  - type: NaftikoCapability
-    url: capabilities/zuplo-api-keys-consumers.yaml
-  - type: NaftikoCapability
-    url: capabilities/zuplo-api-keys-keys.yaml
-  - type: NaftikoCapability
-    url: capabilities/zuplo-api-keys-managers.yaml
-  - type: NaftikoCapability
-    url: capabilities/zuplo-audit-logs.yaml
-  - type: NaftikoCapability
-    url: capabilities/zuplo-custom-domains.yaml
-  - type: NaftikoCapability
-    url: capabilities/zuplo-deployments.yaml
-  - type: NaftikoCapability
-    url: capabilities/zuplo-mcp-servers.yaml
-  - type: NaftikoCapability
-    url: capabilities/zuplo-tunnel-services.yaml
-  - type: NaftikoCapability
-    url: capabilities/zuplo-tunnels.yaml
-  - type: NaftikoCapability
-    url: capabilities/zuplo-variables.yaml
-  description: The Zuplo Developer API (ZAPI) enables developers to programmatically manage API keys, consumers, buckets,
-    tunnels, deployments, metering, audit logs, and more. It is used to perform management actions on your Zuplo account and
-    integrations.
+  - url: graphql/zuplo-graphql.md
+    type: GraphQL
+  description: The Zuplo Developer API (ZAPI) enables developers to programmatically
+    manage API keys, consumers, buckets, tunnels, deployments, metering, audit logs,
+    and more. It is used to perform management actions on your Zuplo account and integrations.
 name: Zuplo
 tags:
 - AI Gateway
@@ -73,6 +49,8 @@ type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 access: 3rd-Party
 common:
+- type: PostmanWorkspace
+  url: https://www.postman.com/kinlaneapi/zuplo/overview
 - type: ArazzoWorkflows
   url: arazzo/
   workflows:
@@ -81,31 +59,38 @@ common:
     summary: Create a consumer, add a manager to it, then list the consumer's managers.
   - url: arazzo/zuplo-bulk-issue-consumer-keys-workflow.yml
     name: Zuplo Bulk-Issue API Keys to a Consumer
-    summary: Create a consumer, bulk-create multiple API keys for it, then list the keys.
+    summary: Create a consumer, bulk-create multiple API keys for it, then list the
+      keys.
   - url: arazzo/zuplo-create-consumer-and-key-workflow.yml
     name: Zuplo Create a Consumer and Issue an API Key
-    summary: Create a consumer in an existing bucket, issue an API key, then read the key back.
+    summary: Create a consumer in an existing bucket, issue an API key, then read
+      the key back.
   - url: arazzo/zuplo-deactivate-consumer-key-workflow.yml
     name: Zuplo Deactivate a Consumer's API Key
     summary: List a consumer's keys, find one, and delete it to revoke access.
   - url: arazzo/zuplo-discover-account-and-buckets-workflow.yml
     name: Zuplo Discover Account and List Its Buckets
-    summary: Resolve the account name from the API key, then list that account's API key buckets.
+    summary: Resolve the account name from the API key, then list that account's API
+      key buckets.
   - url: arazzo/zuplo-find-and-update-bucket-workflow.yml
     name: Zuplo Find and Update an API Key Bucket
-    summary: List the account's buckets, confirm a match exists, update one, and read it back.
+    summary: List the account's buckets, confirm a match exists, update one, and read
+      it back.
   - url: arazzo/zuplo-find-consumer-update-metadata-workflow.yml
     name: Zuplo Find a Consumer and Update Its Metadata
-    summary: List consumers in a bucket, find a match by name, update its metadata, and read it back.
+    summary: List consumers in a bucket, find a match by name, update its metadata,
+      and read it back.
   - url: arazzo/zuplo-find-then-delete-consumer-workflow.yml
     name: Zuplo Find and Delete a Consumer
     summary: List consumers in a bucket, confirm a match exists, and delete the consumer.
   - url: arazzo/zuplo-map-custom-domain-workflow.yml
     name: Zuplo Map a Custom Domain to a Deployment
-    summary: Create a custom domain for a deployment and list the account's domains to confirm it.
+    summary: Create a custom domain for a deployment and list the account's domains
+      to confirm it.
   - url: arazzo/zuplo-onboard-consumer-with-key-workflow.yml
     name: Zuplo Onboard a Consumer With an API Key
-    summary: Create a bucket, create a consumer with an API key, and list the consumer's keys.
+    summary: Create a bucket, create a consumer with an API key, and list the consumer's
+      keys.
   - url: arazzo/zuplo-provision-api-key-bucket-workflow.yml
     name: Zuplo Provision an API Key Bucket
     summary: Create a new API key bucket and read it back to confirm it exists.
@@ -114,22 +99,26 @@ common:
     summary: Create a tunnel and read it back to retrieve the connection token.
   - url: arazzo/zuplo-redeploy-project-deployment-workflow.yml
     name: Zuplo Inspect and Redeploy a Project Deployment
-    summary: List a project's deployments, read the live deployment detail, then trigger a redeploy.
+    summary: List a project's deployments, read the live deployment detail, then trigger
+      a redeploy.
   - url: arazzo/zuplo-repoint-custom-domain-workflow.yml
     name: Zuplo Repoint a Custom Domain to a New Deployment
     summary: List custom domains, confirm one exists, and update it to a new deployment.
   - url: arazzo/zuplo-rotate-consumer-key-workflow.yml
     name: Zuplo Rotate a Consumer's API Keys
-    summary: Read a consumer, roll its keys to set an expiration and issue a fresh key, then list the keys.
+    summary: Read a consumer, roll its keys to set an expiration and issue a fresh
+      key, then list the keys.
   - url: arazzo/zuplo-rotate-tunnel-token-workflow.yml
     name: Zuplo Rotate a Tunnel Token
     summary: Read a tunnel to confirm it exists, then rotate its connection token.
   - url: arazzo/zuplo-set-variable-and-redeploy-workflow.yml
     name: Zuplo Set an Environment Variable and Redeploy
-    summary: Create a branch variable, list the project's deployments, and redeploy so the variable takes effect.
+    summary: Create a branch variable, list the project's deployments, and redeploy
+      so the variable takes effect.
   - url: arazzo/zuplo-update-variable-and-redeploy-workflow.yml
     name: Zuplo Update an Environment Variable and Redeploy
-    summary: Update an existing branch variable value, find the deployment, and redeploy it.
+    summary: Update an existing branch variable value, find the deployment, and redeploy
+      it.
 - url: https://zuplo.com/docs/articles/what-is-zuplo
   name: What is Zuplo? - Zuplo Docs
   type: Documentation
@@ -305,7 +294,8 @@ modified: '2026-05-19'
 position: Consumer
 segments:
 - Gateways
-description: Zuplo is the API management platform for developers. Build, deploy, and scale APIs faster with Zuplo.
+description: Zuplo is the API management platform for developers. Build, deploy, and
+  scale APIs faster with Zuplo.
 integrations:
 - name: Zuplo
 - name: GitHub

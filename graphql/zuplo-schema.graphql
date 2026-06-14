@@ -1,0 +1,1055 @@
+"""
+Zuplo GraphQL Schema (Conceptual)
+Derived from the Zuplo Developer API (ZAPI), JSON Schema artifacts, and product documentation.
+Provider: Zuplo — https://zuplo.com
+Docs: https://zuplo.com/docs/articles/developer-api
+"""
+
+# ─────────────────────────────────────────────
+# Scalars
+# ─────────────────────────────────────────────
+
+scalar DateTime
+scalar JSON
+scalar URL
+
+# ─────────────────────────────────────────────
+# Enums
+# ─────────────────────────────────────────────
+
+enum DeploymentStatusEnum {
+  PENDING
+  BUILDING
+  DEPLOYING
+  LIVE
+  FAILED
+  ROLLED_BACK
+}
+
+enum RateLimitWindowUnit {
+  SECOND
+  MINUTE
+  HOUR
+  DAY
+}
+
+enum PolicyType {
+  INBOUND
+  OUTBOUND
+  ERROR
+}
+
+enum AuthType {
+  API_KEY
+  JWT
+  OAUTH2
+  BASIC
+  CUSTOM
+}
+
+enum DomainVerificationStatus {
+  PENDING
+  VERIFIED
+  FAILED
+}
+
+enum SSLStatus {
+  PROVISIONING
+  ACTIVE
+  EXPIRED
+  REVOKED
+}
+
+enum WebhookEventType {
+  DEPLOYMENT_CREATED
+  DEPLOYMENT_LIVE
+  DEPLOYMENT_FAILED
+  CONSUMER_CREATED
+  CONSUMER_DELETED
+  API_KEY_CREATED
+  API_KEY_REVOKED
+  RATE_LIMIT_EXCEEDED
+  SECURITY_EVENT
+}
+
+enum IntegrationType {
+  LOGGING
+  METRICS
+  WAF
+  AUTH
+  BILLING
+  MONITORING
+}
+
+enum PlanTier {
+  FREE
+  BUILDER
+  BUSINESS
+  ENTERPRISE
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  TRIALING
+  PAST_DUE
+  CANCELED
+  UNPAID
+}
+
+# ─────────────────────────────────────────────
+# Core Project & Environment
+# ─────────────────────────────────────────────
+
+"""A Zuplo API project containing routes, policies, and deployments."""
+type APIProject {
+  id: ID!
+  name: String!
+  slug: String!
+  accountName: String!
+  description: String
+  environments: [APIEnvironment!]!
+  deployments(first: Int, after: String): DeploymentConnection!
+  members: [ProjectMember!]!
+  routes: [Route!]!
+  gateway: APIGateway
+  developerPortal: DeveloperPortal
+  webhooks: [Webhook!]!
+  integrations: [Integration!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""A deployment environment (branch) within a Zuplo project."""
+type APIEnvironment {
+  id: ID!
+  project: APIProject!
+  name: String!
+  branchName: String!
+  url: URL!
+  isLive: Boolean!
+  variables: [EnvironmentVariable!]!
+  deployment: Deployment
+  customDomains: [CustomDomain!]!
+  analytics: Analytics
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""An environment variable scoped to a project branch."""
+type EnvironmentVariable {
+  id: ID!
+  environment: APIEnvironment!
+  key: String!
+  value: String
+  isSecret: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""A member of a Zuplo project."""
+type ProjectMember {
+  id: ID!
+  project: APIProject!
+  email: String!
+  role: String!
+  joinedAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# Gateway & Routing
+# ─────────────────────────────────────────────
+
+"""The API gateway configuration for a Zuplo project."""
+type APIGateway {
+  id: ID!
+  project: APIProject!
+  routes: [Route!]!
+  policies: [Policy!]!
+  rateLimits: [RateLimit!]!
+  trafficFilters: [TrafficFilter!]!
+  authentication: Authentication
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""A single route (endpoint) configured in the Zuplo gateway."""
+type Route {
+  id: ID!
+  gateway: APIGateway!
+  path: String!
+  methods: [String!]!
+  label: String
+  summary: String
+  description: String
+  handler: RequestHandler!
+  inboundPolicies: [Policy!]!
+  outboundPolicies: [Policy!]!
+  rateLimit: RateLimit
+  authentication: Authentication
+  corsEnabled: Boolean!
+  config: RouteConfig
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""Configuration options for a Zuplo route."""
+type RouteConfig {
+  id: ID!
+  route: Route!
+  timeout: Int
+  retries: Int
+  cacheTtl: Int
+  stripPath: Boolean!
+  rewritePath: String
+  headers: JSON
+}
+
+"""The handler that processes inbound requests for a route."""
+type RequestHandler {
+  id: ID!
+  route: Route!
+  type: String!
+  url: URL
+  module: String
+  export: String
+  options: JSON
+}
+
+"""A transformer that modifies outbound responses for a route."""
+type ResponseTransformer {
+  id: ID!
+  route: Route!
+  statusCode: Int
+  headers: JSON
+  bodyTransform: String
+  module: String
+}
+
+# ─────────────────────────────────────────────
+# Policies
+# ─────────────────────────────────────────────
+
+"""A policy applied to inbound or outbound traffic on a route."""
+type Policy {
+  id: ID!
+  name: String!
+  type: PolicyType!
+  policyType: String!
+  config: PolicyConfig
+  routes: [Route!]!
+  enabled: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""Configuration parameters for a specific policy."""
+type PolicyConfig {
+  id: ID!
+  policy: Policy!
+  parameters: JSON
+  order: Int!
+}
+
+"""A filter applied to all traffic passing through the gateway."""
+type TrafficFilter {
+  id: ID!
+  gateway: APIGateway!
+  name: String!
+  enabled: Boolean!
+  conditions: JSON
+  action: String!
+  createdAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# Authentication & Authorization
+# ─────────────────────────────────────────────
+
+"""Authentication configuration for a route or gateway."""
+type Authentication {
+  id: ID!
+  type: AuthType!
+  provider: OAuthProvider
+  jwtConfig: JWTConfig
+  apiKeyAuth: APIKeyAuth
+  required: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""OAuth2 provider configuration (Auth0, Clerk, Okta, etc.)."""
+type OAuthProvider {
+  id: ID!
+  name: String!
+  issuerUrl: URL!
+  audience: String
+  clientId: String
+  scopes: [String!]!
+  tokenEndpoint: URL
+  jwksUri: URL
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""JWT validation configuration."""
+type JWTConfig {
+  id: ID!
+  issuer: String!
+  audience: String
+  algorithms: [String!]!
+  jwksUri: URL
+  secret: String
+  clockSkew: Int
+  createdAt: DateTime!
+}
+
+"""API key authentication configuration."""
+type APIKeyAuth {
+  id: ID!
+  bucket: APIKeyBucket!
+  headerName: String!
+  allowQueryParam: Boolean!
+  queryParamName: String
+  createdAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# API Keys & Consumers
+# ─────────────────────────────────────────────
+
+"""A bucket that groups API keys and consumers for a project."""
+type APIKeyBucket {
+  id: ID!
+  project: APIProject!
+  name: String!
+  description: String
+  consumers(first: Int, after: String): ConsumerConnection!
+  keys(first: Int, after: String): APIKeyConnection!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""An API key issued to a consumer."""
+type APIKey {
+  id: ID!
+  bucket: APIKeyBucket!
+  consumer: APIConsumer!
+  key: String
+  description: String
+  expiresAt: DateTime
+  lastUsedAt: DateTime
+  isActive: Boolean!
+  metadata: JSON
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""A consumer (API user or application) within an API key bucket."""
+type APIConsumer {
+  id: ID!
+  bucket: APIKeyBucket!
+  name: String!
+  email: String
+  description: String
+  keys(first: Int, after: String): APIKeyConnection!
+  managers: [ConsumerManager!]!
+  group: ConsumerGroup
+  quota: Quota
+  billing: ConsumerBilling
+  metadata: JSON
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""A grouping of consumers for shared policy or quota application."""
+type ConsumerGroup {
+  id: ID!
+  bucket: APIKeyBucket!
+  name: String!
+  description: String
+  consumers: [APIConsumer!]!
+  rateLimit: RateLimit
+  quota: Quota
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""A manager (sub-user) associated with a consumer."""
+type ConsumerManager {
+  id: ID!
+  consumer: APIConsumer!
+  email: String!
+  role: String!
+  createdAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# Rate Limiting & Quotas
+# ─────────────────────────────────────────────
+
+"""Rate limit configuration for a route, consumer, or group."""
+type RateLimit {
+  id: ID!
+  name: String!
+  requestsPerWindow: Int!
+  window: RateLimitWindow!
+  keyBy: String
+  headerName: String
+  enabled: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""The time window definition for a rate limit."""
+type RateLimitWindow {
+  value: Int!
+  unit: RateLimitWindowUnit!
+}
+
+"""A quota limiting total usage over a period (e.g., per month)."""
+type Quota {
+  id: ID!
+  name: String!
+  maxRequests: Int
+  maxBandwidthBytes: Int
+  periodDays: Int!
+  resetAt: DateTime
+  usage: QuotaUsage
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""Current usage metrics against a quota."""
+type QuotaUsage {
+  quota: Quota!
+  requestsUsed: Int!
+  bandwidthUsed: Int!
+  percentUsed: Float!
+  resetAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# Deployments
+# ─────────────────────────────────────────────
+
+"""A deployment of a Zuplo project to an environment."""
+type Deployment {
+  id: ID!
+  project: APIProject!
+  environment: APIEnvironment!
+  status: DeploymentStatusEnum!
+  version: String
+  commitSha: String
+  branch: String
+  triggeredBy: String
+  logs: [DeploymentLog!]!
+  customDomains: [CustomDomain!]!
+  startedAt: DateTime
+  completedAt: DateTime
+  createdAt: DateTime!
+}
+
+"""The computed status summary of a deployment."""
+type DeploymentStatus {
+  deployment: Deployment!
+  phase: DeploymentStatusEnum!
+  message: String
+  progress: Float
+  updatedAt: DateTime!
+}
+
+"""A log entry produced during a deployment build or rollout."""
+type DeploymentLog {
+  id: ID!
+  deployment: Deployment!
+  level: String!
+  message: String!
+  timestamp: DateTime!
+}
+
+"""Result of triggering a redeploy."""
+type Redeploy {
+  deploymentId: ID!
+  status: DeploymentStatusEnum!
+  message: String
+  createdAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# Custom Domains & TLS
+# ─────────────────────────────────────────────
+
+"""A custom domain mapped to a Zuplo deployment."""
+type CustomDomain {
+  id: ID!
+  project: APIProject!
+  deployment: Deployment!
+  hostname: String!
+  verification: DomainVerification!
+  sslCertificate: SSLCertificate
+  isActive: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""DNS verification details for a custom domain."""
+type DomainVerification {
+  status: DomainVerificationStatus!
+  txtRecord: String
+  cnameRecord: String
+  verifiedAt: DateTime
+}
+
+"""SSL/TLS certificate associated with a custom domain."""
+type SSLCertificate {
+  id: ID!
+  domain: CustomDomain!
+  status: SSLStatus!
+  issuer: String
+  expiresAt: DateTime
+  provisioner: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# Analytics & Observability
+# ─────────────────────────────────────────────
+
+"""Aggregate analytics for a project environment over a time range."""
+type Analytics {
+  environment: APIEnvironment!
+  from: DateTime!
+  to: DateTime!
+  totalRequests: Int!
+  errorRate: Float!
+  bandwidth: Bandwidth!
+  latency: Latency!
+  requestLogs(first: Int, after: String): RequestLogConnection!
+  errorLogs(first: Int, after: String): ErrorLogConnection!
+  usage: Usage!
+}
+
+"""A single request log entry captured by the gateway."""
+type RequestLog {
+  id: ID!
+  environment: APIEnvironment!
+  route: Route
+  method: String!
+  path: String!
+  statusCode: Int!
+  durationMs: Int!
+  requestSize: Int
+  responseSize: Int
+  consumerId: String
+  apiKeyId: String
+  ipAddress: String
+  userAgent: String
+  timestamp: DateTime!
+}
+
+"""An error log entry for a failed or faulted request."""
+type ErrorLog {
+  id: ID!
+  environment: APIEnvironment!
+  route: Route
+  errorCode: String
+  message: String!
+  stackTrace: String
+  requestId: String
+  timestamp: DateTime!
+}
+
+"""Bandwidth consumption metrics."""
+type Bandwidth {
+  ingressBytes: Int!
+  egressBytes: Int!
+  totalBytes: Int!
+}
+
+"""Latency distribution metrics."""
+type Latency {
+  p50: P50Latency!
+  p99: P99Latency!
+  avgMs: Float!
+  minMs: Float!
+  maxMs: Float!
+}
+
+"""50th-percentile (median) latency."""
+type P50Latency {
+  valueMs: Float!
+  label: String!
+}
+
+"""99th-percentile latency."""
+type P99Latency {
+  valueMs: Float!
+  label: String!
+}
+
+"""Aggregate usage summary for billing and quota tracking."""
+type Usage {
+  environment: APIEnvironment!
+  period: String!
+  requestCount: Int!
+  errorCount: Int!
+  bandwidthBytes: Int!
+  uniqueConsumers: Int!
+}
+
+# ─────────────────────────────────────────────
+# Security
+# ─────────────────────────────────────────────
+
+"""A security event detected by the gateway (e.g., rate limit breach, WAF hit)."""
+type SecurityEvent {
+  id: ID!
+  environment: APIEnvironment!
+  eventType: String!
+  severity: String!
+  ipAddress: String
+  consumerId: String
+  route: Route
+  detail: JSON
+  timestamp: DateTime!
+}
+
+"""An IP address or CIDR block that is blocked from accessing the gateway."""
+type IPBlock {
+  id: ID!
+  gateway: APIGateway!
+  cidr: String!
+  reason: String
+  expiresAt: DateTime
+  createdAt: DateTime!
+}
+
+"""A geographic block rule preventing access from a specific country or region."""
+type GeoBlock {
+  id: ID!
+  gateway: APIGateway!
+  countryCode: String!
+  regionCode: String
+  reason: String
+  enabled: Boolean!
+  createdAt: DateTime!
+}
+
+"""Bot protection configuration for the gateway."""
+type BotProtection {
+  id: ID!
+  gateway: APIGateway!
+  enabled: Boolean!
+  challengeMode: String!
+  allowedBots: [String!]!
+  updatedAt: DateTime!
+}
+
+"""A Web Application Firewall rule applied to gateway traffic."""
+type WAFRule {
+  id: ID!
+  gateway: APIGateway!
+  name: String!
+  expression: String!
+  action: String!
+  priority: Int!
+  enabled: Boolean!
+  provider: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# Monetization
+# ─────────────────────────────────────────────
+
+"""A subscription plan available in the Zuplo developer portal."""
+type Plan {
+  id: ID!
+  name: String!
+  tier: PlanTier!
+  description: String
+  price: Float
+  currency: String
+  billingPeriod: String
+  features: [Feature!]!
+  rateLimit: RateLimit
+  quota: Quota
+  createdAt: DateTime!
+}
+
+"""A feature or entitlement included in a plan."""
+type Feature {
+  id: ID!
+  plan: Plan!
+  name: String!
+  description: String
+  value: String
+  enabled: Boolean!
+}
+
+"""A consumer's subscription to a plan."""
+type Subscription {
+  id: ID!
+  consumer: APIConsumer!
+  plan: Plan!
+  status: SubscriptionStatus!
+  trialEndsAt: DateTime
+  currentPeriodStart: DateTime!
+  currentPeriodEnd: DateTime!
+  canceledAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""Billing details for a consumer."""
+type ConsumerBilling {
+  id: ID!
+  consumer: APIConsumer!
+  subscription: Subscription
+  externalCustomerId: String
+  paymentMethod: String
+  balance: Float
+  currency: String
+  invoices: [JSON!]!
+  updatedAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# Developer Portal
+# ─────────────────────────────────────────────
+
+"""The auto-generated developer portal for a Zuplo project."""
+type DeveloperPortal {
+  id: ID!
+  project: APIProject!
+  url: URL!
+  customDomain: String
+  config: PortalConfig
+  enabled: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""Configuration settings for the developer portal."""
+type PortalConfig {
+  id: ID!
+  portal: DeveloperPortal!
+  title: String
+  logoUrl: URL
+  primaryColor: String
+  allowSelfSignup: Boolean!
+  requireEmailVerification: Boolean!
+  customCss: String
+  updatedAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# Integrations & Events
+# ─────────────────────────────────────────────
+
+"""An external integration connected to a Zuplo project (logging, metrics, auth)."""
+type Integration {
+  id: ID!
+  project: APIProject!
+  name: String!
+  type: IntegrationType!
+  provider: String!
+  config: JSON
+  enabled: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""A plugin extending gateway behavior."""
+type Plugin {
+  id: ID!
+  gateway: APIGateway!
+  name: String!
+  module: String!
+  config: JSON
+  enabled: Boolean!
+  createdAt: DateTime!
+}
+
+"""A webhook endpoint that receives Zuplo platform events."""
+type Webhook {
+  id: ID!
+  project: APIProject!
+  url: URL!
+  secret: String
+  events: [WebhookEventType!]!
+  enabled: Boolean!
+  lastDeliveredAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""A record of an event dispatched to a webhook."""
+type EventLog {
+  id: ID!
+  webhook: Webhook!
+  eventType: WebhookEventType!
+  payload: JSON!
+  statusCode: Int
+  success: Boolean!
+  deliveredAt: DateTime
+  createdAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# Tunnels
+# ─────────────────────────────────────────────
+
+"""A secure tunnel connecting the Zuplo gateway to a private backend."""
+type Tunnel {
+  id: ID!
+  project: APIProject!
+  name: String!
+  description: String
+  token: TunnelToken
+  isActive: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""A connection token used to establish a Zuplo tunnel."""
+type TunnelToken {
+  id: ID!
+  tunnel: Tunnel!
+  token: String!
+  expiresAt: DateTime
+  rotatedAt: DateTime
+  createdAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# Audit
+# ─────────────────────────────────────────────
+
+"""An audit log entry recording a management action on the Zuplo platform."""
+type AuditLog {
+  id: ID!
+  project: APIProject!
+  actor: String!
+  action: String!
+  resourceType: String!
+  resourceId: String!
+  detail: JSON
+  ipAddress: String
+  timestamp: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# Pagination Connections
+# ─────────────────────────────────────────────
+
+type DeploymentConnection {
+  edges: [DeploymentEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type DeploymentEdge {
+  node: Deployment!
+  cursor: String!
+}
+
+type ConsumerConnection {
+  edges: [ConsumerEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type ConsumerEdge {
+  node: APIConsumer!
+  cursor: String!
+}
+
+type APIKeyConnection {
+  edges: [APIKeyEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type APIKeyEdge {
+  node: APIKey!
+  cursor: String!
+}
+
+type RequestLogConnection {
+  edges: [RequestLogEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type RequestLogEdge {
+  node: RequestLog!
+  cursor: String!
+}
+
+type ErrorLogConnection {
+  edges: [ErrorLogEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type ErrorLogEdge {
+  node: ErrorLog!
+  cursor: String!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+# ─────────────────────────────────────────────
+# Query Root
+# ─────────────────────────────────────────────
+
+type Query {
+  """Look up a Zuplo project by ID or slug."""
+  project(id: ID, slug: String): APIProject
+
+  """List all projects for the authenticated account."""
+  projects(first: Int, after: String): [APIProject!]!
+
+  """Look up an API environment by ID."""
+  environment(id: ID!): APIEnvironment
+
+  """Look up a deployment by ID."""
+  deployment(id: ID!): Deployment
+
+  """Look up an API key bucket by ID or name."""
+  bucket(id: ID, name: String): APIKeyBucket
+
+  """List all buckets for a project."""
+  buckets(projectId: ID!): [APIKeyBucket!]!
+
+  """Look up a consumer by ID."""
+  consumer(id: ID!): APIConsumer
+
+  """Search consumers in a bucket."""
+  consumers(bucketId: ID!, search: String, first: Int, after: String): ConsumerConnection!
+
+  """Look up a specific API key by ID."""
+  apiKey(id: ID!): APIKey
+
+  """Look up a custom domain by ID or hostname."""
+  customDomain(id: ID, hostname: String): CustomDomain
+
+  """List custom domains for a project."""
+  customDomains(projectId: ID!): [CustomDomain!]!
+
+  """Look up a tunnel by ID."""
+  tunnel(id: ID!): Tunnel
+
+  """List all tunnels for a project."""
+  tunnels(projectId: ID!): [Tunnel!]!
+
+  """Retrieve analytics for an environment over a time range."""
+  analytics(environmentId: ID!, from: DateTime!, to: DateTime!): Analytics
+
+  """List security events for an environment."""
+  securityEvents(environmentId: ID!, from: DateTime, to: DateTime, first: Int): [SecurityEvent!]!
+
+  """List audit log entries for a project."""
+  auditLogs(projectId: ID!, from: DateTime, to: DateTime, first: Int, after: String): [AuditLog!]!
+
+  """List available plans."""
+  plans: [Plan!]!
+
+  """Look up a webhook by ID."""
+  webhook(id: ID!): Webhook
+
+  """List webhooks for a project."""
+  webhooks(projectId: ID!): [Webhook!]!
+}
+
+# ─────────────────────────────────────────────
+# Mutation Root
+# ─────────────────────────────────────────────
+
+type Mutation {
+  """Create a new API key bucket."""
+  createBucket(projectId: ID!, name: String!, description: String): APIKeyBucket!
+
+  """Update an API key bucket."""
+  updateBucket(id: ID!, name: String, description: String): APIKeyBucket!
+
+  """Delete an API key bucket."""
+  deleteBucket(id: ID!): Boolean!
+
+  """Create a new consumer in a bucket."""
+  createConsumer(bucketId: ID!, name: String!, email: String, metadata: JSON): APIConsumer!
+
+  """Update an existing consumer."""
+  updateConsumer(id: ID!, name: String, email: String, metadata: JSON): APIConsumer!
+
+  """Delete a consumer."""
+  deleteConsumer(id: ID!): Boolean!
+
+  """Issue a new API key for a consumer."""
+  createAPIKey(consumerId: ID!, description: String, expiresAt: DateTime, metadata: JSON): APIKey!
+
+  """Revoke an API key."""
+  deleteAPIKey(id: ID!): Boolean!
+
+  """Add a manager to a consumer."""
+  addConsumerManager(consumerId: ID!, email: String!, role: String!): ConsumerManager!
+
+  """Remove a manager from a consumer."""
+  removeConsumerManager(id: ID!): Boolean!
+
+  """Set an environment variable on a branch."""
+  setEnvironmentVariable(environmentId: ID!, key: String!, value: String!, isSecret: Boolean): EnvironmentVariable!
+
+  """Delete an environment variable."""
+  deleteEnvironmentVariable(id: ID!): Boolean!
+
+  """Trigger a redeployment of an environment."""
+  redeploy(environmentId: ID!): Redeploy!
+
+  """Map a custom domain to a deployment."""
+  createCustomDomain(deploymentId: ID!, hostname: String!): CustomDomain!
+
+  """Update the deployment a custom domain points to."""
+  updateCustomDomain(id: ID!, deploymentId: ID!): CustomDomain!
+
+  """Delete a custom domain."""
+  deleteCustomDomain(id: ID!): Boolean!
+
+  """Create a secure tunnel."""
+  createTunnel(projectId: ID!, name: String!, description: String): Tunnel!
+
+  """Rotate a tunnel's connection token."""
+  rotateTunnelToken(tunnelId: ID!): TunnelToken!
+
+  """Delete a tunnel."""
+  deleteTunnel(id: ID!): Boolean!
+
+  """Create a webhook endpoint."""
+  createWebhook(projectId: ID!, url: URL!, events: [WebhookEventType!]!, secret: String): Webhook!
+
+  """Update a webhook."""
+  updateWebhook(id: ID!, url: URL, events: [WebhookEventType!], enabled: Boolean): Webhook!
+
+  """Delete a webhook."""
+  deleteWebhook(id: ID!): Boolean!
+
+  """Add an IP block rule to the gateway."""
+  createIPBlock(gatewayId: ID!, cidr: String!, reason: String, expiresAt: DateTime): IPBlock!
+
+  """Remove an IP block rule."""
+  deleteIPBlock(id: ID!): Boolean!
+
+  """Add a WAF rule to the gateway."""
+  createWAFRule(gatewayId: ID!, name: String!, expression: String!, action: String!, priority: Int!): WAFRule!
+
+  """Delete a WAF rule."""
+  deleteWAFRule(id: ID!): Boolean!
+}
