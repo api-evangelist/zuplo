@@ -5,7 +5,7 @@
       "source": "https://zuplo.com/blog/atom.xml",
       "feed_url": "https://zuplo.com/blog/atom.xml",
       "title": "",
-      "saved": 2,
+      "saved": 0,
       "method": "feed"
     },
     {
@@ -23,6 +23,6 @@
       "method": "discovered"
     }
   ],
-  "post_count": 76,
-  "fetched": "2026-06-27T12:03:07Z"
+  "post_count": 85,
+  "fetched": "2026-07-11T11:50:51Z"
 }
