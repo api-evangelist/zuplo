@@ -1,0 +1,349 @@
+openapi: 3.0.0
+info:
+  title: Zuplo Developer API Keys - Buckets Variables API
+  termsOfService: https://zuplo.com/legal/terms
+  contact:
+    name: Zuplo
+    url: https://zuplo.com/
+    email: support@zuplo.com
+  description: The Zuplo Developer API (ZAPI) enables developers to programmatically manage API keys, consumers, buckets, tunnels, deployments, metering, audit logs, and more.
+  version: 1.0.0
+servers:
+- url: https://dev.zuplo.com
+  description: Zuplo Developer API
+security:
+- ApiKeyAuth: []
+tags:
+- name: Variables
+  description: Set of operations available to create and update environment variables. You can learn more about environment variables [here](https://zuplo.com/docs/articles/environment-variables).
+paths:
+  /v1/accounts/{accountName}/projects/{projectName}/branches/{branchName}/variables:
+    post:
+      operationId: VariablesService_create
+      summary: Creates a Variable
+      description: Creates a new environment variable in a branch for a given project.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      - $ref: '#/components/parameters/Zuplo.Common.AccountProjectParams.projectName'
+      - $ref: '#/components/parameters/Zuplo.Common.BranchParams'
+      responses:
+        '201':
+          description: The request has succeeded and a new resource has been created as a result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.Variables.Variable'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - Variables
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Zuplo.Variables.VariableCreateBody'
+  /v1/accounts/{accountName}/projects/{projectName}/branches/{branchName}/variables/{variableName}:
+    patch:
+      operationId: VariablesService_update
+      summary: Updates a Variable
+      description: Update the value of a variable in a branch for a given project.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      - $ref: '#/components/parameters/Zuplo.Common.AccountProjectParams.projectName'
+      - $ref: '#/components/parameters/Zuplo.Common.BranchParams'
+      - $ref: '#/components/parameters/Zuplo.Common.VariableParams'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.Variables.Variable'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.NotFoundProblemResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - Variables
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Zuplo.Variables.VariableUpdateBody'
+components:
+  schemas:
+    Zuplo.Variables.VariableUpdateBody:
+      type: object
+      properties:
+        value:
+          type: string
+          description: The value of the variable.
+      example:
+        value: '89333'
+    Zuplo.Variables.Variable:
+      type: object
+      required:
+      - branch
+      - createdOn
+      - updatedOn
+      - name
+      - isSecret
+      - value
+      properties:
+        branch:
+          type: string
+          example: preview
+          readOnly: true
+        createdOn:
+          type: string
+          format: date-time
+          description: When the item was created.
+          example: '2023-04-18T05:54:34.408Z'
+          readOnly: true
+        updatedOn:
+          type: string
+          format: date-time
+          description: When the item was last updated.
+          example: '2023-04-20T05:54:34.408Z'
+          readOnly: true
+        name:
+          type: string
+          description: The name of the variable. Must be named in SCREAMING_SNAKE_CASE.
+          example: APP_ENVIRONMENT_KEY
+        isSecret:
+          type: boolean
+          description: Whether the variable is a secret.
+          example: true
+        value:
+          type: string
+          description: The value of the variable.
+      example:
+        name: PORTAL_ID
+        isSecret: false
+        value: '89333'
+        branch: main
+        createdOn: '2023-04-18T05:54:34.408Z'
+        updatedOn: '2023-04-20T05:54:34.408Z'
+    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/401
+        title:
+          type: string
+          enum:
+          - Unauthorized
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/401
+        title: Unauthorized
+        status: 401
+    Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/500
+        title:
+          type: string
+          enum:
+          - Internal Server Error
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/500
+        title: Internal Server Error
+        status: 500
+    Zuplo.Variables.VariableCreateBody:
+      type: object
+      required:
+      - name
+      - isSecret
+      - value
+      properties:
+        name:
+          type: string
+          description: The name of the variable. Must be named in SCREAMING_SNAKE_CASE.
+          example: APP_ENVIRONMENT_KEY
+        isSecret:
+          type: boolean
+          description: Whether the variable is a secret.
+          example: true
+        value:
+          type: string
+          description: The value of the variable.
+      example:
+        name: PORTAL_ID
+        isSecret: false
+        value: '89333'
+    Zuplo.HttpProblemDetails.BadRequestProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/400
+        title:
+          type: string
+          enum:
+          - Bad Request
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/400
+        title: Bad Request
+        status: 400
+    Zuplo.HttpProblemDetails.NotFoundProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/404
+        title:
+          type: string
+          enum:
+          - Not Found
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/404
+        title: Not Found
+        status: 404
+  parameters:
+    Zuplo.Common.AccountParams:
+      name: accountName
+      in: path
+      required: true
+      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
+      schema:
+        type: string
+    Zuplo.Common.VariableParams:
+      name: variableName
+      in: path
+      required: true
+      description: The name of the environment variable.
+      schema:
+        type: string
+    Zuplo.Common.BranchParams:
+      name: branchName
+      in: path
+      required: true
+      description: The name of the branch in your source control provider.
+      schema:
+        type: string
+    Zuplo.Common.AccountProjectParams.projectName:
+      name: projectName
+      in: path
+      required: true
+      description: The name of the project. You can find this in your Zuplo Portal under Settings > Project Information.
+      schema:
+        type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'API key authentication. Format: Bearer {api-key}'

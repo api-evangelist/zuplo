@@ -1,0 +1,36 @@
+openapi: 3.0.0
+info:
+  title: Zuplo Developer API Keys - Buckets Openapi API
+  termsOfService: https://zuplo.com/legal/terms
+  contact:
+    name: Zuplo
+    url: https://zuplo.com/
+    email: support@zuplo.com
+  description: The Zuplo Developer API (ZAPI) enables developers to programmatically manage API keys, consumers, buckets, tunnels, deployments, metering, audit logs, and more.
+  version: 1.0.0
+servers:
+- url: https://dev.zuplo.com
+  description: Zuplo Developer API
+security:
+- ApiKeyAuth: []
+tags:
+- name: Openapi
+paths:
+  /openapi:
+    get:
+      operationId: openApi
+      summary: OpenAPI Specification
+      description: Returns the OpenAPI V3 spec for Zuplo's Developer API
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+      tags:
+      - Openapi
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'API key authentication. Format: Bearer {api-key}'

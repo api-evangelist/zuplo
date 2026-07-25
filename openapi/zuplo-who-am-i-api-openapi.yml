@@ -1,0 +1,169 @@
+openapi: 3.0.0
+info:
+  title: Zuplo Developer API Keys - Buckets Who Am I API
+  termsOfService: https://zuplo.com/legal/terms
+  contact:
+    name: Zuplo
+    url: https://zuplo.com/
+    email: support@zuplo.com
+  description: The Zuplo Developer API (ZAPI) enables developers to programmatically manage API keys, consumers, buckets, tunnels, deployments, metering, audit logs, and more.
+  version: 1.0.0
+servers:
+- url: https://dev.zuplo.com
+  description: Zuplo Developer API
+security:
+- ApiKeyAuth: []
+tags:
+- name: Who Am I
+paths:
+  /v1/who-am-i:
+    get:
+      operationId: V1_whoAmI
+      summary: Who Am I
+      description: Returns basic information about the caller. Supports both API key and JWT authentication. The response always includes the subject identifier (`sub`). The `account` field is included when called with an API key, and `email` is included when called with a JWT that carries the email claim.
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.WhoAmI.WhoAmI'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - Who Am I
+components:
+  schemas:
+    Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/500
+        title:
+          type: string
+          enum:
+          - Internal Server Error
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/500
+        title: Internal Server Error
+        status: 500
+    Zuplo.HttpProblemDetails.BadRequestProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/400
+        title:
+          type: string
+          enum:
+          - Bad Request
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/400
+        title: Bad Request
+        status: 400
+    Zuplo.WhoAmI.WhoAmI:
+      type: object
+      required:
+      - sub
+      properties:
+        account:
+          type: string
+          example: chocolate_blizzard_treat
+        email:
+          type: string
+          example: user@example.com
+        sub:
+          type: string
+          example: auth0|abc123
+    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/401
+        title:
+          type: string
+          enum:
+          - Unauthorized
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/401
+        title: Unauthorized
+        status: 401
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'API key authentication. Format: Bearer {api-key}'

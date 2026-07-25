@@ -1,0 +1,634 @@
+openapi: 3.0.0
+info:
+  title: Zuplo Developer API Keys - Buckets API Keys - Keys API
+  termsOfService: https://zuplo.com/legal/terms
+  contact:
+    name: Zuplo
+    url: https://zuplo.com/
+    email: support@zuplo.com
+  description: The Zuplo Developer API (ZAPI) enables developers to programmatically manage API keys, consumers, buckets, tunnels, deployments, metering, audit logs, and more.
+  version: 1.0.0
+servers:
+- url: https://dev.zuplo.com
+  description: Zuplo Developer API
+security:
+- ApiKeyAuth: []
+tags:
+- name: API Keys - Keys
+  description: This is an object representing an API key. This section includes a list of endpoints to perform CRUD operations on an API key. You can learn more about API keys [here](https://zuplo.com/docs/articles/api-key-management#api-keys).
+paths:
+  /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers/{consumerName}/keys:
+    get:
+      operationId: ApiKeyKeysService_list
+      summary: Lists Keys
+      description: Lists all keys for this consumer.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.BucketParams.bucketName'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.ConsumerParams.consumerName'
+      - name: limit
+        in: query
+        required: true
+        description: 'The maximum number of entries to return. If the value exceeds the maximum, then the maximum value will be used. Default: 1000'
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+        explode: false
+      - name: offset
+        in: query
+        required: true
+        description: 'The offset of the first item returned in the collection. Default: 0'
+        schema:
+          type: integer
+          minimum: 0
+        explode: false
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.KeyFormatQueryParam'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.ApiKeys.ApiKeys'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '429':
+          $ref: '#/components/responses/RateLimitWithRetryAfter'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - API Keys - Keys
+    post:
+      operationId: ApiKeyKeysService_create
+      summary: Creates an API Key
+      description: Creates a new API key for this consumer. New API keys will automatically have [API Key Leak Detection](https://zuplo.com/docs/articles/api-key-leak-detection) enabled.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.BucketParams.bucketName'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.ConsumerParams.consumerName'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.ApiKeys.ApiKey'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '429':
+          $ref: '#/components/responses/RateLimitWithRetryAfter'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - API Keys - Keys
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Zuplo.ApiKeys.ApiKeyCreateOrUpdateBody'
+  /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers/{consumerName}/keys/$bulk:
+    post:
+      operationId: ApiKeyKeysService_bulkCreate
+      summary: Creates Multiple API Keys
+      description: Creates multiple new API keys for this consumer.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.BucketParams.bucketName'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.ConsumerParams.consumerName'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.ApiKeys.ApiKeys'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '429':
+          $ref: '#/components/responses/RateLimitWithRetryAfter'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - API Keys - Keys
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiKeyBulkCreateOrUpdateBody'
+  /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers/{consumerName}/keys/{keyId}:
+    get:
+      operationId: ApiKeyKeysService_get
+      summary: Gets an API Key
+      description: Retrieves an API key for this consumer.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.BucketParams.bucketName'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.ConsumerParams.consumerName'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.ApiKeyParams.keyId'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.KeyFormatQueryParam'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.TagQueryParam'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.ApiKeys.ApiKey'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.NotFoundProblemResponse'
+        '429':
+          $ref: '#/components/responses/RateLimitWithRetryAfter'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - API Keys - Keys
+    patch:
+      operationId: ApiKeyKeysService_update
+      summary: Updates an API Key
+      description: Updates an API key for this consumer.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.BucketParams.bucketName'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.ConsumerParams.consumerName'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.ApiKeyParams.keyId'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.TagQueryParam'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.ApiKeys.ApiKey'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.NotFoundProblemResponse'
+        '429':
+          $ref: '#/components/responses/RateLimitWithRetryAfter'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - API Keys - Keys
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Zuplo.ApiKeys.ApiKeyCreateOrUpdateBody'
+    delete:
+      operationId: ApiKeyKeysService_delete
+      summary: Deletes an API Key
+      description: Deletes an API key for this consumer.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.BucketParams.bucketName'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.ConsumerParams.consumerName'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.ApiKeyParams.keyId'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.TagQueryParam'
+      responses:
+        '204':
+          description: There is no content to send for this request, but the headers may be useful.
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.NotFoundProblemResponse'
+        '429':
+          $ref: '#/components/responses/RateLimitWithRetryAfter'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - API Keys - Keys
+components:
+  parameters:
+    Zuplo.ApiKeys.KeyFormatQueryParam:
+      name: key-format
+      in: query
+      required: false
+      description: 'The format of the key to return.
+
+        `none`: Key is completely hidden.
+
+        `visible`: Key is completely visible.
+
+        `masked`: Part of key suffix is visible.'
+      schema:
+        $ref: '#/components/schemas/Zuplo.ApiKeys.KeyFormat'
+        x-example: masked
+      x-example: masked
+      explode: false
+    Zuplo.Common.AccountParams:
+      name: accountName
+      in: path
+      required: true
+      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
+      schema:
+        type: string
+    Zuplo.ApiKeys.TagQueryParam:
+      name: tag
+      in: query
+      required: false
+      description: Query by tag. Example usage is `tag.account=foo`, where `account` is the name of the tag property and `foo` is the value.
+      schema:
+        type: string
+      explode: false
+    Zuplo.ApiKeys.ConsumerParams.consumerName:
+      name: consumerName
+      in: path
+      required: true
+      description: The name of the consumer.
+      schema:
+        type: string
+    Zuplo.ApiKeys.BucketParams.bucketName:
+      name: bucketName
+      in: path
+      required: true
+      description: The name of the bucket. Zuplo automatically creates a bucket for your project. You can find it in youe Zuplo Portal under Settings > Project Information.
+      schema:
+        type: string
+    Zuplo.ApiKeys.ApiKeyParams.keyId:
+      name: keyId
+      in: path
+      required: true
+      description: The key id.
+      schema:
+        type: string
+  schemas:
+    Zuplo.ApiKeys.ApiKeyCreateOrUpdateBody:
+      type: object
+      properties:
+        expiresOn:
+          type: string
+          format: date-time
+          description: When the key expires.
+          x-example: '2023-04-18T05:54:34.408Z'
+        description:
+          type: string
+          description: The description of the api key.
+        key:
+          type: string
+          description: The API key's value. You can use this parameter to override Zuplo's default key format, but this is not recommended as you will lose our [API Key Leak Detection](https://zuplo.com/docs/articles/api-key-leak-detection)
+      example:
+        description: My secret api key
+        expiresOn: '2023-04-20T05:54:34.408Z'
+        key: zpka_EXAMPLE_KEY_REDACTED_FOR_DOCS_1
+    Zuplo.HttpProblemDetails.NotFoundProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/404
+        title:
+          type: string
+          enum:
+          - Not Found
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/404
+        title: Not Found
+        status: 404
+    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/401
+        title:
+          type: string
+          enum:
+          - Unauthorized
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/401
+        title: Unauthorized
+        status: 401
+    Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/500
+        title:
+          type: string
+          enum:
+          - Internal Server Error
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/500
+        title: Internal Server Error
+        status: 500
+    ApiKeyBulkCreateOrUpdateBody:
+      type: array
+      items:
+        $ref: '#/components/schemas/Zuplo.ApiKeys.ApiKeyCreateOrUpdateBody'
+      example:
+      - description: My secret api key
+        expiresOn: '2023-04-20T05:54:34.408Z'
+        key: zpka_EXAMPLE_KEY_REDACTED_FOR_DOCS_1
+      - description: My secret api key2
+        expiresOn: '2023-05-20T05:54:34.408Z'
+        key: zpka_EXAMPLE_KEY_REDACTED_FOR_DOCS_2
+    Zuplo.ApiKeys.ApiKey:
+      type: object
+      required:
+      - createdOn
+      - updatedOn
+      - id
+      properties:
+        createdOn:
+          type: string
+          format: date-time
+          description: When the item was created.
+          example: '2023-04-18T05:54:34.408Z'
+          readOnly: true
+        updatedOn:
+          type: string
+          format: date-time
+          description: When the item was last updated.
+          example: '2023-04-20T05:54:34.408Z'
+          readOnly: true
+        id:
+          type: string
+          readOnly: true
+        expiresOn:
+          type: string
+          format: date-time
+          description: When the key expires.
+          x-example: '2023-04-18T05:54:34.408Z'
+        description:
+          type: string
+          description: The description of the api key.
+        key:
+          type: string
+          description: The API key's value. You can use this parameter to override Zuplo's default key format, but this is not recommended as you will lose our [API Key Leak Detection](https://zuplo.com/docs/articles/api-key-leak-detection)
+      description: A Consumer can have any number of API keys associated with it. Each API Key shares the same identity (i.e. Consumer) when authenticating with this service. Keys can have their own description to note the use of the key and can have an expiration date. Expired keys will not be permitted to authenticate after their expiration.
+      example:
+        createdOn: '2023-04-20T05:54:34.408Z'
+        updatedOn: '2023-04-20T05:54:34.408Z'
+        id: key_m1m4ol223R0kGHGZY7tPQMQl
+        description: My secret api key
+        expiresOn: '2023-04-20T05:54:34.408Z'
+        key: zpka_EXAMPLE_KEY_REDACTED_FOR_DOCS_1
+    Zuplo.HttpProblemDetails.BadRequestProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/400
+        title:
+          type: string
+          enum:
+          - Bad Request
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/400
+        title: Bad Request
+        status: 400
+    Zuplo.ApiKeys.KeyFormat:
+      type: string
+      enum:
+      - none
+      - visible
+      - masked
+    Zuplo.ApiKeys.ApiKeys:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Zuplo.ApiKeys.ApiKey'
+        limit:
+          type: integer
+          format: uint32
+          example: 1000
+        offset:
+          type: integer
+          format: uint32
+          example: 0
+        total:
+          type: integer
+          format: uint32
+      example:
+        data:
+        - createdOn: '2023-04-20T05:54:34.408Z'
+          updatedOn: '2023-04-20T05:54:34.408Z'
+          id: key_m1m4ol223R0kGHGZY7tPQMQl
+          description: My secret api key
+          expiresOn: '2023-04-20T05:54:34.408Z'
+          key: zpka_EXAMPLE_KEY_REDACTED_FOR_DOCS_1
+        limit: 1000
+        offset: 0
+  responses:
+    RateLimitWithRetryAfter:
+      description: Rate Limiting Response
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - type
+            - title
+            - status
+            examples:
+            - type: https://httpproblems.com/http-status/429
+              title: Too Many Requests
+              status: 429
+              instance: /foo/bar
+            properties:
+              type:
+                type: string
+                example: https://httpproblems.com/http-status/429
+                description: A URI reference that identifies the problem.
+              title:
+                type: string
+                example: Too Many Requests
+                description: A short, human-readable summary of the problem.
+              status:
+                type: number
+                example: 429
+                description: The HTTP status code.
+              instance:
+                type: string
+                example: /foo/bar
+      headers:
+        retry-after:
+          description: The number of seconds to wait before making a new request.
+          schema:
+            type: integer
+            example: 60
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'API key authentication. Format: Bearer {api-key}'

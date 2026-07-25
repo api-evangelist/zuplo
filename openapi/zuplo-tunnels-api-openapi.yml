@@ -1,0 +1,495 @@
+openapi: 3.0.0
+info:
+  title: Zuplo Developer API Keys - Buckets Tunnels API
+  termsOfService: https://zuplo.com/legal/terms
+  contact:
+    name: Zuplo
+    url: https://zuplo.com/
+    email: support@zuplo.com
+  description: The Zuplo Developer API (ZAPI) enables developers to programmatically manage API keys, consumers, buckets, tunnels, deployments, metering, audit logs, and more.
+  version: 1.0.0
+servers:
+- url: https://dev.zuplo.com
+  description: Zuplo Developer API
+security:
+- ApiKeyAuth: []
+tags:
+- name: Tunnels
+  description: List of endpoints available to perform operations on Tunnels.
+paths:
+  /v1/accounts/{accountName}/tunnels:
+    get:
+      operationId: TunnelService_list
+      summary: Lists Tunnels
+      description: Lists all tunnels belonging to this account.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.Tunnels.TunnelList'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - Tunnels
+    post:
+      operationId: TunnelService_create
+      summary: Creates a Tunnel
+      description: Creates a new tunnel for this account.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      responses:
+        '201':
+          description: The request has succeeded and a new resource has been created as a result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.Tunnels.Tunnel'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - Tunnels
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Zuplo.Tunnels.Tunnel'
+  /v1/accounts/{accountName}/tunnels/{tunnelId}:
+    get:
+      operationId: TunnelService_read
+      summary: Gets a Tunnel
+      description: Returns the details for a tunnel, including the token used to connect to the tunnel.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      - $ref: '#/components/parameters/Zuplo.Tunnels.TunnelIdParam'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.Tunnels.Tunnel'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.NotFoundProblemResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - Tunnels
+    delete:
+      operationId: TunnelService_delete
+      summary: Deletes a Tunnel
+      description: Deletes a tunnel and any services that it has.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      - $ref: '#/components/parameters/Zuplo.Tunnels.TunnelIdParam'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.Tunnels.TunnelTeardownOperation'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.NotFoundProblemResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - Tunnels
+  /v1/accounts/{accountName}/tunnels/{tunnelId}/$rotate-token:
+    post:
+      operationId: TunnelService_update
+      summary: Rotates the Token
+      description: Rotates the token used to connect to the tunnel.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      - $ref: '#/components/parameters/Zuplo.Tunnels.TunnelIdParam'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.Tunnels.Tunnel'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.NotFoundProblemResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - Tunnels
+  /v1/accounts/{accountName}/tunnels/{tunnelId}/teardown-operations/{operationId}:
+    get:
+      operationId: TunnelService_getProvisioningStatus
+      summary: Gets a Teardown Status
+      description: This endpoint returns the status of the deletion of the tunnel. Tearing down the tunnel is an asynchronous process so this endpoint allows you to poll the status.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      - $ref: '#/components/parameters/Zuplo.Tunnels.TunnelIdParam'
+      - $ref: '#/components/parameters/Zuplo.Tunnels.TunnelTeardownStatusParams.operationId'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.Tunnels.TunnelTeardownOperation'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - Tunnels
+components:
+  parameters:
+    Zuplo.Common.AccountParams:
+      name: accountName
+      in: path
+      required: true
+      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
+      schema:
+        type: string
+    Zuplo.Tunnels.TunnelTeardownStatusParams.operationId:
+      name: operationId
+      in: path
+      required: true
+      description: The ID of the deletion operation.
+      schema:
+        type: string
+    Zuplo.Tunnels.TunnelIdParam:
+      name: tunnelId
+      in: path
+      required: true
+      description: The ID of the tunnel.
+      schema:
+        type: string
+  schemas:
+    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/401
+        title:
+          type: string
+          enum:
+          - Unauthorized
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/401
+        title: Unauthorized
+        status: 401
+    Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/500
+        title:
+          type: string
+          enum:
+          - Internal Server Error
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/500
+        title: Internal Server Error
+        status: 500
+    Zuplo.Tunnels.Tunnel:
+      type: object
+      required:
+      - tunnelId
+      - name
+      - token
+      properties:
+        tunnelId:
+          type: string
+          example: tnl_JcHFzTcJ9y4GU69lKBOaxFYU
+          readOnly: true
+        name:
+          type: string
+          pattern: ^[a-zA-Z0-9-]{3,24}$
+          description: A friendly name for the tunnel.
+          example: api-service-tunnel
+        token:
+          type: string
+          description: Set your TUNNEL_TOKEN to this value to connect to the tunnel.
+          example: eyJhIjoiODJh[..]m89In0=
+          readOnly: true
+      description: Tunnels allow you to expose services running on bare metal, on-premises, or other non-cloud providers to the Zuplo platform. [Further reading](https://zuplo.com/docs/articles/secure-tunnel).
+      example:
+        tunnelId: tnl_JcHFzTcJ9y4GU69lKBOaxFYU
+        name: api-service-tunnel
+        token: eyJhIjoiODJhNGM0ZTBlYWY3ZmU3YjQyMWRlZHU1ODhlNjg1ZGMiLCJ0IjoiNjY3ZWZhODktYzIyNS00NTIyLWI0M2EtYTgwYzY0OTgxMGY1IiwicyI6IkY5RGdVNnNNOTJWT245OUlUSWxMazVwY3lHV0ZLVG1jcHg2d0I5TkR4Vm89In0=
+    Zuplo.Tunnels.TunnelTeardownOperation:
+      type: object
+      required:
+      - id
+      - status
+      properties:
+        id:
+          type: string
+          example: tst_1vmvAjaCun9Mfeosn3Og4ddD
+          readOnly: true
+        status:
+          type: string
+          enum:
+          - in-progress
+          - success
+          - error
+          example: success
+        message:
+          type: string
+          example: Successfully torn down tunnel.
+        details:
+          type: string
+    Zuplo.Tunnels.TunnelList:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Zuplo.Tunnels.TunnelListItem'
+        limit:
+          type: integer
+          format: uint32
+          example: 1000
+        offset:
+          type: integer
+          format: uint32
+          example: 0
+        total:
+          type: integer
+          format: uint32
+      example:
+        data:
+        - id: tnl_JcHFzTcJ9y4GU69lKBOaxFYU
+          name: api-service-tunnel
+    Zuplo.HttpProblemDetails.BadRequestProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/400
+        title:
+          type: string
+          enum:
+          - Bad Request
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/400
+        title: Bad Request
+        status: 400
+    Zuplo.HttpProblemDetails.NotFoundProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/404
+        title:
+          type: string
+          enum:
+          - Not Found
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/404
+        title: Not Found
+        status: 404
+    Zuplo.Tunnels.TunnelListItem:
+      type: object
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          example: tnl_JcHFzTcJ9y4GU69lKBOaxFYU
+          readOnly: true
+        name:
+          type: string
+          pattern: ^[a-zA-Z0-9-]{3,24}$
+          description: A friendly name for the tunnel.
+          example: api-service-tunnel
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'API key authentication. Format: Bearer {api-key}'

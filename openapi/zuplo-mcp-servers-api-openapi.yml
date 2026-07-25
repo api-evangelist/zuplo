@@ -1,0 +1,48 @@
+openapi: 3.0.0
+info:
+  title: Zuplo Developer API Keys - Buckets MCP Servers API
+  termsOfService: https://zuplo.com/legal/terms
+  contact:
+    name: Zuplo
+    url: https://zuplo.com/
+    email: support@zuplo.com
+  description: The Zuplo Developer API (ZAPI) enables developers to programmatically manage API keys, consumers, buckets, tunnels, deployments, metering, audit logs, and more.
+  version: 1.0.0
+servers:
+- url: https://dev.zuplo.com
+  description: Zuplo Developer API
+security:
+- ApiKeyAuth: []
+tags:
+- name: MCP Servers
+  description: MCP server endpoints for AI-powered tools
+paths:
+  /mcp/docs:
+    post:
+      operationId: MCPService_post
+      summary: Docs MCP Server
+      description: The Zuplo Documentation MCP server
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - MCP Servers
+      x-mcp-server:
+        name: zuplo-docs
+        version: 1.0.0
+        tools:
+        - name: search-zuplo-docs
+          description: Use this tool to do a semantic search for reference content related to Zuplo. The results provided will be extracts from documentation sites and other public sources like GitHub. The content may not fully answer your question -- be circumspect when reviewing and interpreting these extracts before using them in your response.
+        - name: ask-question-about-zuplo
+          description: Use this tool to ask a question about Zuplo to an AI Support Agent that is knowledgeable about Zuplo. Use this tool to ask specific troubleshooting, feature capability, or conceptual questions. Be specific and provide the minimum context needed to address your question in full
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'API key authentication. Format: Bearer {api-key}'

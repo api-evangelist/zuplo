@@ -1,0 +1,426 @@
+openapi: 3.0.0
+info:
+  title: Zuplo Developer API Keys - Buckets API Keys - Managers API
+  termsOfService: https://zuplo.com/legal/terms
+  contact:
+    name: Zuplo
+    url: https://zuplo.com/
+    email: support@zuplo.com
+  description: The Zuplo Developer API (ZAPI) enables developers to programmatically manage API keys, consumers, buckets, tunnels, deployments, metering, audit logs, and more.
+  version: 1.0.0
+servers:
+- url: https://dev.zuplo.com
+  description: Zuplo Developer API
+security:
+- ApiKeyAuth: []
+tags:
+- name: API Keys - Managers
+  description: A Manager is an object representing a group of managers in a given consumer. This section includes a group of endpoints available to perform operations on a manager. You can learn more about consumer managers [here](https://zuplo.com/docs/articles/api-key-management#consumers).
+paths:
+  /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers/{consumerName}/managers:
+    get:
+      operationId: ApiKeyConsumerManagers_list
+      summary: Lists Managers
+      description: Lists all managers belonging to a consumer.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.BucketParams.bucketName'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.ConsumerParams.consumerName'
+      - name: limit
+        in: query
+        required: true
+        description: 'The maximum number of entries to return. If the value exceeds the maximum, then the maximum value will be used. Default: 1000'
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+        explode: false
+      - name: offset
+        in: query
+        required: true
+        description: 'The offset of the first item returned in the collection. Default: 0'
+        schema:
+          type: integer
+          minimum: 0
+        explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.ApiKeys.Managers'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '429':
+          $ref: '#/components/responses/RateLimitWithRetryAfter'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - API Keys - Managers
+    post:
+      operationId: ApiKeyConsumerManagers_create
+      summary: Creates a Manager
+      description: Creates a new manager for a consumer.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.BucketParams.bucketName'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.ConsumerParams.consumerName'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.ApiKeys.Manager'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '429':
+          $ref: '#/components/responses/RateLimitWithRetryAfter'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - API Keys - Managers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Zuplo.ApiKeys.ManagerCreateBody'
+  /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers/{consumerName}/managers/{managerId}:
+    delete:
+      operationId: ApiKeyConsumerManagers_delete
+      summary: Deletes a Manager
+      description: Deletes a manager record
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.BucketParams.bucketName'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.ConsumerParams.consumerName'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.ManagerParams.managerId'
+      responses:
+        '204':
+          description: There is no content to send for this request, but the headers may be useful.
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.NotFoundProblemResponse'
+        '429':
+          $ref: '#/components/responses/RateLimitWithRetryAfter'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - API Keys - Managers
+components:
+  parameters:
+    Zuplo.ApiKeys.ManagerParams.managerId:
+      name: managerId
+      in: path
+      required: true
+      description: The manager id
+      schema:
+        type: string
+    Zuplo.Common.AccountParams:
+      name: accountName
+      in: path
+      required: true
+      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
+      schema:
+        type: string
+    Zuplo.ApiKeys.BucketParams.bucketName:
+      name: bucketName
+      in: path
+      required: true
+      description: The name of the bucket. Zuplo automatically creates a bucket for your project. You can find it in youe Zuplo Portal under Settings > Project Information.
+      schema:
+        type: string
+    Zuplo.ApiKeys.ConsumerParams.consumerName:
+      name: consumerName
+      in: path
+      required: true
+      description: The name of the consumer.
+      schema:
+        type: string
+  schemas:
+    Zuplo.ApiKeys.Managers:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Zuplo.ApiKeys.Manager'
+        limit:
+          type: integer
+          format: uint32
+          example: 1000
+        offset:
+          type: integer
+          format: uint32
+          example: 0
+        total:
+          type: integer
+          format: uint32
+      example:
+        data:
+        - createdOn: '2023-04-20T05:54:34.408Z'
+          id: managerId
+          email: bob@example.com
+          sub: sub-oauth2|113533232396018044159
+        limit: 1000
+        offset: 0
+    Zuplo.ApiKeys.Manager:
+      type: object
+      required:
+      - createdOn
+      - id
+      - email
+      - sub
+      properties:
+        email:
+          type: string
+          description: The email address of the manager
+        sub:
+          type: string
+          description: The sub of the manager in the identity provider
+      description: Managers are users that have access to a consumer. Managers can be added directly to a consumer (using email and sub) or invited (using only email) to a consumer.
+      example:
+        createdOn: '2023-04-20T05:54:34.408Z'
+        id: managerId
+        email: bob@example.com
+        sub: sub-oauth2|113533232396018044159
+    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/401
+        title:
+          type: string
+          enum:
+          - Unauthorized
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/401
+        title: Unauthorized
+        status: 401
+    Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/500
+        title:
+          type: string
+          enum:
+          - Internal Server Error
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/500
+        title: Internal Server Error
+        status: 500
+    Zuplo.HttpProblemDetails.BadRequestProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/400
+        title:
+          type: string
+          enum:
+          - Bad Request
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/400
+        title: Bad Request
+        status: 400
+    Zuplo.HttpProblemDetails.NotFoundProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/404
+        title:
+          type: string
+          enum:
+          - Not Found
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/404
+        title: Not Found
+        status: 404
+    Zuplo.ApiKeys.ManagerCreateBody:
+      type: object
+      required:
+      - email
+      - sub
+      properties:
+        email:
+          type: string
+          description: The email address of the manager
+          x-example: bob@example.com
+        sub:
+          type: string
+          description: The sub of the manager in the identity provider
+          x-example: sub-oauth2|113533232396018044159
+      example:
+        email: bob@example.com
+        sub: sub-oauth2|113533232396018044159
+  responses:
+    RateLimitWithRetryAfter:
+      description: Rate Limiting Response
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - type
+            - title
+            - status
+            examples:
+            - type: https://httpproblems.com/http-status/429
+              title: Too Many Requests
+              status: 429
+              instance: /foo/bar
+            properties:
+              type:
+                type: string
+                example: https://httpproblems.com/http-status/429
+                description: A URI reference that identifies the problem.
+              title:
+                type: string
+                example: Too Many Requests
+                description: A short, human-readable summary of the problem.
+              status:
+                type: number
+                example: 429
+                description: The HTTP status code.
+              instance:
+                type: string
+                example: /foo/bar
+      headers:
+        retry-after:
+          description: The number of seconds to wait before making a new request.
+          schema:
+            type: integer
+            example: 60
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'API key authentication. Format: Bearer {api-key}'

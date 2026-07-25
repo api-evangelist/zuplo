@@ -1,0 +1,336 @@
+openapi: 3.0.0
+info:
+  title: Zuplo Developer API Keys - Buckets Tunnel Services API
+  termsOfService: https://zuplo.com/legal/terms
+  contact:
+    name: Zuplo
+    url: https://zuplo.com/
+    email: support@zuplo.com
+  description: The Zuplo Developer API (ZAPI) enables developers to programmatically manage API keys, consumers, buckets, tunnels, deployments, metering, audit logs, and more.
+  version: 1.0.0
+servers:
+- url: https://dev.zuplo.com
+  description: Zuplo Developer API
+security:
+- ApiKeyAuth: []
+tags:
+- name: Tunnel Services
+  description: List of endpoints available to manage services for a given tunnel.
+paths:
+  /v1/accounts/{accountName}/tunnels/{tunnelId}/provisioning-operations/{operationId}:
+    get:
+      operationId: TunneledServicesService_getProvisioningStatus
+      summary: Gets a Provisioning Status
+      description: This endpoint returns the status of the services that the tunnel is currently configured for. Provisioning the services is an asynchronous process so this endpoint allows you to poll the status.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      - $ref: '#/components/parameters/Zuplo.Tunnels.TunnelIdParam'
+      - $ref: '#/components/parameters/Zuplo.Tunnels.TunneledServiceProvisioningStatusParams.operationId'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.Tunnels.TunneledServicesProvisioningOperation'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - Tunnel Services
+  /v1/accounts/{accountName}/tunnels/{tunnelId}/services-configuration:
+    get:
+      operationId: TunneledServicesService_getServiceConfiguration
+      summary: Gets a Service Configuration
+      description: This endpoint returns a snapshot of the services that the tunnel is currently configured for.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      - $ref: '#/components/parameters/Zuplo.Tunnels.TunnelIdParam'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.Tunnels.TunneledServicesConfiguration'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - Tunnel Services
+    put:
+      operationId: TunneledServicesService_putServiceConfiguration
+      summary: Configures Tunnel Services
+      description: This endpoint reads the request body and creates/updates/delete the services that the tunnel connects to.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      - $ref: '#/components/parameters/Zuplo.Tunnels.TunnelIdParam'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.Tunnels.TunneledServicesProvisioningOperation'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - Tunnel Services
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Zuplo.Tunnels.TunneledServicesConfiguration'
+components:
+  parameters:
+    Zuplo.Common.AccountParams:
+      name: accountName
+      in: path
+      required: true
+      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
+      schema:
+        type: string
+    Zuplo.Tunnels.TunneledServiceProvisioningStatusParams.operationId:
+      name: operationId
+      in: path
+      required: true
+      description: The ID of the operation.
+      schema:
+        type: string
+    Zuplo.Tunnels.TunnelIdParam:
+      name: tunnelId
+      in: path
+      required: true
+      description: The ID of the tunnel.
+      schema:
+        type: string
+  schemas:
+    Zuplo.Tunnels.TunneledServiceConfiguration:
+      type: object
+      required:
+      - name
+      - endpoint
+      - configurations
+      properties:
+        name:
+          type: string
+          pattern: ^[a-zA-Z0-9-]{3,24}$
+          description: A friendly name for the service. This name needs to be unique across all your tunneled services. Changing this will invalidate existing services with the name.
+          example: authservice
+        endpoint:
+          type: string
+          description: The URL of the service that the tunnel will forward to, e.g, http://localhost:3000
+          example: https://localhost:3000
+        configurations:
+          type: array
+          items:
+            type: object
+            properties:
+              project:
+                type: string
+                description: The name the project.
+                example: alpha-beta-gamma
+              accessibleBy:
+                type: array
+                items:
+                  type: string
+                  enum:
+                  - working-copy
+                  - preview
+                  - production
+                description: The environments of the project that should have acess to this tunneled service.
+                example:
+                - preview
+                - production
+            required:
+            - project
+            - accessibleBy
+          description: A list of projects that should have access to this tunneled service under the service://name URL scheme.
+      description: Tunnel service configuration.
+    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/401
+        title:
+          type: string
+          enum:
+          - Unauthorized
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/401
+        title: Unauthorized
+        status: 401
+    Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/500
+        title:
+          type: string
+          enum:
+          - Internal Server Error
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/500
+        title: Internal Server Error
+        status: 500
+    Zuplo.Tunnels.TunneledServicesProvisioningOperation:
+      type: object
+      required:
+      - id
+      - status
+      properties:
+        id:
+          type: string
+          example: pst_ezMUOh0xFqRWg84DPH5jVwgO
+          readOnly: true
+        status:
+          type: string
+          enum:
+          - in-progress
+          - success
+          - error
+          example: success
+        message:
+          type: string
+          example: Successfully provisioned services.
+        details:
+          type: string
+    Zuplo.HttpProblemDetails.BadRequestProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/400
+        title:
+          type: string
+          enum:
+          - Bad Request
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/400
+        title: Bad Request
+        status: 400
+    Zuplo.Tunnels.TunneledServicesConfiguration:
+      type: object
+      required:
+      - version
+      - services
+      properties:
+        version:
+          type: integer
+          format: uint8
+          description: The version of this configuration format.
+          example: 1
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/Zuplo.Tunnels.TunneledServiceConfiguration'
+          description: A list of services that the tunnel will connect to.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'API key authentication. Format: Bearer {api-key}'

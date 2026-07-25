@@ -1,0 +1,838 @@
+openapi: 3.0.0
+info:
+  title: Zuplo Developer API Keys - Buckets API Keys - Consumers API
+  termsOfService: https://zuplo.com/legal/terms
+  contact:
+    name: Zuplo
+    url: https://zuplo.com/
+    email: support@zuplo.com
+  description: The Zuplo Developer API (ZAPI) enables developers to programmatically manage API keys, consumers, buckets, tunnels, deployments, metering, audit logs, and more.
+  version: 1.0.0
+servers:
+- url: https://dev.zuplo.com
+  description: Zuplo Developer API
+security:
+- ApiKeyAuth: []
+tags:
+- name: API Keys - Consumers
+  description: A Consumer is an object representing a group of API keys in a given bucket. This section includes a group of endpoints available to perform CRUD operations on a consumer. You can learn more about consumers [here](https://zuplo.com/docs/articles/api-key-management#consumers).
+paths:
+  /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers:
+    get:
+      operationId: ApiKeyConsumersService_list
+      summary: Lists Consumers
+      description: Lists all consumers belonging to this account.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.BucketParams.bucketName'
+      - name: limit
+        in: query
+        required: true
+        description: 'The maximum number of entries to return. If the value exceeds the maximum, then the maximum value will be used. Default: 1000'
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+        explode: false
+      - name: offset
+        in: query
+        required: true
+        description: 'The offset of the first item returned in the collection. Default: 0'
+        schema:
+          type: integer
+          minimum: 0
+        explode: false
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.IncludeApiKeyParam'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.IncludeManagerInvitesParam'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.IncludeManagerParam'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.KeyFormatQueryParam'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.ManagerEmailQueryParam'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.TagQueryParam'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.ApiKeys.Consumers'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '429':
+          $ref: '#/components/responses/RateLimitWithRetryAfter'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - API Keys - Consumers
+    post:
+      operationId: ApiKeyConsumersService_create
+      summary: Creates a Consumer
+      description: Creates a new consumer for this account.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.BucketParams.bucketName'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.WithApiKeyQueryParam'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.ApiKeys.Consumer'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '429':
+          $ref: '#/components/responses/RateLimitWithRetryAfter'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - API Keys - Consumers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Zuplo.ApiKeys.ConsumerCreateBody'
+  /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers/{consumerName}:
+    get:
+      operationId: ApiKeyConsumersService_read
+      summary: Gets a Consumer
+      description: Gets a consumer given a bucket name and consumer name.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.BucketParams.bucketName'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.ConsumerParams.consumerName'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.IncludeApiKeyParam'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.KeyFormatQueryParam'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.IncludeManagerParam'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.IncludeManagerInvitesParam'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.TagQueryParam'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.ApiKeys.Consumer'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.NotFoundProblemResponse'
+        '429':
+          $ref: '#/components/responses/RateLimitWithRetryAfter'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - API Keys - Consumers
+    patch:
+      operationId: ApiKeyConsumersService_update
+      summary: Updates a Consumer
+      description: Update the consumer with the matching consumer name.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.BucketParams.bucketName'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.ConsumerParams.consumerName'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.TagQueryParam'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.ApiKeys.Consumer'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.NotFoundProblemResponse'
+        '429':
+          $ref: '#/components/responses/RateLimitWithRetryAfter'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - API Keys - Consumers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Zuplo.ApiKeys.ConsumerUpdateBody'
+    delete:
+      operationId: ApiKeyConsumersService_delete
+      summary: Deletes a Consumer
+      description: Deletes a consumer and any related resources
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.BucketParams.bucketName'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.ConsumerParams.consumerName'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.TagQueryParam'
+      responses:
+        '204':
+          description: There is no content to send for this request, but the headers may be useful.
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.NotFoundProblemResponse'
+        '429':
+          $ref: '#/components/responses/RateLimitWithRetryAfter'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - API Keys - Consumers
+  /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers/{consumerName}/roll-key:
+    post:
+      operationId: ApiKeyConsumersService_rollKey
+      summary: Roll Consumer Keys
+      description: Set expiration for keys with no expiration date and creates a new key.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.BucketParams.bucketName'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.ConsumerParams.consumerName'
+      - $ref: '#/components/parameters/Zuplo.ApiKeys.TagQueryParam'
+      responses:
+        '204':
+          description: There is no content to send for this request, but the headers may be useful.
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.NotFoundProblemResponse'
+        '429':
+          $ref: '#/components/responses/RateLimitWithRetryAfter'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - API Keys - Consumers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Zuplo.Common.ExpiresOnField'
+components:
+  parameters:
+    Zuplo.ApiKeys.KeyFormatQueryParam:
+      name: key-format
+      in: query
+      required: false
+      description: 'The format of the key to return.
+
+        `none`: Key is completely hidden.
+
+        `visible`: Key is completely visible.
+
+        `masked`: Part of key suffix is visible.'
+      schema:
+        $ref: '#/components/schemas/Zuplo.ApiKeys.KeyFormat'
+        x-example: masked
+      x-example: masked
+      explode: false
+    Zuplo.ApiKeys.IncludeApiKeyParam:
+      name: include-api-keys
+      in: query
+      required: false
+      description: Include the api key data in the response.
+      schema:
+        type: boolean
+        x-example: true
+      x-example: true
+      explode: false
+    Zuplo.ApiKeys.TagQueryParam:
+      name: tag
+      in: query
+      required: false
+      description: Query by tag. Example usage is `tag.account=foo`, where `account` is the name of the tag property and `foo` is the value.
+      schema:
+        type: string
+      explode: false
+    Zuplo.ApiKeys.ConsumerParams.consumerName:
+      name: consumerName
+      in: path
+      required: true
+      description: The name of the consumer.
+      schema:
+        type: string
+    Zuplo.ApiKeys.BucketParams.bucketName:
+      name: bucketName
+      in: path
+      required: true
+      description: The name of the bucket. Zuplo automatically creates a bucket for your project. You can find it in youe Zuplo Portal under Settings > Project Information.
+      schema:
+        type: string
+    Zuplo.ApiKeys.ManagerEmailQueryParam:
+      name: manager-email
+      in: query
+      required: false
+      description: Filter by email address of key manager.
+      schema:
+        type: string
+        x-example: bob@example.com
+      x-example: bob@example.com
+      explode: false
+    Zuplo.ApiKeys.IncludeManagerParam:
+      name: include-managers
+      in: query
+      required: false
+      description: Include the manager's data in the response.
+      schema:
+        type: boolean
+        x-example: true
+      x-example: true
+      explode: false
+    Zuplo.Common.AccountParams:
+      name: accountName
+      in: path
+      required: true
+      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
+      schema:
+        type: string
+    Zuplo.ApiKeys.WithApiKeyQueryParam:
+      name: with-api-key
+      in: query
+      required: false
+      description: If an API key should be created with the consumer.
+      schema:
+        type: boolean
+        x-example: true
+      x-example: true
+      explode: false
+    Zuplo.ApiKeys.IncludeManagerInvitesParam:
+      name: include-manager-invites
+      in: query
+      required: false
+      description: Include the manager invites data in the response.
+      schema:
+        type: boolean
+        x-example: true
+      x-example: true
+      explode: false
+  schemas:
+    Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/500
+        title:
+          type: string
+          enum:
+          - Internal Server Error
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/500
+        title: Internal Server Error
+        status: 500
+    Zuplo.ApiKeys.ApiKey:
+      type: object
+      required:
+      - createdOn
+      - updatedOn
+      - id
+      properties:
+        createdOn:
+          type: string
+          format: date-time
+          description: When the item was created.
+          example: '2023-04-18T05:54:34.408Z'
+          readOnly: true
+        updatedOn:
+          type: string
+          format: date-time
+          description: When the item was last updated.
+          example: '2023-04-20T05:54:34.408Z'
+          readOnly: true
+        id:
+          type: string
+          readOnly: true
+        expiresOn:
+          type: string
+          format: date-time
+          description: When the key expires.
+          x-example: '2023-04-18T05:54:34.408Z'
+        description:
+          type: string
+          description: The description of the api key.
+        key:
+          type: string
+          description: The API key's value. You can use this parameter to override Zuplo's default key format, but this is not recommended as you will lose our [API Key Leak Detection](https://zuplo.com/docs/articles/api-key-leak-detection)
+      description: A Consumer can have any number of API keys associated with it. Each API Key shares the same identity (i.e. Consumer) when authenticating with this service. Keys can have their own description to note the use of the key and can have an expiration date. Expired keys will not be permitted to authenticate after their expiration.
+      example:
+        createdOn: '2023-04-20T05:54:34.408Z'
+        updatedOn: '2023-04-20T05:54:34.408Z'
+        id: key_m1m4ol223R0kGHGZY7tPQMQl
+        description: My secret api key
+        expiresOn: '2023-04-20T05:54:34.408Z'
+        key: zpka_EXAMPLE_KEY_REDACTED_FOR_DOCS_1
+    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/401
+        title:
+          type: string
+          enum:
+          - Unauthorized
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/401
+        title: Unauthorized
+        status: 401
+    Zuplo.HttpProblemDetails.NotFoundProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/404
+        title:
+          type: string
+          enum:
+          - Not Found
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/404
+        title: Not Found
+        status: 404
+    Zuplo.ApiKeys.ConsumerCreateBody:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          pattern: ^[a-z0-9-]{1,128}$
+          description: A friendly name for the consumer. This name is used as the default user.sub property in the API Key Authentication policy.
+        managers:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: array
+            items:
+              $ref: '#/components/schemas/Zuplo.ApiKeys.Manager'
+          description: Email addresses of the managers to invite or a list of managers (with subs) to add to the consumer.
+        apiKeys:
+          type: array
+          items:
+            $ref: '#/components/schemas/Zuplo.ApiKeys.ApiKey'
+        description:
+          type: string
+          description: A description of the consumer.
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+          description: Key value pairs to associate with the consumer.
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Generic metadata associated with the consumer.
+      example:
+        name: zup-inc
+        description: Consumer for zup inc
+        tags:
+          foo: bar
+        metadata:
+          id: zup-id-343
+        managers:
+        - id: '123'
+          email: user@example.com
+          sub: oauth2|113533232396018044159
+          createdOn: '2023-06-19T17:32:11.990Z'
+    Zuplo.Common.ExpiresOnField:
+      type: object
+      required:
+      - expiresOn
+      properties:
+        expiresOn:
+          type: string
+          format: date-time
+          description: When the item will expire.
+          example: '2050-04-18T05:54:34.408Z'
+      example:
+        expiresOn: '2050-04-18T05:54:34.408Z'
+    Zuplo.ApiKeys.Consumers:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Zuplo.ApiKeys.Consumer'
+        limit:
+          type: integer
+          format: uint32
+          example: 1000
+        offset:
+          type: integer
+          format: uint32
+          example: 0
+        total:
+          type: integer
+          format: uint32
+      example:
+        data:
+        - id: csmr_brw0leTAVw478VFKD4F6OqVI
+          name: zup-inc
+          createdOn: '2023-04-20T05:54:34.408Z'
+          updatedOn: '2023-04-20T05:54:34.408Z'
+          description: Consumer for zup inc
+          tags:
+            foo: bar
+          metadata:
+            id: zup-id-343
+          managers:
+          - id: eusr_MeefoYod5eQN33MEjC4PeRFH
+            createdOn: '2023-06-19T17:32:11.990Z'
+            email: mgr@zuploinc.com
+            sub: sub-oauth2|113533232396018044159
+          apiKeys:
+          - id: key_AM7eAiR0BiaXTam951XmC9kK
+            description: api key for zup inc
+            createdOn: '2023-06-19T17:32:17.737Z'
+            updatedOn: '2023-06-19T17:32:17.737Z'
+            expiresOn: '2035-06-19T17:32:17.737Z'
+            key: '****69ff2f90'
+        offset: 0
+        limit: 1000
+    Zuplo.ApiKeys.KeyFormat:
+      type: string
+      enum:
+      - none
+      - visible
+      - masked
+    Zuplo.ApiKeys.Manager:
+      type: object
+      required:
+      - createdOn
+      - id
+      - email
+      - sub
+      properties:
+        email:
+          type: string
+          description: The email address of the manager
+        sub:
+          type: string
+          description: The sub of the manager in the identity provider
+      description: Managers are users that have access to a consumer. Managers can be added directly to a consumer (using email and sub) or invited (using only email) to a consumer.
+      example:
+        createdOn: '2023-04-20T05:54:34.408Z'
+        id: managerId
+        email: bob@example.com
+        sub: sub-oauth2|113533232396018044159
+    Zuplo.ApiKeys.Consumer:
+      type: object
+      required:
+      - createdOn
+      - updatedOn
+      - id
+      - name
+      properties:
+        createdOn:
+          type: string
+          format: date-time
+          description: When the item was created.
+          example: '2023-04-18T05:54:34.408Z'
+          readOnly: true
+        updatedOn:
+          type: string
+          format: date-time
+          description: When the item was last updated.
+          example: '2023-04-20T05:54:34.408Z'
+          readOnly: true
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          pattern: ^[a-z0-9-]{1,128}$
+          description: A friendly name for the consumer. This name is used as the default user.sub property in the API Key Authentication policy.
+        apiKeys:
+          type: array
+          items:
+            $ref: '#/components/schemas/Zuplo.ApiKeys.ApiKey'
+        description:
+          type: string
+          description: A description of the consumer.
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+          description: Key value pairs to associate with the consumer.
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Generic metadata associated with the consumer.
+      description: 'Consumers are the core of the API Key service. The consumer is the ''identity'' of any API Keys that are created. '
+      example:
+        id: csmr_brw0leTAVw478VFKD4F6OqVI
+        name: zup-inc
+        createdOn: '2023-04-20T05:54:34.408Z'
+        updatedOn: '2023-04-20T05:54:34.408Z'
+        description: Consumer for zup inc
+        tags:
+          foo: bar
+        metadata:
+          id: zup-id-343
+        managers:
+        - id: eusr_MeefoYod5eQN33MEjC4PeRFH
+          createdOn: '2023-06-19T17:32:11.990Z'
+          email: mgr@zuploinc.com
+          sub: sub-oauth2|113533232396018044159
+        apiKeys:
+        - id: key_AM7eAiR0BiaXTam951XmC9kK
+          description: api key for zup inc
+          createdOn: '2023-06-19T17:32:17.737Z'
+          updatedOn: '2023-06-19T17:32:17.737Z'
+          expiresOn: '2035-06-19T17:32:17.737Z'
+          key: '****69ff2f90'
+    Zuplo.ApiKeys.ConsumerUpdateBody:
+      type: object
+      properties:
+        description:
+          type: string
+          description: A description of the consumer.
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+          description: Key value pairs to associate with the consumer.
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Generic metadata associated with the consumer.
+      example:
+        description: Consumer for zup inc
+        tags:
+          foo: bar
+        metadata:
+          id: zup-id-343
+    Zuplo.HttpProblemDetails.BadRequestProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/400
+        title:
+          type: string
+          enum:
+          - Bad Request
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/400
+        title: Bad Request
+        status: 400
+  responses:
+    RateLimitWithRetryAfter:
+      description: Rate Limiting Response
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - type
+            - title
+            - status
+            examples:
+            - type: https://httpproblems.com/http-status/429
+              title: Too Many Requests
+              status: 429
+              instance: /foo/bar
+            properties:
+              type:
+                type: string
+                example: https://httpproblems.com/http-status/429
+                description: A URI reference that identifies the problem.
+              title:
+                type: string
+                example: Too Many Requests
+                description: A short, human-readable summary of the problem.
+              status:
+                type: number
+                example: 429
+                description: The HTTP status code.
+              instance:
+                type: string
+                example: /foo/bar
+      headers:
+        retry-after:
+          description: The number of seconds to wait before making a new request.
+          schema:
+            type: integer
+            example: 60
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'API key authentication. Format: Bearer {api-key}'

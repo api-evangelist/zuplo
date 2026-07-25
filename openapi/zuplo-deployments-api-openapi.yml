@@ -1,0 +1,561 @@
+openapi: 3.0.0
+info:
+  title: Zuplo Developer API Keys - Buckets Deployments API
+  termsOfService: https://zuplo.com/legal/terms
+  contact:
+    name: Zuplo
+    url: https://zuplo.com/
+    email: support@zuplo.com
+  description: The Zuplo Developer API (ZAPI) enables developers to programmatically manage API keys, consumers, buckets, tunnels, deployments, metering, audit logs, and more.
+  version: 1.0.0
+servers:
+- url: https://dev.zuplo.com
+  description: Zuplo Developer API
+security:
+- ApiKeyAuth: []
+tags:
+- name: Deployments
+  description: Set of operations available to handle deployments. You can learn more about deployments [here](https://zuplo.com/docs/articles/environments).
+paths:
+  /v1/accounts/{accountName}/projects/{projectName}/deployment-status/{statusId}:
+    get:
+      operationId: V1_deploymentStatus
+      summary: Gets a Deployment Status
+      description: Gets the deployment status of your upload. Use the UUID of the uploaded sources as the `statusId`.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      - $ref: '#/components/parameters/Zuplo.Common.AccountProjectParams.projectName'
+      - name: statusId
+        in: path
+        required: true
+        description: The UUID of the uploaded sources.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.DeploymentStatus.DeploymentStatus'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '404':
+          description: The server cannot find the requested resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.NotFoundProblemResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - Deployments
+  /v1/accounts/{accountName}/projects/{projectName}/deployments:
+    get:
+      operationId: DeploymentsService_list
+      summary: Lists Deployments
+      description: Lists the deployments for the specified account and project.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.AccountParams'
+      - $ref: '#/components/parameters/Zuplo.Common.AccountProjectParams.projectName'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.Deployments.DeploymentsList'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - Deployments
+  /v1/deployments/sources:
+    post:
+      operationId: DeployService_sources
+      summary: Upload Deployment Source
+      description: Creates a URL for uploading sources.
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.Sources.Source'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - Deployments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Zuplo.Deploys.SourceCreateBody'
+  /v1/deployments/{deploymentName}:
+    get:
+      operationId: DeploymentsService_read
+      summary: Get a Deployment
+      description: Gets the specified deployment.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.DeployParams'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.Deployments.Deployment'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - Deployments
+    delete:
+      operationId: DeploymentsService_delete
+      summary: Deletes a Deployment
+      description: Deletes the specified deployment.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.DeployParams'
+      responses:
+        '200':
+          description: The request has succeeded.
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - Deployments
+  /v1/deployments/{deploymentName}/deploy:
+    post:
+      operationId: DeployService_redeploy
+      summary: Re-deploy a Deployment
+      description: Re-deploys the specified deployment so that it can pick up new environment variables or other configuration changes.
+      parameters:
+      - $ref: '#/components/parameters/Zuplo.Common.DeployParams'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.Deploys.DeploymentResponse'
+        '400':
+          description: The server could not understand the request due to invalid syntax.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.BadRequestProblemResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.UnauthorizedProblemResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse'
+      tags:
+      - Deployments
+components:
+  schemas:
+    Zuplo.Deployments.Deployment:
+      type: object
+      required:
+      - name
+      - url
+      - label
+      - urlParameter
+      - createdOn
+      - updatedOn
+      - loggingId
+      - accountName
+      - projectName
+      - state
+      - message
+      - branchName
+      - environmentType
+      properties:
+        name:
+          type: string
+          description: The name of the deployment. You can find this in the Zuplo Portal under Settings > Environments.
+          example: lime-fox-main-bbe7540
+        url:
+          type: string
+          example: https://api.zuplo.com/deployments/lime-fox-main-bbe7540
+        label:
+          type: string
+          example: main
+        urlParameter:
+          type: string
+          example: main
+        createdOn:
+          type: string
+          example: '2023-07-25T23:41:41.468Z'
+        updatedOn:
+          type: string
+          example: '2023-07-25T23:41:41.468Z'
+        loggingId:
+          type: string
+          example: chocolate_great_buzzard::lime-fox::main::main::bbe7540
+        accountName:
+          type: string
+          example: chocolate_great_buzzard
+        projectName:
+          type: string
+          example: lime-fox
+        state:
+          type: string
+          example: STARTED
+        message:
+          type: string
+          enum:
+          - ''
+          example: ''
+        branchName:
+          type: string
+          example: main
+        environmentType:
+          type: string
+          example: PRODUCTION
+      description: A single deployment of a Zup.
+      example:
+        name: lime-fox-main-bbe7540
+        label: main
+        urlParameter: main
+        createdOn: '2023-07-25T23:41:41.468Z'
+        updatedOn: '2023-07-25T23:41:41.468Z'
+        loggingId: chocolate_great_buzzard::lime-fox::main::main::bbe7540
+        accountName: chocolate_great_buzzard
+        projectName: lime-fox
+        state: STARTED
+        message: ''
+        branchName: main
+        url: https://lime-fox-main-bbe7540.zuplo.app
+        environmentType: PRODUCTION
+    Zuplo.Sources.Source:
+      type: object
+      required:
+      - uploadUrl
+      properties:
+        uploadUrl:
+          type: string
+          example: https://storage.googleapis.com/[..]1fac8da132b9
+      example:
+        uploadUrl: https://storage.googleapis.com/[..]1fac8da132b9
+    Zuplo.Deployments.DeploymentsList:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Zuplo.Deployments.Deployment'
+      example:
+        data:
+        - name: lime-fox-main-bbe7540
+          label: main
+          urlParameter: main
+          createdOn: '2023-07-25T23:41:41.468Z'
+          updatedOn: '2023-07-25T23:41:41.468Z'
+          loggingId: chocolate_great_buzzard::lime-fox::main::main::bbe7540
+          accountName: chocolate_great_buzzard
+          projectName: lime-fox
+          state: STARTED
+          message: ''
+          branchName: main
+          url: https://lime-fox-main-bbe7540.zuplo.app
+          environmentType: PRODUCTION
+    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/401
+        title:
+          type: string
+          enum:
+          - Unauthorized
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/401
+        title: Unauthorized
+        status: 401
+    Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/500
+        title:
+          type: string
+          enum:
+          - Internal Server Error
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/500
+        title: Internal Server Error
+        status: 500
+    Zuplo.Deploys.SourceCreateBody:
+      type: object
+      required:
+      - accountName
+      - projectName
+      - branchName
+      properties:
+        accountName:
+          type: string
+          description: The name of the account
+          example: my-account
+        projectName:
+          type: string
+          description: The name of the project
+          example: my-project
+        branchName:
+          type: string
+          description: The name of the branch for deployment
+          example: main
+    Zuplo.DeploymentStatus.DeploymentStatus:
+      type: object
+      required:
+      - status
+      - url
+      - steps
+      - buildResult
+      properties:
+        status:
+          type: string
+          enum:
+          - SUCCESS
+          - ERROR
+          - IN_PROGRESS
+          example: SUCCESS
+        url:
+          type: string
+          example: https://api.zuplo.com/v1/deployments/lime-fox-main-bbe7540
+        steps:
+          type: object
+          additionalProperties: {}
+        buildResult:
+          type: object
+          additionalProperties: {}
+      description: Status of a Zuplo project deployment, including the status, build results, and a URL to view more details.
+      example:
+        status: SUCCESS
+        url: https://api.zuplo.com/v1/deployments/lime-fox-main-bbe7540
+        steps: {}
+        buildResult: {}
+    Zuplo.HttpProblemDetails.BadRequestProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/400
+        title:
+          type: string
+          enum:
+          - Bad Request
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/400
+        title: Bad Request
+        status: 400
+    Zuplo.Deploys.DeploymentResponse:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+      example:
+        status: request enqueued
+    Zuplo.HttpProblemDetails.NotFoundProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/404
+        title:
+          type: string
+          enum:
+          - Not Found
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/404
+        title: Not Found
+        status: 404
+  parameters:
+    Zuplo.Common.AccountParams:
+      name: accountName
+      in: path
+      required: true
+      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
+      schema:
+        type: string
+    Zuplo.Common.DeployParams:
+      name: deploymentName
+      in: path
+      required: true
+      description: The name of the deployment. You can find this in the Zuplo Portal under Settings > Environments.
+      schema:
+        type: string
+    Zuplo.Common.AccountProjectParams.projectName:
+      name: projectName
+      in: path
+      required: true
+      description: The name of the project. You can find this in your Zuplo Portal under Settings > Project Information.
+      schema:
+        type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'API key authentication. Format: Bearer {api-key}'
