@@ -1,44 +1,462 @@
 aid: zuplo
 url: https://raw.githubusercontent.com/api-evangelist/zuplo/refs/heads/main/apis.yml
 apis:
-- aid: zuplo:zuplo
-  name: Zuplo Developer API
-  tags:
-  - API Keys
-  - API Management
-  - Gateways
-  baseURL: https://dev.zuplo.com
+- aid: zuplo:zuplo-api-keys-buckets-api
+  name: Zuplo API Keys - Buckets API
+  description: >-
+    A Bucket is an object representing a group of API key consumers for a given account. This section
+    includes a group of endpoints available to perform CRUD operations on a bucket. You can learn more
+    about buckets [here](https://zuplo.com/docs/articles/api-key-buckets).
   humanURL: https://zuplo.com/docs/articles/developer-api
+  baseURL: https://dev.zuplo.com
+  tags:
+  - API Keys - Buckets
   properties:
-  - url: https://zuplo.com/docs/articles/developer-api
-    type: Documentation
-  - url: https://zuplo.com/docs/api
-    type: APIReference
-  - url: https://zuplo.com/docs/api/~endpoints
-    type: APIEndpoints
-  - url: openapi/zuplo-openapi.yml
-    type: OpenAPI
-  - url: rules/zuplo-rules.yml
-    type: SpectralRules
-  - url: json-schema/zuplo-api-key-schema.json
-    type: JSONSchema
-  - url: json-schema/zuplo-consumer-schema.json
-    type: JSONSchema
-  - url: json-schema/zuplo-tunnel-schema.json
-    type: JSONSchema
-  - url: json-schema/zuplo-deployment-schema.json
-    type: JSONSchema
-  - url: json-ld/zuplo-context.jsonld
-    type: JSONLDContext
-  - url: vocabulary/zuplo-vocabulary.yml
-    type: Vocabulary
-  - url: https://zuplo.com/docs/articles/api-key-api
-    type: GettingStarted
-  - url: graphql/zuplo-graphql.md
-    type: GraphQL
-  description: The Zuplo Developer API (ZAPI) enables developers to programmatically
-    manage API keys, consumers, buckets, tunnels, deployments, metering, audit logs,
-    and more. It is used to perform management actions on your Zuplo account and integrations.
+  - type: OpenAPI
+    url: openapi/zuplo-api-keys-buckets-api-openapi.yml
+  - type: Documentation
+    url: https://zuplo.com/docs/articles/developer-api
+  - type: APIReference
+    url: https://zuplo.com/docs/api
+  - type: APIEndpoints
+    url: https://zuplo.com/docs/api/~endpoints
+  - type: SpectralRules
+    url: rules/zuplo-rules.yml
+  - type: JSONSchema
+    url: json-schema/zuplo-api-key-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-consumer-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-tunnel-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-deployment-schema.json
+  - type: JSONLDContext
+    url: json-ld/zuplo-context.jsonld
+  - type: Vocabulary
+    url: vocabulary/zuplo-vocabulary.yml
+  - type: GettingStarted
+    url: https://zuplo.com/docs/articles/api-key-api
+  - type: GraphQL
+    url: graphql/zuplo-graphql.md
+- aid: zuplo:zuplo-api-keys-consumers-api
+  name: Zuplo API Keys - Consumers API
+  description: >-
+    A Consumer is an object representing a group of API keys in a given bucket. This section includes
+    a group of endpoints available to perform CRUD operations on a consumer. You can learn more about
+    consumers [here](https://zuplo.com/docs/articles/api-key-management#consumers).
+  humanURL: https://zuplo.com/docs/articles/developer-api
+  baseURL: https://dev.zuplo.com
+  tags:
+  - API Keys - Consumers
+  properties:
+  - type: OpenAPI
+    url: openapi/zuplo-api-keys-consumers-api-openapi.yml
+  - type: Documentation
+    url: https://zuplo.com/docs/articles/developer-api
+  - type: APIReference
+    url: https://zuplo.com/docs/api
+  - type: APIEndpoints
+    url: https://zuplo.com/docs/api/~endpoints
+  - type: SpectralRules
+    url: rules/zuplo-rules.yml
+  - type: JSONSchema
+    url: json-schema/zuplo-api-key-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-consumer-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-tunnel-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-deployment-schema.json
+  - type: JSONLDContext
+    url: json-ld/zuplo-context.jsonld
+  - type: Vocabulary
+    url: vocabulary/zuplo-vocabulary.yml
+  - type: GettingStarted
+    url: https://zuplo.com/docs/articles/api-key-api
+  - type: GraphQL
+    url: graphql/zuplo-graphql.md
+- aid: zuplo:zuplo-api-keys-keys-api
+  name: Zuplo API Keys - Keys API
+  description: >-
+    This is an object representing an API key. This section includes a list of endpoints to perform CRUD
+    operations on an API key. You can learn more about API keys [here](https://zuplo.com/docs/articles/api-key-management#api-keys).
+  humanURL: https://zuplo.com/docs/articles/developer-api
+  baseURL: https://dev.zuplo.com
+  tags:
+  - API Keys - Keys
+  properties:
+  - type: OpenAPI
+    url: openapi/zuplo-api-keys-keys-api-openapi.yml
+  - type: Documentation
+    url: https://zuplo.com/docs/articles/developer-api
+  - type: APIReference
+    url: https://zuplo.com/docs/api
+  - type: APIEndpoints
+    url: https://zuplo.com/docs/api/~endpoints
+  - type: SpectralRules
+    url: rules/zuplo-rules.yml
+  - type: JSONSchema
+    url: json-schema/zuplo-api-key-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-consumer-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-tunnel-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-deployment-schema.json
+  - type: JSONLDContext
+    url: json-ld/zuplo-context.jsonld
+  - type: Vocabulary
+    url: vocabulary/zuplo-vocabulary.yml
+  - type: GettingStarted
+    url: https://zuplo.com/docs/articles/api-key-api
+  - type: GraphQL
+    url: graphql/zuplo-graphql.md
+- aid: zuplo:zuplo-api-keys-managers-api
+  name: Zuplo API Keys - Managers API
+  description: >-
+    A Manager is an object representing a group of managers in a given consumer. This section includes
+    a group of endpoints available to perform operations on a manager. You can learn more about consumer
+    managers [here](https://zuplo.com/docs/articles/api-key-management#consumers).
+  humanURL: https://zuplo.com/docs/articles/developer-api
+  baseURL: https://dev.zuplo.com
+  tags:
+  - API Keys - Managers
+  properties:
+  - type: OpenAPI
+    url: openapi/zuplo-api-keys-managers-api-openapi.yml
+  - type: Documentation
+    url: https://zuplo.com/docs/articles/developer-api
+  - type: APIReference
+    url: https://zuplo.com/docs/api
+  - type: APIEndpoints
+    url: https://zuplo.com/docs/api/~endpoints
+  - type: SpectralRules
+    url: rules/zuplo-rules.yml
+  - type: JSONSchema
+    url: json-schema/zuplo-api-key-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-consumer-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-tunnel-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-deployment-schema.json
+  - type: JSONLDContext
+    url: json-ld/zuplo-context.jsonld
+  - type: Vocabulary
+    url: vocabulary/zuplo-vocabulary.yml
+  - type: GettingStarted
+    url: https://zuplo.com/docs/articles/api-key-api
+  - type: GraphQL
+    url: graphql/zuplo-graphql.md
+- aid: zuplo:zuplo-audit-logs-api
+  name: Zuplo Audit Logs API
+  description: The Audit Logs API from Zuplo — 1 operation(s) for audit logs.
+  humanURL: https://zuplo.com/docs/articles/developer-api
+  baseURL: https://dev.zuplo.com
+  tags:
+  - Audit Logs
+  properties:
+  - type: OpenAPI
+    url: openapi/zuplo-audit-logs-api-openapi.yml
+  - type: Documentation
+    url: https://zuplo.com/docs/articles/developer-api
+  - type: APIReference
+    url: https://zuplo.com/docs/api
+  - type: APIEndpoints
+    url: https://zuplo.com/docs/api/~endpoints
+  - type: SpectralRules
+    url: rules/zuplo-rules.yml
+  - type: JSONSchema
+    url: json-schema/zuplo-api-key-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-consumer-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-tunnel-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-deployment-schema.json
+  - type: JSONLDContext
+    url: json-ld/zuplo-context.jsonld
+  - type: Vocabulary
+    url: vocabulary/zuplo-vocabulary.yml
+  - type: GettingStarted
+    url: https://zuplo.com/docs/articles/api-key-api
+  - type: GraphQL
+    url: graphql/zuplo-graphql.md
+- aid: zuplo:zuplo-custom-domains-api
+  name: Zuplo Custom Domains API
+  description: Manage account custom domains and their deployment mappings
+  humanURL: https://zuplo.com/docs/articles/developer-api
+  baseURL: https://dev.zuplo.com
+  tags:
+  - Custom Domains
+  properties:
+  - type: OpenAPI
+    url: openapi/zuplo-custom-domains-api-openapi.yml
+  - type: Documentation
+    url: https://zuplo.com/docs/articles/developer-api
+  - type: APIReference
+    url: https://zuplo.com/docs/api
+  - type: APIEndpoints
+    url: https://zuplo.com/docs/api/~endpoints
+  - type: SpectralRules
+    url: rules/zuplo-rules.yml
+  - type: JSONSchema
+    url: json-schema/zuplo-api-key-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-consumer-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-tunnel-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-deployment-schema.json
+  - type: JSONLDContext
+    url: json-ld/zuplo-context.jsonld
+  - type: Vocabulary
+    url: vocabulary/zuplo-vocabulary.yml
+  - type: GettingStarted
+    url: https://zuplo.com/docs/articles/api-key-api
+  - type: GraphQL
+    url: graphql/zuplo-graphql.md
+- aid: zuplo:zuplo-deployments-api
+  name: Zuplo Deployments API
+  description: >-
+    Set of operations available to handle deployments. You can learn more about deployments [here](https://zuplo.com/docs/articles/environments).
+  humanURL: https://zuplo.com/docs/articles/developer-api
+  baseURL: https://dev.zuplo.com
+  tags:
+  - Deployments
+  properties:
+  - type: OpenAPI
+    url: openapi/zuplo-deployments-api-openapi.yml
+  - type: Documentation
+    url: https://zuplo.com/docs/articles/developer-api
+  - type: APIReference
+    url: https://zuplo.com/docs/api
+  - type: APIEndpoints
+    url: https://zuplo.com/docs/api/~endpoints
+  - type: SpectralRules
+    url: rules/zuplo-rules.yml
+  - type: JSONSchema
+    url: json-schema/zuplo-api-key-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-consumer-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-tunnel-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-deployment-schema.json
+  - type: JSONLDContext
+    url: json-ld/zuplo-context.jsonld
+  - type: Vocabulary
+    url: vocabulary/zuplo-vocabulary.yml
+  - type: GettingStarted
+    url: https://zuplo.com/docs/articles/api-key-api
+  - type: GraphQL
+    url: graphql/zuplo-graphql.md
+- aid: zuplo:zuplo-mcp-servers-api
+  name: Zuplo MCP Servers API
+  description: MCP server endpoints for AI-powered tools
+  humanURL: https://zuplo.com/docs/articles/developer-api
+  baseURL: https://dev.zuplo.com
+  tags:
+  - MCP Servers
+  properties:
+  - type: OpenAPI
+    url: openapi/zuplo-mcp-servers-api-openapi.yml
+  - type: Documentation
+    url: https://zuplo.com/docs/articles/developer-api
+  - type: APIReference
+    url: https://zuplo.com/docs/api
+  - type: APIEndpoints
+    url: https://zuplo.com/docs/api/~endpoints
+  - type: SpectralRules
+    url: rules/zuplo-rules.yml
+  - type: JSONSchema
+    url: json-schema/zuplo-api-key-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-consumer-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-tunnel-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-deployment-schema.json
+  - type: JSONLDContext
+    url: json-ld/zuplo-context.jsonld
+  - type: Vocabulary
+    url: vocabulary/zuplo-vocabulary.yml
+  - type: GettingStarted
+    url: https://zuplo.com/docs/articles/api-key-api
+  - type: GraphQL
+    url: graphql/zuplo-graphql.md
+- aid: zuplo:zuplo-openapi-api
+  name: Zuplo Openapi API
+  description: The Openapi API from Zuplo — 1 operation(s) for openapi.
+  humanURL: https://zuplo.com/docs/articles/developer-api
+  baseURL: https://dev.zuplo.com
+  tags:
+  - Openapi
+  properties:
+  - type: OpenAPI
+    url: openapi/zuplo-openapi-api-openapi.yml
+  - type: Documentation
+    url: https://zuplo.com/docs/articles/developer-api
+  - type: APIReference
+    url: https://zuplo.com/docs/api
+  - type: APIEndpoints
+    url: https://zuplo.com/docs/api/~endpoints
+  - type: SpectralRules
+    url: rules/zuplo-rules.yml
+  - type: JSONSchema
+    url: json-schema/zuplo-api-key-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-consumer-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-tunnel-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-deployment-schema.json
+  - type: JSONLDContext
+    url: json-ld/zuplo-context.jsonld
+  - type: Vocabulary
+    url: vocabulary/zuplo-vocabulary.yml
+  - type: GettingStarted
+    url: https://zuplo.com/docs/articles/api-key-api
+  - type: GraphQL
+    url: graphql/zuplo-graphql.md
+- aid: zuplo:zuplo-tunnel-services-api
+  name: Zuplo Tunnel Services API
+  description: List of endpoints available to manage services for a given tunnel.
+  humanURL: https://zuplo.com/docs/articles/developer-api
+  baseURL: https://dev.zuplo.com
+  tags:
+  - Tunnel Services
+  properties:
+  - type: OpenAPI
+    url: openapi/zuplo-tunnel-services-api-openapi.yml
+  - type: Documentation
+    url: https://zuplo.com/docs/articles/developer-api
+  - type: APIReference
+    url: https://zuplo.com/docs/api
+  - type: APIEndpoints
+    url: https://zuplo.com/docs/api/~endpoints
+  - type: SpectralRules
+    url: rules/zuplo-rules.yml
+  - type: JSONSchema
+    url: json-schema/zuplo-api-key-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-consumer-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-tunnel-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-deployment-schema.json
+  - type: JSONLDContext
+    url: json-ld/zuplo-context.jsonld
+  - type: Vocabulary
+    url: vocabulary/zuplo-vocabulary.yml
+  - type: GettingStarted
+    url: https://zuplo.com/docs/articles/api-key-api
+  - type: GraphQL
+    url: graphql/zuplo-graphql.md
+- aid: zuplo:zuplo-tunnels-api
+  name: Zuplo Tunnels API
+  description: List of endpoints available to perform operations on Tunnels.
+  humanURL: https://zuplo.com/docs/articles/developer-api
+  baseURL: https://dev.zuplo.com
+  tags:
+  - Tunnels
+  properties:
+  - type: OpenAPI
+    url: openapi/zuplo-tunnels-api-openapi.yml
+  - type: Documentation
+    url: https://zuplo.com/docs/articles/developer-api
+  - type: APIReference
+    url: https://zuplo.com/docs/api
+  - type: APIEndpoints
+    url: https://zuplo.com/docs/api/~endpoints
+  - type: SpectralRules
+    url: rules/zuplo-rules.yml
+  - type: JSONSchema
+    url: json-schema/zuplo-api-key-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-consumer-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-tunnel-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-deployment-schema.json
+  - type: JSONLDContext
+    url: json-ld/zuplo-context.jsonld
+  - type: Vocabulary
+    url: vocabulary/zuplo-vocabulary.yml
+  - type: GettingStarted
+    url: https://zuplo.com/docs/articles/api-key-api
+  - type: GraphQL
+    url: graphql/zuplo-graphql.md
+- aid: zuplo:zuplo-variables-api
+  name: Zuplo Variables API
+  description: >-
+    Set of operations available to create and update environment variables. You can learn more about environment
+    variables [here](https://zuplo.com/docs/articles/environment-variables).
+  humanURL: https://zuplo.com/docs/articles/developer-api
+  baseURL: https://dev.zuplo.com
+  tags:
+  - Variables
+  properties:
+  - type: OpenAPI
+    url: openapi/zuplo-variables-api-openapi.yml
+  - type: Documentation
+    url: https://zuplo.com/docs/articles/developer-api
+  - type: APIReference
+    url: https://zuplo.com/docs/api
+  - type: APIEndpoints
+    url: https://zuplo.com/docs/api/~endpoints
+  - type: SpectralRules
+    url: rules/zuplo-rules.yml
+  - type: JSONSchema
+    url: json-schema/zuplo-api-key-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-consumer-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-tunnel-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-deployment-schema.json
+  - type: JSONLDContext
+    url: json-ld/zuplo-context.jsonld
+  - type: Vocabulary
+    url: vocabulary/zuplo-vocabulary.yml
+  - type: GettingStarted
+    url: https://zuplo.com/docs/articles/api-key-api
+  - type: GraphQL
+    url: graphql/zuplo-graphql.md
+- aid: zuplo:zuplo-who-am-i-api
+  name: Zuplo Who Am I API
+  description: The Who Am I API from Zuplo — 1 operation(s) for who am i.
+  humanURL: https://zuplo.com/docs/articles/developer-api
+  baseURL: https://dev.zuplo.com
+  tags:
+  - Who Am I
+  properties:
+  - type: OpenAPI
+    url: openapi/zuplo-who-am-i-api-openapi.yml
+  - type: Documentation
+    url: https://zuplo.com/docs/articles/developer-api
+  - type: APIReference
+    url: https://zuplo.com/docs/api
+  - type: APIEndpoints
+    url: https://zuplo.com/docs/api/~endpoints
+  - type: SpectralRules
+    url: rules/zuplo-rules.yml
+  - type: JSONSchema
+    url: json-schema/zuplo-api-key-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-consumer-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-tunnel-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-deployment-schema.json
+  - type: JSONLDContext
+    url: json-ld/zuplo-context.jsonld
+  - type: Vocabulary
+    url: vocabulary/zuplo-vocabulary.yml
+  - type: GettingStarted
+    url: https://zuplo.com/docs/articles/api-key-api
+  - type: GraphQL
+    url: graphql/zuplo-graphql.md
 name: Zuplo
 tags:
 - AI Gateway
@@ -46,7 +464,20 @@ tags:
 - Gateways
 - Platform
 type: Index
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/zuplo.png
 access: 3rd-Party
 common:
 - type: AgenticAccess
