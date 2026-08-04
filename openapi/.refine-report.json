@@ -1,0 +1,38 @@
+{
+  "provider": "zuplo",
+  "sources": [
+    "zuplo-api-keys-buckets-api-openapi.yml",
+    "zuplo-api-keys-consumers-api-openapi.yml",
+    "zuplo-api-keys-keys-api-openapi.yml",
+    "zuplo-api-keys-managers-api-openapi.yml",
+    "zuplo-audit-logs-api-openapi.yml",
+    "zuplo-custom-domains-api-openapi.yml",
+    "zuplo-deployments-api-openapi.yml",
+    "zuplo-mcp-servers-api-openapi.yml",
+    "zuplo-openapi-api-openapi.yml",
+    "zuplo-tunnel-services-api-openapi.yml",
+    "zuplo-tunnels-api-openapi.yml",
+    "zuplo-variables-api-openapi.yml",
+    "zuplo-who-am-i-api-openapi.yml"
+  ],
+  "outputs": [
+    "zuplo-api-keys-buckets-api-openapi.yml",
+    "zuplo-api-keys-consumers-api-openapi.yml",
+    "zuplo-api-keys-keys-api-openapi.yml",
+    "zuplo-api-keys-managers-api-openapi.yml",
+    "zuplo-audit-logs-api-openapi.yml",
+    "zuplo-custom-domains-api-openapi.yml",
+    "zuplo-deployments-api-openapi.yml",
+    "zuplo-mcp-servers-api-openapi.yml",
+    "zuplo-openapi-api-openapi.yml",
+    "zuplo-tunnel-services-api-openapi.yml",
+    "zuplo-tunnels-api-openapi.yml",
+    "zuplo-variables-api-openapi.yml",
+    "zuplo-who-am-i-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
