@@ -480,6 +480,8 @@ accessModel:
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/zuplo.png
 access: 3rd-Party
 common:
+- type: Roadmap
+  url: https://zuplo.com/roadmap
 - type: AgenticAccess
   url: agentic-access/zuplo-agentic-access.yml
 - type: DomainSecurity
