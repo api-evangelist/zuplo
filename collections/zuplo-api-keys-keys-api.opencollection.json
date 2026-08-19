@@ -1,0 +1,284 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Zuplo Developer API Keys - Buckets API Keys - Keys API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "API Keys - Keys",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lists Keys",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/key-buckets/:bucketName/consumers/:consumerName/keys",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "bucketName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the bucket. Zuplo automatically creates a bucket for your project. You can find it in youe Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "consumerName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the consumer."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of entries to return. If the value exceeds the maximum, then the maximum value will be used. Default: 1000"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset of the first item returned in the collection. Default: 0"
+              },
+              {
+                "name": "key-format",
+                "value": "",
+                "type": "query",
+                "description": "The format of the key to return.\n`none`: Key is completely hidden.\n`visible`: Key is completely visible.\n`masked`: Part of key suffix is visible."
+              }
+            ]
+          },
+          "docs": "Lists all keys for this consumer."
+        },
+        {
+          "info": {
+            "name": "Creates an API Key",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/key-buckets/:bucketName/consumers/:consumerName/keys",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "bucketName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the bucket. Zuplo automatically creates a bucket for your project. You can find it in youe Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "consumerName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the consumer."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new API key for this consumer. New API keys will automatically have [API Key Leak Detection](https://zuplo.com/docs/articles/api-key-leak-detection) enabled."
+        },
+        {
+          "info": {
+            "name": "Creates Multiple API Keys",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/key-buckets/:bucketName/consumers/:consumerName/keys/$bulk",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "bucketName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the bucket. Zuplo automatically creates a bucket for your project. You can find it in youe Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "consumerName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the consumer."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates multiple new API keys for this consumer."
+        },
+        {
+          "info": {
+            "name": "Gets an API Key",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/key-buckets/:bucketName/consumers/:consumerName/keys/:keyId",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "bucketName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the bucket. Zuplo automatically creates a bucket for your project. You can find it in youe Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "consumerName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the consumer."
+              },
+              {
+                "name": "keyId",
+                "value": "",
+                "type": "path",
+                "description": "The key id."
+              },
+              {
+                "name": "key-format",
+                "value": "",
+                "type": "query",
+                "description": "The format of the key to return.\n`none`: Key is completely hidden.\n`visible`: Key is completely visible.\n`masked`: Part of key suffix is visible."
+              },
+              {
+                "name": "tag",
+                "value": "",
+                "type": "query",
+                "description": "Query by tag. Example usage is `tag.account=foo`, where `account` is the name of the tag property and `foo` is the value."
+              }
+            ]
+          },
+          "docs": "Retrieves an API key for this consumer."
+        },
+        {
+          "info": {
+            "name": "Updates an API Key",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/key-buckets/:bucketName/consumers/:consumerName/keys/:keyId",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "bucketName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the bucket. Zuplo automatically creates a bucket for your project. You can find it in youe Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "consumerName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the consumer."
+              },
+              {
+                "name": "keyId",
+                "value": "",
+                "type": "path",
+                "description": "The key id."
+              },
+              {
+                "name": "tag",
+                "value": "",
+                "type": "query",
+                "description": "Query by tag. Example usage is `tag.account=foo`, where `account` is the name of the tag property and `foo` is the value."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an API key for this consumer."
+        },
+        {
+          "info": {
+            "name": "Deletes an API Key",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/key-buckets/:bucketName/consumers/:consumerName/keys/:keyId",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "bucketName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the bucket. Zuplo automatically creates a bucket for your project. You can find it in youe Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "consumerName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the consumer."
+              },
+              {
+                "name": "keyId",
+                "value": "",
+                "type": "path",
+                "description": "The key id."
+              },
+              {
+                "name": "tag",
+                "value": "",
+                "type": "query",
+                "description": "Query by tag. Example usage is `tag.account=foo`, where `account` is the name of the tag property and `foo` is the value."
+              }
+            ]
+          },
+          "docs": "Deletes an API key for this consumer."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

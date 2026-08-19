@@ -1,0 +1,102 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Zuplo Developer API Keys - Buckets Variables API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Variables",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Creates a Variable",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/projects/:projectName/branches/:branchName/variables",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "projectName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the project. You can find this in your Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "branchName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the branch in your source control provider."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new environment variable in a branch for a given project."
+        },
+        {
+          "info": {
+            "name": "Updates a Variable",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/projects/:projectName/branches/:branchName/variables/:variableName",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "projectName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the project. You can find this in your Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "branchName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the branch in your source control provider."
+              },
+              {
+                "name": "variableName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the environment variable."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the value of a variable in a branch for a given project."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

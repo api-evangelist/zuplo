@@ -1,0 +1,129 @@
+{
+  "item": [
+    {
+      "id": "dad5db44-169f-44ee-af7b-3924ef7c8092",
+      "name": "MCP Servers",
+      "description": {
+        "content": "MCP server endpoints for AI-powered tools",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "93ffcbca-c4f0-4ac0-8093-a4be802851a4",
+          "name": "Docs MCP Server",
+          "request": {
+            "name": "Docs MCP Server",
+            "description": {
+              "content": "The Zuplo Documentation MCP server",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "mcp",
+                "docs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f39e5618-0c17-43c8-8138-465925e51b3f",
+              "name": "The request has succeeded.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "mcp",
+                    "docs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://dev.zuplo.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "7a6724d5-fb39-4eea-a734-ce0fd2cce33a",
+    "name": "Zuplo Developer API Keys - Buckets MCP Servers API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Zuplo Developer API (ZAPI) enables developers to programmatically manage API keys, consumers, buckets, tunnels, deployments, metering, audit logs, and more.\n\nContact Support:\n Name: Zuplo\n Email: support@zuplo.com",
+      "type": "text/plain"
+    }
+  }
+}

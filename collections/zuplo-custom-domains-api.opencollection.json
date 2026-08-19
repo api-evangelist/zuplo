@@ -1,0 +1,122 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Zuplo Developer API Keys - Buckets Custom Domains API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Custom Domains",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Custom Domains",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/custom-domains",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              }
+            ]
+          },
+          "docs": "Gets the account custom domains"
+        },
+        {
+          "info": {
+            "name": "Create Custom Domain",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/custom-domains",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a custom domain"
+        },
+        {
+          "info": {
+            "name": "Update a Custom Domain",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/custom-domains",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a custom domain"
+        },
+        {
+          "info": {
+            "name": "Delete a Custom Domain",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/custom-domains",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "hostname",
+                "value": "",
+                "type": "query",
+                "description": "The hostname of the custom domain to delete."
+              },
+              {
+                "name": "deploymentName",
+                "value": "",
+                "type": "query",
+                "description": "The deployment associated with the hostname, when deleting a deployment-specific mapping."
+              }
+            ]
+          },
+          "docs": "Delete a custom domain"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

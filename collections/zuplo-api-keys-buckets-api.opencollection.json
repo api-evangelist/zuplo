@@ -1,0 +1,147 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Zuplo Developer API Keys - Buckets API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "API Keys - Buckets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lists Buckets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/key-buckets",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              }
+            ]
+          },
+          "docs": "Lists all buckets belonging to this account."
+        },
+        {
+          "info": {
+            "name": "Creates a Bucket",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/key-buckets",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new bucket for this account."
+        },
+        {
+          "info": {
+            "name": "Gets a Bucket",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/key-buckets/:bucketName",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "bucketName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the bucket. Zuplo automatically creates a bucket for your project. You can find it in youe Zuplo Portal under Settings > Project Information."
+              }
+            ]
+          },
+          "docs": "Returns the details for a bucket, including the token used to connect to the bucket."
+        },
+        {
+          "info": {
+            "name": "Updates a Bucket",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/key-buckets/:bucketName",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "bucketName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the bucket. Zuplo automatically creates a bucket for your project. You can find it in youe Zuplo Portal under Settings > Project Information."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a bucket, and returns the updated value."
+        },
+        {
+          "info": {
+            "name": "Deletes a Bucket",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/key-buckets/:bucketName",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "bucketName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the bucket. Zuplo automatically creates a bucket for your project. You can find it in youe Zuplo Portal under Settings > Project Information."
+              }
+            ]
+          },
+          "docs": "Deletes a bucket and any related resources"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

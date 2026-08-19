@@ -1,0 +1,174 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Zuplo Developer API Keys - Buckets Tunnels API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tunnels",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lists Tunnels",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/tunnels",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              }
+            ]
+          },
+          "docs": "Lists all tunnels belonging to this account."
+        },
+        {
+          "info": {
+            "name": "Creates a Tunnel",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/tunnels",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new tunnel for this account."
+        },
+        {
+          "info": {
+            "name": "Gets a Tunnel",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/tunnels/:tunnelId",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "tunnelId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the tunnel."
+              }
+            ]
+          },
+          "docs": "Returns the details for a tunnel, including the token used to connect to the tunnel."
+        },
+        {
+          "info": {
+            "name": "Deletes a Tunnel",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/tunnels/:tunnelId",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "tunnelId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the tunnel."
+              }
+            ]
+          },
+          "docs": "Deletes a tunnel and any services that it has."
+        },
+        {
+          "info": {
+            "name": "Rotates the Token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/tunnels/:tunnelId/$rotate-token",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "tunnelId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the tunnel."
+              }
+            ]
+          },
+          "docs": "Rotates the token used to connect to the tunnel."
+        },
+        {
+          "info": {
+            "name": "Gets a Teardown Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/tunnels/:tunnelId/teardown-operations/:operationId",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "tunnelId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the tunnel."
+              },
+              {
+                "name": "operationId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the deletion operation."
+              }
+            ]
+          },
+          "docs": "This endpoint returns the status of the deletion of the tunnel. Tearing down the tunnel is an asynchronous process so this endpoint allows you to poll the status."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

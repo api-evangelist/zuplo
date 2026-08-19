@@ -1,0 +1,37 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Zuplo Developer API Keys - Buckets Who Am I API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Who Am I",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Who Am I",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dev.zuplo.com/v1/who-am-i"
+          },
+          "docs": "Returns basic information about the caller. Supports both API key and JWT authentication. The response always includes the subject identifier (`sub`). The `account` field is included when called with an API key, and `email` is included when called with a JWT that carries the email claim."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

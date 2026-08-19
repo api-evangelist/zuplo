@@ -1,0 +1,154 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Zuplo Developer API Keys - Buckets Deployments API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Deployments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Gets a Deployment Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/projects/:projectName/deployment-status/:statusId",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "projectName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the project. You can find this in your Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "statusId",
+                "value": "",
+                "type": "path",
+                "description": "The UUID of the uploaded sources."
+              }
+            ]
+          },
+          "docs": "Gets the deployment status of your upload. Use the UUID of the uploaded sources as the `statusId`."
+        },
+        {
+          "info": {
+            "name": "Lists Deployments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/projects/:projectName/deployments",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "projectName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the project. You can find this in your Zuplo Portal under Settings > Project Information."
+              }
+            ]
+          },
+          "docs": "Lists the deployments for the specified account and project."
+        },
+        {
+          "info": {
+            "name": "Upload Deployment Source",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dev.zuplo.com/v1/deployments/sources",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a URL for uploading sources."
+        },
+        {
+          "info": {
+            "name": "Get a Deployment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dev.zuplo.com/v1/deployments/:deploymentName",
+            "params": [
+              {
+                "name": "deploymentName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the deployment. You can find this in the Zuplo Portal under Settings > Environments."
+              }
+            ]
+          },
+          "docs": "Gets the specified deployment."
+        },
+        {
+          "info": {
+            "name": "Deletes a Deployment",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://dev.zuplo.com/v1/deployments/:deploymentName",
+            "params": [
+              {
+                "name": "deploymentName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the deployment. You can find this in the Zuplo Portal under Settings > Environments."
+              }
+            ]
+          },
+          "docs": "Deletes the specified deployment."
+        },
+        {
+          "info": {
+            "name": "Re-deploy a Deployment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dev.zuplo.com/v1/deployments/:deploymentName/deploy",
+            "params": [
+              {
+                "name": "deploymentName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the deployment. You can find this in the Zuplo Portal under Settings > Environments."
+              }
+            ]
+          },
+          "docs": "Re-deploys the specified deployment so that it can pick up new environment variables or other configuration changes."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

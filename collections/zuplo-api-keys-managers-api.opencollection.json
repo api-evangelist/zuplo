@@ -1,0 +1,141 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Zuplo Developer API Keys - Buckets API Keys - Managers API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "API Keys - Managers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Lists Managers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/key-buckets/:bucketName/consumers/:consumerName/managers",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "bucketName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the bucket. Zuplo automatically creates a bucket for your project. You can find it in youe Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "consumerName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the consumer."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of entries to return. If the value exceeds the maximum, then the maximum value will be used. Default: 1000"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset of the first item returned in the collection. Default: 0"
+              }
+            ]
+          },
+          "docs": "Lists all managers belonging to a consumer."
+        },
+        {
+          "info": {
+            "name": "Creates a Manager",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/key-buckets/:bucketName/consumers/:consumerName/managers",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "bucketName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the bucket. Zuplo automatically creates a bucket for your project. You can find it in youe Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "consumerName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the consumer."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new manager for a consumer."
+        },
+        {
+          "info": {
+            "name": "Deletes a Manager",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/key-buckets/:bucketName/consumers/:consumerName/managers/:managerId",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "bucketName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the bucket. Zuplo automatically creates a bucket for your project. You can find it in youe Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "consumerName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the consumer."
+              },
+              {
+                "name": "managerId",
+                "value": "",
+                "type": "path",
+                "description": "The manager id"
+              }
+            ]
+          },
+          "docs": "Deletes a manager record"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

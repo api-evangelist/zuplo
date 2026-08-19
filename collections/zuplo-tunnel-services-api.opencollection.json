@@ -1,0 +1,111 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Zuplo Developer API Keys - Buckets Tunnel Services API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tunnel Services",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Gets a Provisioning Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/tunnels/:tunnelId/provisioning-operations/:operationId",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "tunnelId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the tunnel."
+              },
+              {
+                "name": "operationId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the operation."
+              }
+            ]
+          },
+          "docs": "This endpoint returns the status of the services that the tunnel is currently configured for. Provisioning the services is an asynchronous process so this endpoint allows you to poll the status."
+        },
+        {
+          "info": {
+            "name": "Gets a Service Configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/tunnels/:tunnelId/services-configuration",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "tunnelId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the tunnel."
+              }
+            ]
+          },
+          "docs": "This endpoint returns a snapshot of the services that the tunnel is currently configured for."
+        },
+        {
+          "info": {
+            "name": "Configures Tunnel Services",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://dev.zuplo.com/v1/accounts/:accountName/tunnels/:tunnelId/services-configuration",
+            "params": [
+              {
+                "name": "accountName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the account. You can find this in your Zuplo Portal under Settings > Project Information."
+              },
+              {
+                "name": "tunnelId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the tunnel."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint reads the request body and creates/updates/delete the services that the tunnel connects to."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
