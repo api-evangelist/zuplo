@@ -223,6 +223,8 @@ apis:
   humanURL: https://zuplo.com/docs/articles/developer-api
   baseURL: https://dev.zuplo.com
   tags:
+  - Deployment
+  tags_raw:
   - Deployments
   properties:
   - type: OpenAPI
@@ -291,6 +293,8 @@ apis:
   humanURL: https://zuplo.com/docs/articles/developer-api
   baseURL: https://dev.zuplo.com
   tags:
+  - OpenAPI
+  tags_raw:
   - Openapi
   properties:
   - type: OpenAPI
@@ -429,6 +433,8 @@ apis:
   humanURL: https://zuplo.com/docs/articles/developer-api
   baseURL: https://dev.zuplo.com
   tags:
+  - Whoami
+  tags_raw:
   - Who Am I
   properties:
   - type: OpenAPI
