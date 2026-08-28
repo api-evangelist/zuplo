@@ -10,8 +10,8 @@ info:
     OpenAPI description.
   version: 1.0.0
 sourceDescriptions:
-- name: zuploApi
-  url: ../openapi/zuplo-openapi.yml
+- name: apiKeysKeysApi
+  url: ../openapi/zuplo-api-keys-keys-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: deactivate-consumer-key

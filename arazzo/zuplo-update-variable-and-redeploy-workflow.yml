@@ -11,8 +11,11 @@ info:
     description.
   version: 1.0.0
 sourceDescriptions:
-- name: zuploApi
-  url: ../openapi/zuplo-openapi.yml
+- name: deploymentsApi
+  url: ../openapi/zuplo-deployments-api-openapi.yml
+  type: openapi
+- name: variablesApi
+  url: ../openapi/zuplo-variables-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: update-variable-and-redeploy

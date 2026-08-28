@@ -11,8 +11,8 @@ info:
     opening the underlying OpenAPI description.
   version: 1.0.0
 sourceDescriptions:
-- name: zuploApi
-  url: ../openapi/zuplo-openapi.yml
+- name: customDomainsApi
+  url: ../openapi/zuplo-custom-domains-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: map-custom-domain

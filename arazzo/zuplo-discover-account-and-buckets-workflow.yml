@@ -10,8 +10,11 @@ info:
     and executed without opening the underlying OpenAPI description.
   version: 1.0.0
 sourceDescriptions:
-- name: zuploApi
-  url: ../openapi/zuplo-openapi.yml
+- name: apiKeysBucketsApi
+  url: ../openapi/zuplo-api-keys-buckets-api-openapi.yml
+  type: openapi
+- name: whoAmIApi
+  url: ../openapi/zuplo-who-am-i-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: discover-account-and-buckets

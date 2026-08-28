@@ -10,8 +10,8 @@ info:
     be read and executed without opening the underlying OpenAPI description.
   version: 1.0.0
 sourceDescriptions:
-- name: zuploApi
-  url: ../openapi/zuplo-openapi.yml
+- name: apiKeysBucketsApi
+  url: ../openapi/zuplo-api-keys-buckets-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: find-and-update-bucket

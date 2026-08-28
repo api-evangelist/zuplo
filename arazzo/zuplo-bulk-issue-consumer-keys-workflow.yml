@@ -11,8 +11,11 @@ info:
     underlying OpenAPI description.
   version: 1.0.0
 sourceDescriptions:
-- name: zuploApi
-  url: ../openapi/zuplo-openapi.yml
+- name: apiKeysConsumersApi
+  url: ../openapi/zuplo-api-keys-consumers-api-openapi.yml
+  type: openapi
+- name: apiKeysKeysApi
+  url: ../openapi/zuplo-api-keys-keys-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: bulk-issue-consumer-keys
