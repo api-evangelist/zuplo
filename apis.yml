@@ -293,7 +293,7 @@ apis:
   humanURL: https://zuplo.com/docs/articles/developer-api
   baseURL: https://dev.zuplo.com
   tags:
-  - OpenAPI
+  - Openapi
   tags_raw:
   - Openapi
   properties:
@@ -433,7 +433,7 @@ apis:
   humanURL: https://zuplo.com/docs/articles/developer-api
   baseURL: https://dev.zuplo.com
   tags:
-  - Whoami
+  - Who Am I
   tags_raw:
   - Who Am I
   properties:
