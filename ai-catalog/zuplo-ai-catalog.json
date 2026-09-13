@@ -1,0 +1,79 @@
+{
+  "entries": [
+    {
+      "@context": "https://agenticresourcediscovery.org/context/v1",
+      "description": "The Zuplo Developer API lets you programmatically manage your Zuplo account, projects, environments, tunnels, custom domains, and more. Use it to automate workflows, integrate with CI/CD pipelines, or build custom tooling on top of Zuplo.\n\n## Authentication\n\nAll API requests require a **Bearer token** in the `Authorization` header:\n\n```\nAuthorization: Bearer YOUR_API_KEY\n```\n\n### Creating an API Key\n\n1. Navigate to [portal.zuplo.com](https://portal.zuplo.com) and log in.\n2. Select the account you want to work with.\n3. Go to **Settings** > **API Keys**.\n4. Click **Create New Key** or copy an existing key.\n\nAPI keys are scoped to your account, so a single key works for all projects under that account. If you belong to multiple accounts, make sure to select the correct one before creating a key.\n\n> **⚠️ Warning:** Keep your API key secure. Do not commit it to version control or share it publicly. Use environment variables to store your key in CI/CD environments.",
+      "displayName": "Zuplo Developer API",
+      "identifier": "urn:air:zuplo.com:api:api",
+      "metadata": {
+        "documentationUrl": "https://zuplo.com/docs/api",
+        "kind": "api",
+        "endpoint": "https://dev.zuplo.com/"
+      },
+      "trustManifest": {
+        "identity": "https://zuplo.com",
+        "identityType": "https"
+      },
+      "type": "application/json",
+      "url": "https://zuplo.com/openapi.json",
+      "version": "1.0.0"
+    },
+    {
+      "@context": "https://agenticresourcediscovery.org/context/v1",
+      "capabilities": [
+        "search-zuplo-docs",
+        "ask-question-about-zuplo"
+      ],
+      "description": "Public Streamable HTTP MCP server for Zuplo documentation tools and stable agent resources.",
+      "displayName": "Docs MCP Server",
+      "identifier": "urn:air:zuplo.com:mcp:com.zuplo-docs",
+      "metadata": {
+        "apiIdentifier": "urn:air:zuplo.com:api:api",
+        "apiPath": "api",
+        "endpoint": "https://dev.zuplo.com/mcp/docs",
+        "method": "POST",
+        "operationId": "docsMcpPost",
+        "authenticated": false,
+        "authType": "none"
+      },
+      "trustManifest": {
+        "identity": "https://zuplo.com",
+        "identityType": "https"
+      },
+      "type": "application/mcp-server-card+json",
+      "url": "https://zuplo.com/.well-known/mcp/com.zuplo-docs-server-card.json",
+      "version": "1.0.0"
+    },
+    {
+      "@context": "https://agenticresourcediscovery.org/context/v1",
+      "description": "Exposes the public Zuplo Developer API operations as MCP tools.",
+      "displayName": "Zuplo Platform MCP Server",
+      "identifier": "urn:air:zuplo.com:mcp:com.zuplo-platform",
+      "metadata": {
+        "apiIdentifier": "urn:air:zuplo.com:api:api",
+        "apiPath": "api",
+        "endpoint": "https://dev.zuplo.com/mcp",
+        "method": "POST",
+        "operationId": "developerApiMcpServer",
+        "authenticated": true,
+        "authType": "apiKey",
+        "securitySchemes": "DeveloperApiKey",
+        "authHeader": "Authorization",
+        "authScheme": "Bearer"
+      },
+      "trustManifest": {
+        "identity": "https://zuplo.com",
+        "identityType": "https"
+      },
+      "type": "application/mcp-server-card+json",
+      "url": "https://zuplo.com/.well-known/mcp/com.zuplo-platform-server-card.json",
+      "version": "1.0.0"
+    }
+  ],
+  "host": {
+    "displayName": "Zuplo",
+    "documentationUrl": "https://zuplo.com/docs/api",
+    "identifier": "https://zuplo.com"
+  },
+  "specVersion": "1.0"
+}
