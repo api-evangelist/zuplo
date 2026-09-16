@@ -287,42 +287,6 @@ apis:
     url: https://zuplo.com/docs/articles/api-key-api
   - type: GraphQL
     url: graphql/zuplo-graphql.md
-- aid: zuplo:zuplo-openapi-api
-  name: Zuplo Openapi API
-  description: The Openapi API from Zuplo — 1 operation(s) for openapi.
-  humanURL: https://zuplo.com/docs/articles/developer-api
-  baseURL: https://dev.zuplo.com
-  tags:
-  - OpenAPI
-  tags_raw:
-  - Openapi
-  properties:
-  - type: OpenAPI
-    url: openapi/zuplo-openapi-api-openapi.yml
-  - type: Documentation
-    url: https://zuplo.com/docs/articles/developer-api
-  - type: APIReference
-    url: https://zuplo.com/docs/api
-  - type: APIEndpoints
-    url: https://zuplo.com/docs/api/~endpoints
-  - type: SpectralRules
-    url: rules/zuplo-rules.yml
-  - type: JSONSchema
-    url: json-schema/zuplo-api-key-schema.json
-  - type: JSONSchema
-    url: json-schema/zuplo-consumer-schema.json
-  - type: JSONSchema
-    url: json-schema/zuplo-tunnel-schema.json
-  - type: JSONSchema
-    url: json-schema/zuplo-deployment-schema.json
-  - type: JSONLDContext
-    url: json-ld/zuplo-context.jsonld
-  - type: Vocabulary
-    url: vocabulary/zuplo-vocabulary.yml
-  - type: GettingStarted
-    url: https://zuplo.com/docs/articles/api-key-api
-  - type: GraphQL
-    url: graphql/zuplo-graphql.md
 - aid: zuplo:zuplo-tunnel-services-api
   name: Zuplo Tunnel Services API
   description: List of endpoints available to manage services for a given tunnel.
@@ -427,18 +391,50 @@ apis:
     url: https://zuplo.com/docs/articles/api-key-api
   - type: GraphQL
     url: graphql/zuplo-graphql.md
-- aid: zuplo:zuplo-who-am-i-api
-  name: Zuplo Who Am I API
-  description: The Who Am I API from Zuplo — 1 operation(s) for who am i.
+- aid: zuplo:zuplo-open-api-api
+  name: Zuplo Open API
+  description: The Open API API from Zuplo — 1 operation(s) for open api.
+  humanURL: https://zuplo.com/docs/articles/developer-api
+  baseURL: https://dev.zuplo.com
+  tags:
+  - Open API
+  properties:
+  - type: OpenAPI
+    url: openapi/zuplo-open-api-api-openapi.yml
+  - type: Documentation
+    url: https://zuplo.com/docs/articles/developer-api
+  - type: APIReference
+    url: https://zuplo.com/docs/api
+  - type: APIEndpoints
+    url: https://zuplo.com/docs/api/~endpoints
+  - type: SpectralRules
+    url: rules/zuplo-rules.yml
+  - type: JSONSchema
+    url: json-schema/zuplo-api-key-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-consumer-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-tunnel-schema.json
+  - type: JSONSchema
+    url: json-schema/zuplo-deployment-schema.json
+  - type: JSONLDContext
+    url: json-ld/zuplo-context.jsonld
+  - type: Vocabulary
+    url: vocabulary/zuplo-vocabulary.yml
+  - type: GettingStarted
+    url: https://zuplo.com/docs/articles/api-key-api
+  - type: GraphQL
+    url: graphql/zuplo-graphql.md
+- aid: zuplo:zuplo-whoami-api
+  name: Zuplo Whoami API
+  description: The Whoami API from Zuplo — 1 operation(s) for whoami.
   humanURL: https://zuplo.com/docs/articles/developer-api
   baseURL: https://dev.zuplo.com
   tags:
   - Whoami
-  tags_raw:
-  - Who Am I
   properties:
   - type: OpenAPI
-    url: openapi/zuplo-who-am-i-api-openapi.yml
+    url: openapi/zuplo-whoami-api-openapi.yml
   - type: Documentation
     url: https://zuplo.com/docs/articles/developer-api
   - type: APIReference
