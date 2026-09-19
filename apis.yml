@@ -259,6 +259,8 @@ apis:
   humanURL: https://zuplo.com/docs/articles/developer-api
   baseURL: https://dev.zuplo.com
   tags:
+  - MCP Server
+  tags_raw:
   - MCP Servers
   properties:
   - type: OpenAPI
@@ -397,6 +399,8 @@ apis:
   humanURL: https://zuplo.com/docs/articles/developer-api
   baseURL: https://dev.zuplo.com
   tags:
+  - OpenAPI
+  tags_raw:
   - Open API
   properties:
   - type: OpenAPI
