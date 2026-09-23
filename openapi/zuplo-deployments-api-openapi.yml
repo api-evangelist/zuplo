@@ -1,6 +1,6 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Zuplo Developer API Keys - Buckets Deployments API
+  title: Zuplo Developer Deployments API
   termsOfService: https://zuplo.com/legal/terms
   contact:
     name: Zuplo
@@ -15,7 +15,7 @@ security:
 - ApiKeyAuth: []
 tags:
 - name: Deployments
-  description: Set of operations available to handle deployments. You can learn more about deployments [here](https://zuplo.com/docs/articles/environments).
+  description: Set of operations available to handle deployments. You can learn more about deployments here.
 paths:
   /v1/accounts/{accountName}/projects/{projectName}/deployment-status/{statusId}:
     get:
@@ -237,6 +237,70 @@ paths:
       - Deployments
 components:
   schemas:
+    Zuplo.HttpProblemDetails.BadRequestProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/400
+        title:
+          type: string
+          enum:
+          - Bad Request
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/400
+        title: Bad Request
+        status: 400
+    Zuplo.HttpProblemDetails.NotFoundProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/404
+        title:
+          type: string
+          enum:
+          - Not Found
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/404
+        title: Not Found
+        status: 404
     Zuplo.Deployments.Deployment:
       type: object
       required:
@@ -311,72 +375,6 @@ components:
         branchName: main
         url: https://lime-fox-main-bbe7540.zuplo.app
         environmentType: PRODUCTION
-    Zuplo.Sources.Source:
-      type: object
-      required:
-      - uploadUrl
-      properties:
-        uploadUrl:
-          type: string
-          example: https://storage.googleapis.com/[..]1fac8da132b9
-      example:
-        uploadUrl: https://storage.googleapis.com/[..]1fac8da132b9
-    Zuplo.Deployments.DeploymentsList:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Zuplo.Deployments.Deployment'
-      example:
-        data:
-        - name: lime-fox-main-bbe7540
-          label: main
-          urlParameter: main
-          createdOn: '2023-07-25T23:41:41.468Z'
-          updatedOn: '2023-07-25T23:41:41.468Z'
-          loggingId: chocolate_great_buzzard::lime-fox::main::main::bbe7540
-          accountName: chocolate_great_buzzard
-          projectName: lime-fox
-          state: STARTED
-          message: ''
-          branchName: main
-          url: https://lime-fox-main-bbe7540.zuplo.app
-          environmentType: PRODUCTION
-    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/401
-        title:
-          type: string
-          enum:
-          - Unauthorized
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/401
-        title: Unauthorized
-        status: 401
     Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
       type: object
       required:
@@ -428,6 +426,39 @@ components:
           type: string
           description: The name of the branch for deployment
           example: main
+    Zuplo.Deploys.DeploymentResponse:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+      example:
+        status: request enqueued
+    Zuplo.Deployments.DeploymentsList:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Zuplo.Deployments.Deployment'
+      example:
+        data:
+        - name: lime-fox-main-bbe7540
+          label: main
+          urlParameter: main
+          createdOn: '2023-07-25T23:41:41.468Z'
+          updatedOn: '2023-07-25T23:41:41.468Z'
+          loggingId: chocolate_great_buzzard::lime-fox::main::main::bbe7540
+          accountName: chocolate_great_buzzard
+          projectName: lime-fox
+          state: STARTED
+          message: ''
+          branchName: main
+          url: https://lime-fox-main-bbe7540.zuplo.app
+          environmentType: PRODUCTION
     Zuplo.DeploymentStatus.DeploymentStatus:
       type: object
       required:
@@ -458,7 +489,17 @@ components:
         url: https://api.zuplo.com/v1/deployments/lime-fox-main-bbe7540
         steps: {}
         buildResult: {}
-    Zuplo.HttpProblemDetails.BadRequestProblemResponse:
+    Zuplo.Sources.Source:
+      type: object
+      required:
+      - uploadUrl
+      properties:
+        uploadUrl:
+          type: string
+          example: https://storage.googleapis.com/[..]1fac8da132b9
+      example:
+        uploadUrl: https://storage.googleapis.com/[..]1fac8da132b9
+    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
       type: object
       required:
       - type
@@ -467,11 +508,11 @@ components:
         type:
           type: string
           enum:
-          - https://httpproblems.com/http-status/400
+          - https://httpproblems.com/http-status/401
         title:
           type: string
           enum:
-          - Bad Request
+          - Unauthorized
       allOf:
       - type: object
         required:
@@ -487,50 +528,9 @@ components:
           instance:
             type: string
       example:
-        type: https://httpproblems.com/http-status/400
-        title: Bad Request
-        status: 400
-    Zuplo.Deploys.DeploymentResponse:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-      example:
-        status: request enqueued
-    Zuplo.HttpProblemDetails.NotFoundProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/404
-        title:
-          type: string
-          enum:
-          - Not Found
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/404
-        title: Not Found
-        status: 404
+        type: https://httpproblems.com/http-status/401
+        title: Unauthorized
+        status: 401
   parameters:
     Zuplo.Common.AccountParams:
       name: accountName

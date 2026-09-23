@@ -1,19 +1,7 @@
 {
   "provider": "zuplo",
   "sources": [
-    "zuplo-api-keys-buckets-api-openapi.yml",
-    "zuplo-api-keys-consumers-api-openapi.yml",
-    "zuplo-api-keys-keys-api-openapi.yml",
-    "zuplo-api-keys-managers-api-openapi.yml",
-    "zuplo-audit-logs-api-openapi.yml",
-    "zuplo-custom-domains-api-openapi.yml",
-    "zuplo-deployments-api-openapi.yml",
-    "zuplo-mcp-servers-api-openapi.yml",
-    "zuplo-openapi-api-openapi.yml",
-    "zuplo-tunnel-services-api-openapi.yml",
-    "zuplo-tunnels-api-openapi.yml",
-    "zuplo-variables-api-openapi.yml",
-    "zuplo-who-am-i-api-openapi.yml"
+    "_original/zuplo-openapi.yml"
   ],
   "outputs": [
     "zuplo-api-keys-buckets-api-openapi.yml",
@@ -30,9 +18,34 @@
     "zuplo-variables-api-openapi.yml",
     "zuplo-who-am-i-api-openapi.yml"
   ],
-  "archived": [],
+  "archived": [
+    "deleted 2 superseded output(s) from the previous generation"
+  ],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "zuplo-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "zuplo-openapi.yml: tagged paths GET /openapi -> Openapi",
+    "zuplo-openapi.yml: tagged paths GET /v1/who-am-i -> Who Am I",
+    "zuplo-openapi.yml: declared missing tag: Openapi",
+    "zuplo-openapi.yml: declared missing tag: Who Am I",
+    "superseded outputs removed: zuplo-open-api-api-openapi.yml, zuplo-whoami-api-openapi.yml",
+    "apis.yml register: written (+2 apis, 13 total)"
+  ],
+  "skipped": [
+    "zuplo-api-keys-buckets-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zuplo-api-keys-consumers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zuplo-api-keys-keys-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zuplo-api-keys-managers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zuplo-audit-logs-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zuplo-custom-domains-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zuplo-deployments-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zuplo-mcp-servers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zuplo-open-api-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zuplo-tunnel-services-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zuplo-tunnels-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zuplo-variables-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zuplo-whoami-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

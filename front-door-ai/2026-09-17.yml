@@ -1,0 +1,33 @@
+# Front Door AI Index — zuplo — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: zuplo
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: www.zuplo.com
+  final_host: zuplo.com
+  ownership: own
+  owner: zuplo
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 75
+  host_score: 75
+  density: 49.73
+  words: 1508
+  tiers:
+    agentic: 38
+    core: 28
+    model: 9
+  ambiguous: 18
+  top_terms:
+    MCP: 32
+    agent: 18
+    AI: 17
+    LLMs: 11
+    OpenAI: 7
+    AI agent: 3
+    prompts: 3
+    ChatGPT: 1
+    Claude: 1

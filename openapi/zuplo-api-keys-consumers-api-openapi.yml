@@ -1,6 +1,6 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Zuplo Developer API Keys - Buckets API Keys - Consumers API
+  title: Zuplo Developer API Keys - Consumers API
   termsOfService: https://zuplo.com/legal/terms
   contact:
     name: Zuplo
@@ -15,7 +15,7 @@ security:
 - ApiKeyAuth: []
 tags:
 - name: API Keys - Consumers
-  description: A Consumer is an object representing a group of API keys in a given bucket. This section includes a group of endpoints available to perform CRUD operations on a consumer. You can learn more about consumers [here](https://zuplo.com/docs/articles/api-key-management#consumers).
+  description: A Consumer is an object representing a group of API keys in a given bucket. This section includes a group of endpoints available to perform CRUD operations on a consumer. You can learn more about consumers here.
 paths:
   /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers:
     get:
@@ -308,40 +308,13 @@ paths:
               $ref: '#/components/schemas/Zuplo.Common.ExpiresOnField'
 components:
   parameters:
-    Zuplo.ApiKeys.KeyFormatQueryParam:
-      name: key-format
-      in: query
-      required: false
-      description: 'The format of the key to return.
-
-        `none`: Key is completely hidden.
-
-        `visible`: Key is completely visible.
-
-        `masked`: Part of key suffix is visible.'
-      schema:
-        $ref: '#/components/schemas/Zuplo.ApiKeys.KeyFormat'
-        x-example: masked
-      x-example: masked
-      explode: false
-    Zuplo.ApiKeys.IncludeApiKeyParam:
-      name: include-api-keys
-      in: query
-      required: false
-      description: Include the api key data in the response.
-      schema:
-        type: boolean
-        x-example: true
-      x-example: true
-      explode: false
-    Zuplo.ApiKeys.TagQueryParam:
-      name: tag
-      in: query
-      required: false
-      description: Query by tag. Example usage is `tag.account=foo`, where `account` is the name of the tag property and `foo` is the value.
+    Zuplo.Common.AccountParams:
+      name: accountName
+      in: path
+      required: true
+      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
       schema:
         type: string
-      explode: false
     Zuplo.ApiKeys.ConsumerParams.consumerName:
       name: consumerName
       in: path
@@ -354,33 +327,6 @@ components:
       in: path
       required: true
       description: The name of the bucket. Zuplo automatically creates a bucket for your project. You can find it in youe Zuplo Portal under Settings > Project Information.
-      schema:
-        type: string
-    Zuplo.ApiKeys.ManagerEmailQueryParam:
-      name: manager-email
-      in: query
-      required: false
-      description: Filter by email address of key manager.
-      schema:
-        type: string
-        x-example: bob@example.com
-      x-example: bob@example.com
-      explode: false
-    Zuplo.ApiKeys.IncludeManagerParam:
-      name: include-managers
-      in: query
-      required: false
-      description: Include the manager's data in the response.
-      schema:
-        type: boolean
-        x-example: true
-      x-example: true
-      explode: false
-    Zuplo.Common.AccountParams:
-      name: accountName
-      in: path
-      required: true
-      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
       schema:
         type: string
     Zuplo.ApiKeys.WithApiKeyQueryParam:
@@ -403,112 +349,61 @@ components:
         x-example: true
       x-example: true
       explode: false
+    Zuplo.ApiKeys.TagQueryParam:
+      name: tag
+      in: query
+      required: false
+      description: Query by tag. Example usage is `tag.account=foo`, where `account` is the name of the tag property and `foo` is the value.
+      schema:
+        type: string
+      explode: false
+    Zuplo.ApiKeys.IncludeManagerParam:
+      name: include-managers
+      in: query
+      required: false
+      description: Include the manager's data in the response.
+      schema:
+        type: boolean
+        x-example: true
+      x-example: true
+      explode: false
+    Zuplo.ApiKeys.IncludeApiKeyParam:
+      name: include-api-keys
+      in: query
+      required: false
+      description: Include the api key data in the response.
+      schema:
+        type: boolean
+        x-example: true
+      x-example: true
+      explode: false
+    Zuplo.ApiKeys.ManagerEmailQueryParam:
+      name: manager-email
+      in: query
+      required: false
+      description: Filter by email address of key manager.
+      schema:
+        type: string
+        x-example: bob@example.com
+      x-example: bob@example.com
+      explode: false
+    Zuplo.ApiKeys.KeyFormatQueryParam:
+      name: key-format
+      in: query
+      required: false
+      description: 'The format of the key to return.
+
+        `none`: Key is completely hidden.
+
+        `visible`: Key is completely visible.
+
+        `masked`: Part of key suffix is visible.'
+      schema:
+        $ref: '#/components/schemas/Zuplo.ApiKeys.KeyFormat'
+        x-example: masked
+      x-example: masked
+      explode: false
   schemas:
-    Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/500
-        title:
-          type: string
-          enum:
-          - Internal Server Error
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/500
-        title: Internal Server Error
-        status: 500
-    Zuplo.ApiKeys.ApiKey:
-      type: object
-      required:
-      - createdOn
-      - updatedOn
-      - id
-      properties:
-        createdOn:
-          type: string
-          format: date-time
-          description: When the item was created.
-          example: '2023-04-18T05:54:34.408Z'
-          readOnly: true
-        updatedOn:
-          type: string
-          format: date-time
-          description: When the item was last updated.
-          example: '2023-04-20T05:54:34.408Z'
-          readOnly: true
-        id:
-          type: string
-          readOnly: true
-        expiresOn:
-          type: string
-          format: date-time
-          description: When the key expires.
-          x-example: '2023-04-18T05:54:34.408Z'
-        description:
-          type: string
-          description: The description of the api key.
-        key:
-          type: string
-          description: The API key's value. You can use this parameter to override Zuplo's default key format, but this is not recommended as you will lose our [API Key Leak Detection](https://zuplo.com/docs/articles/api-key-leak-detection)
-      description: A Consumer can have any number of API keys associated with it. Each API Key shares the same identity (i.e. Consumer) when authenticating with this service. Keys can have their own description to note the use of the key and can have an expiration date. Expired keys will not be permitted to authenticate after their expiration.
-      example:
-        createdOn: '2023-04-20T05:54:34.408Z'
-        updatedOn: '2023-04-20T05:54:34.408Z'
-        id: key_m1m4ol223R0kGHGZY7tPQMQl
-        description: My secret api key
-        expiresOn: '2023-04-20T05:54:34.408Z'
-        key: zpka_EXAMPLE_KEY_REDACTED_FOR_DOCS_1
-    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/401
-        title:
-          type: string
-          enum:
-          - Unauthorized
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/401
-        title: Unauthorized
-        status: 401
     Zuplo.HttpProblemDetails.NotFoundProblemResponse:
       type: object
       required:
@@ -541,53 +436,38 @@ components:
         type: https://httpproblems.com/http-status/404
         title: Not Found
         status: 404
-    Zuplo.ApiKeys.ConsumerCreateBody:
+    Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
       type: object
       required:
-      - name
+      - type
+      - title
       properties:
-        name:
+        type:
           type: string
-          pattern: ^[a-z0-9-]{1,128}$
-          description: A friendly name for the consumer. This name is used as the default user.sub property in the API Key Authentication policy.
-        managers:
-          anyOf:
-          - type: array
-            items:
-              type: string
-          - type: array
-            items:
-              $ref: '#/components/schemas/Zuplo.ApiKeys.Manager'
-          description: Email addresses of the managers to invite or a list of managers (with subs) to add to the consumer.
-        apiKeys:
-          type: array
-          items:
-            $ref: '#/components/schemas/Zuplo.ApiKeys.ApiKey'
-        description:
+          enum:
+          - https://httpproblems.com/http-status/500
+        title:
           type: string
-          description: A description of the consumer.
-        tags:
-          type: object
-          additionalProperties:
+          enum:
+          - Internal Server Error
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
             type: string
-          description: Key value pairs to associate with the consumer.
-        metadata:
-          type: object
-          additionalProperties:
+          title:
             type: string
-          description: Generic metadata associated with the consumer.
+          detail:
+            type: string
+          instance:
+            type: string
       example:
-        name: zup-inc
-        description: Consumer for zup inc
-        tags:
-          foo: bar
-        metadata:
-          id: zup-id-343
-        managers:
-        - id: '123'
-          email: user@example.com
-          sub: oauth2|113533232396018044159
-          createdOn: '2023-06-19T17:32:11.990Z'
+        type: https://httpproblems.com/http-status/500
+        title: Internal Server Error
+        status: 500
     Zuplo.Common.ExpiresOnField:
       type: object
       required:
@@ -600,77 +480,6 @@ components:
           example: '2050-04-18T05:54:34.408Z'
       example:
         expiresOn: '2050-04-18T05:54:34.408Z'
-    Zuplo.ApiKeys.Consumers:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Zuplo.ApiKeys.Consumer'
-        limit:
-          type: integer
-          format: uint32
-          example: 1000
-        offset:
-          type: integer
-          format: uint32
-          example: 0
-        total:
-          type: integer
-          format: uint32
-      example:
-        data:
-        - id: csmr_brw0leTAVw478VFKD4F6OqVI
-          name: zup-inc
-          createdOn: '2023-04-20T05:54:34.408Z'
-          updatedOn: '2023-04-20T05:54:34.408Z'
-          description: Consumer for zup inc
-          tags:
-            foo: bar
-          metadata:
-            id: zup-id-343
-          managers:
-          - id: eusr_MeefoYod5eQN33MEjC4PeRFH
-            createdOn: '2023-06-19T17:32:11.990Z'
-            email: mgr@zuploinc.com
-            sub: sub-oauth2|113533232396018044159
-          apiKeys:
-          - id: key_AM7eAiR0BiaXTam951XmC9kK
-            description: api key for zup inc
-            createdOn: '2023-06-19T17:32:17.737Z'
-            updatedOn: '2023-06-19T17:32:17.737Z'
-            expiresOn: '2035-06-19T17:32:17.737Z'
-            key: '****69ff2f90'
-        offset: 0
-        limit: 1000
-    Zuplo.ApiKeys.KeyFormat:
-      type: string
-      enum:
-      - none
-      - visible
-      - masked
-    Zuplo.ApiKeys.Manager:
-      type: object
-      required:
-      - createdOn
-      - id
-      - email
-      - sub
-      properties:
-        email:
-          type: string
-          description: The email address of the manager
-        sub:
-          type: string
-          description: The sub of the manager in the identity provider
-      description: Managers are users that have access to a consumer. Managers can be added directly to a consumer (using email and sub) or invited (using only email) to a consumer.
-      example:
-        createdOn: '2023-04-20T05:54:34.408Z'
-        id: managerId
-        email: bob@example.com
-        sub: sub-oauth2|113533232396018044159
     Zuplo.ApiKeys.Consumer:
       type: object
       required:
@@ -738,6 +547,104 @@ components:
           updatedOn: '2023-06-19T17:32:17.737Z'
           expiresOn: '2035-06-19T17:32:17.737Z'
           key: '****69ff2f90'
+    Zuplo.ApiKeys.KeyFormat:
+      type: string
+      enum:
+      - none
+      - visible
+      - masked
+    Zuplo.ApiKeys.Consumers:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Zuplo.ApiKeys.Consumer'
+        limit:
+          type: integer
+          format: uint32
+          example: 1000
+        offset:
+          type: integer
+          format: uint32
+          example: 0
+        total:
+          type: integer
+          format: uint32
+      example:
+        data:
+        - id: csmr_brw0leTAVw478VFKD4F6OqVI
+          name: zup-inc
+          createdOn: '2023-04-20T05:54:34.408Z'
+          updatedOn: '2023-04-20T05:54:34.408Z'
+          description: Consumer for zup inc
+          tags:
+            foo: bar
+          metadata:
+            id: zup-id-343
+          managers:
+          - id: eusr_MeefoYod5eQN33MEjC4PeRFH
+            createdOn: '2023-06-19T17:32:11.990Z'
+            email: mgr@zuploinc.com
+            sub: sub-oauth2|113533232396018044159
+          apiKeys:
+          - id: key_AM7eAiR0BiaXTam951XmC9kK
+            description: api key for zup inc
+            createdOn: '2023-06-19T17:32:17.737Z'
+            updatedOn: '2023-06-19T17:32:17.737Z'
+            expiresOn: '2035-06-19T17:32:17.737Z'
+            key: '****69ff2f90'
+        offset: 0
+        limit: 1000
+    Zuplo.ApiKeys.ConsumerCreateBody:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          pattern: ^[a-z0-9-]{1,128}$
+          description: A friendly name for the consumer. This name is used as the default user.sub property in the API Key Authentication policy.
+        managers:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: array
+            items:
+              $ref: '#/components/schemas/Zuplo.ApiKeys.Manager'
+          description: Email addresses of the managers to invite or a list of managers (with subs) to add to the consumer.
+        apiKeys:
+          type: array
+          items:
+            $ref: '#/components/schemas/Zuplo.ApiKeys.ApiKey'
+        description:
+          type: string
+          description: A description of the consumer.
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+          description: Key value pairs to associate with the consumer.
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Generic metadata associated with the consumer.
+      example:
+        name: zup-inc
+        description: Consumer for zup inc
+        tags:
+          foo: bar
+        metadata:
+          id: zup-id-343
+        managers:
+        - id: '123'
+          email: user@example.com
+          sub: oauth2|113533232396018044159
+          createdOn: '2023-06-19T17:32:11.990Z'
     Zuplo.ApiKeys.ConsumerUpdateBody:
       type: object
       properties:
@@ -792,6 +699,99 @@ components:
         type: https://httpproblems.com/http-status/400
         title: Bad Request
         status: 400
+    Zuplo.ApiKeys.Manager:
+      type: object
+      required:
+      - createdOn
+      - id
+      - email
+      - sub
+      properties:
+        email:
+          type: string
+          description: The email address of the manager
+        sub:
+          type: string
+          description: The sub of the manager in the identity provider
+      description: Managers are users that have access to a consumer. Managers can be added directly to a consumer (using email and sub) or invited (using only email) to a consumer.
+      example:
+        createdOn: '2023-04-20T05:54:34.408Z'
+        id: managerId
+        email: bob@example.com
+        sub: sub-oauth2|113533232396018044159
+    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/401
+        title:
+          type: string
+          enum:
+          - Unauthorized
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/401
+        title: Unauthorized
+        status: 401
+    Zuplo.ApiKeys.ApiKey:
+      type: object
+      required:
+      - createdOn
+      - updatedOn
+      - id
+      properties:
+        createdOn:
+          type: string
+          format: date-time
+          description: When the item was created.
+          example: '2023-04-18T05:54:34.408Z'
+          readOnly: true
+        updatedOn:
+          type: string
+          format: date-time
+          description: When the item was last updated.
+          example: '2023-04-20T05:54:34.408Z'
+          readOnly: true
+        id:
+          type: string
+          readOnly: true
+        expiresOn:
+          type: string
+          format: date-time
+          description: When the key expires.
+          x-example: '2023-04-18T05:54:34.408Z'
+        description:
+          type: string
+          description: The description of the api key.
+        key:
+          type: string
+          description: The API key's value. You can use this parameter to override Zuplo's default key format, but this is not recommended as you will lose our [API Key Leak Detection](https://zuplo.com/docs/articles/api-key-leak-detection)
+      description: A Consumer can have any number of API keys associated with it. Each API Key shares the same identity (i.e. Consumer) when authenticating with this service. Keys can have their own description to note the use of the key and can have an expiration date. Expired keys will not be permitted to authenticate after their expiration.
+      example:
+        createdOn: '2023-04-20T05:54:34.408Z'
+        updatedOn: '2023-04-20T05:54:34.408Z'
+        id: key_m1m4ol223R0kGHGZY7tPQMQl
+        description: My secret api key
+        expiresOn: '2023-04-20T05:54:34.408Z'
+        key: zpka_EXAMPLE_KEY_REDACTED_FOR_DOCS_1
   responses:
     RateLimitWithRetryAfter:
       description: Rate Limiting Response

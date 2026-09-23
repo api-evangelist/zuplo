@@ -1,6 +1,6 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Zuplo Developer API Keys - Buckets Tunnel Services API
+  title: Zuplo Developer Tunnel Services API
   termsOfService: https://zuplo.com/legal/terms
   contact:
     name: Zuplo
@@ -129,29 +129,109 @@ paths:
             schema:
               $ref: '#/components/schemas/Zuplo.Tunnels.TunneledServicesConfiguration'
 components:
-  parameters:
-    Zuplo.Common.AccountParams:
-      name: accountName
-      in: path
-      required: true
-      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
-      schema:
-        type: string
-    Zuplo.Tunnels.TunneledServiceProvisioningStatusParams.operationId:
-      name: operationId
-      in: path
-      required: true
-      description: The ID of the operation.
-      schema:
-        type: string
-    Zuplo.Tunnels.TunnelIdParam:
-      name: tunnelId
-      in: path
-      required: true
-      description: The ID of the tunnel.
-      schema:
-        type: string
   schemas:
+    Zuplo.HttpProblemDetails.BadRequestProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/400
+        title:
+          type: string
+          enum:
+          - Bad Request
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/400
+        title: Bad Request
+        status: 400
+    Zuplo.Tunnels.TunneledServicesConfiguration:
+      type: object
+      required:
+      - version
+      - services
+      properties:
+        version:
+          type: integer
+          format: uint8
+          description: The version of this configuration format.
+          example: 1
+        services:
+          type: array
+          items:
+            $ref: '#/components/schemas/Zuplo.Tunnels.TunneledServiceConfiguration'
+          description: A list of services that the tunnel will connect to.
+    Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/500
+        title:
+          type: string
+          enum:
+          - Internal Server Error
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/500
+        title: Internal Server Error
+        status: 500
+    Zuplo.Tunnels.TunneledServicesProvisioningOperation:
+      type: object
+      required:
+      - id
+      - status
+      properties:
+        id:
+          type: string
+          example: pst_ezMUOh0xFqRWg84DPH5jVwgO
+          readOnly: true
+        status:
+          type: string
+          enum:
+          - in-progress
+          - success
+          - error
+          example: success
+        message:
+          type: string
+          example: Successfully provisioned services.
+        details:
+          type: string
     Zuplo.Tunnels.TunneledServiceConfiguration:
       type: object
       required:
@@ -226,108 +306,28 @@ components:
         type: https://httpproblems.com/http-status/401
         title: Unauthorized
         status: 401
-    Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/500
-        title:
-          type: string
-          enum:
-          - Internal Server Error
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/500
-        title: Internal Server Error
-        status: 500
-    Zuplo.Tunnels.TunneledServicesProvisioningOperation:
-      type: object
-      required:
-      - id
-      - status
-      properties:
-        id:
-          type: string
-          example: pst_ezMUOh0xFqRWg84DPH5jVwgO
-          readOnly: true
-        status:
-          type: string
-          enum:
-          - in-progress
-          - success
-          - error
-          example: success
-        message:
-          type: string
-          example: Successfully provisioned services.
-        details:
-          type: string
-    Zuplo.HttpProblemDetails.BadRequestProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/400
-        title:
-          type: string
-          enum:
-          - Bad Request
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/400
-        title: Bad Request
-        status: 400
-    Zuplo.Tunnels.TunneledServicesConfiguration:
-      type: object
-      required:
-      - version
-      - services
-      properties:
-        version:
-          type: integer
-          format: uint8
-          description: The version of this configuration format.
-          example: 1
-        services:
-          type: array
-          items:
-            $ref: '#/components/schemas/Zuplo.Tunnels.TunneledServiceConfiguration'
-          description: A list of services that the tunnel will connect to.
+  parameters:
+    Zuplo.Common.AccountParams:
+      name: accountName
+      in: path
+      required: true
+      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
+      schema:
+        type: string
+    Zuplo.Tunnels.TunnelIdParam:
+      name: tunnelId
+      in: path
+      required: true
+      description: The ID of the tunnel.
+      schema:
+        type: string
+    Zuplo.Tunnels.TunneledServiceProvisioningStatusParams.operationId:
+      name: operationId
+      in: path
+      required: true
+      description: The ID of the operation.
+      schema:
+        type: string
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
