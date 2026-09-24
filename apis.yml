@@ -36,8 +36,6 @@ apis:
     url: vocabulary/zuplo-vocabulary.yml
   - type: GettingStarted
     url: https://zuplo.com/docs/articles/api-key-api
-  - type: GraphQL
-    url: graphql/zuplo-graphql.md
 - aid: zuplo:zuplo-api-keys-consumers-api
   name: Zuplo API Keys - Consumers API
   description: >-
@@ -73,8 +71,6 @@ apis:
     url: vocabulary/zuplo-vocabulary.yml
   - type: GettingStarted
     url: https://zuplo.com/docs/articles/api-key-api
-  - type: GraphQL
-    url: graphql/zuplo-graphql.md
 - aid: zuplo:zuplo-api-keys-keys-api
   name: Zuplo API Keys - Keys API
   description: >-
@@ -109,8 +105,6 @@ apis:
     url: vocabulary/zuplo-vocabulary.yml
   - type: GettingStarted
     url: https://zuplo.com/docs/articles/api-key-api
-  - type: GraphQL
-    url: graphql/zuplo-graphql.md
 - aid: zuplo:zuplo-api-keys-managers-api
   name: Zuplo API Keys - Managers API
   description: >-
@@ -146,8 +140,6 @@ apis:
     url: vocabulary/zuplo-vocabulary.yml
   - type: GettingStarted
     url: https://zuplo.com/docs/articles/api-key-api
-  - type: GraphQL
-    url: graphql/zuplo-graphql.md
 - aid: zuplo:zuplo-audit-logs-api
   name: Zuplo Audit Logs API
   description: The Audit Logs API from Zuplo — 1 operation(s) for audit logs.
@@ -180,8 +172,6 @@ apis:
     url: vocabulary/zuplo-vocabulary.yml
   - type: GettingStarted
     url: https://zuplo.com/docs/articles/api-key-api
-  - type: GraphQL
-    url: graphql/zuplo-graphql.md
 - aid: zuplo:zuplo-custom-domains-api
   name: Zuplo Custom Domains API
   description: Manage account custom domains and their deployment mappings
@@ -214,8 +204,6 @@ apis:
     url: vocabulary/zuplo-vocabulary.yml
   - type: GettingStarted
     url: https://zuplo.com/docs/articles/api-key-api
-  - type: GraphQL
-    url: graphql/zuplo-graphql.md
 - aid: zuplo:zuplo-deployments-api
   name: Zuplo Deployments API
   description: >-
@@ -251,8 +239,6 @@ apis:
     url: vocabulary/zuplo-vocabulary.yml
   - type: GettingStarted
     url: https://zuplo.com/docs/articles/api-key-api
-  - type: GraphQL
-    url: graphql/zuplo-graphql.md
 - aid: zuplo:zuplo-mcp-servers-api
   name: Zuplo MCP Servers API
   description: MCP server endpoints for AI-powered tools
@@ -287,8 +273,6 @@ apis:
     url: vocabulary/zuplo-vocabulary.yml
   - type: GettingStarted
     url: https://zuplo.com/docs/articles/api-key-api
-  - type: GraphQL
-    url: graphql/zuplo-graphql.md
 - aid: zuplo:zuplo-tunnel-services-api
   name: Zuplo Tunnel Services API
   description: List of endpoints available to manage services for a given tunnel.
@@ -321,8 +305,6 @@ apis:
     url: vocabulary/zuplo-vocabulary.yml
   - type: GettingStarted
     url: https://zuplo.com/docs/articles/api-key-api
-  - type: GraphQL
-    url: graphql/zuplo-graphql.md
 - aid: zuplo:zuplo-tunnels-api
   name: Zuplo Tunnels API
   description: List of endpoints available to perform operations on Tunnels.
@@ -355,8 +337,6 @@ apis:
     url: vocabulary/zuplo-vocabulary.yml
   - type: GettingStarted
     url: https://zuplo.com/docs/articles/api-key-api
-  - type: GraphQL
-    url: graphql/zuplo-graphql.md
 - aid: zuplo:zuplo-variables-api
   name: Zuplo Variables API
   description: >-
@@ -391,8 +371,6 @@ apis:
     url: vocabulary/zuplo-vocabulary.yml
   - type: GettingStarted
     url: https://zuplo.com/docs/articles/api-key-api
-  - type: GraphQL
-    url: graphql/zuplo-graphql.md
 - aid: zuplo:zuplo-open-api-api
   name: Zuplo Open API
   description: The Open API API from Zuplo — 1 operation(s) for open api.
@@ -427,8 +405,6 @@ apis:
     url: vocabulary/zuplo-vocabulary.yml
   - type: GettingStarted
     url: https://zuplo.com/docs/articles/api-key-api
-  - type: GraphQL
-    url: graphql/zuplo-graphql.md
 - aid: zuplo:zuplo-whoami-api
   name: Zuplo Whoami API
   description: The Whoami API from Zuplo — 1 operation(s) for whoami.
@@ -461,8 +437,6 @@ apis:
     url: vocabulary/zuplo-vocabulary.yml
   - type: GettingStarted
     url: https://zuplo.com/docs/articles/api-key-api
-  - type: GraphQL
-    url: graphql/zuplo-graphql.md
 name: Zuplo
 tags:
 - AI Gateway
