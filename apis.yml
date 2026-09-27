@@ -377,8 +377,6 @@ apis:
   humanURL: https://zuplo.com/docs/articles/developer-api
   baseURL: https://dev.zuplo.com
   tags:
-  - OpenAPI
-  tags_raw:
   - Open API
   properties:
   - type: OpenAPI
@@ -446,6 +444,10 @@ tags:
 type: Index
 deliveryModel:
   model: unknown
+  license_evidence:
+    repo: zuplo/zuplo
+    spdx: none
+    stars: 37
   open_source: unknown
   commercial: true
   callable_host: true
@@ -455,7 +457,7 @@ deliveryModel:
   - openapi
   - pricing
   - repository-unlicensed
-  generated: '2026-08-28'
+  generated: '2026-09-25'
   method: derived
 accessModel:
   pricing: freemium

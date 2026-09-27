@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Zuplo Developer Openapi API
+  title: Zuplo Developer OpenAPI API
   termsOfService: https://zuplo.com/legal/terms
   contact:
     name: Zuplo

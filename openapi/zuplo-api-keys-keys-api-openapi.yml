@@ -300,7 +300,291 @@ paths:
       tags:
       - API Keys - Keys
 components:
+  parameters:
+    Zuplo.ApiKeys.KeyFormatQueryParam:
+      name: key-format
+      in: query
+      required: false
+      description: 'The format of the key to return.
+
+        `none`: Key is completely hidden.
+
+        `visible`: Key is completely visible.
+
+        `masked`: Part of key suffix is visible.'
+      schema:
+        $ref: '#/components/schemas/Zuplo.ApiKeys.KeyFormat'
+        x-example: masked
+      x-example: masked
+      explode: false
+    Zuplo.ApiKeys.ConsumerParams.consumerName:
+      name: consumerName
+      in: path
+      required: true
+      description: The name of the consumer.
+      schema:
+        type: string
+    Zuplo.ApiKeys.ApiKeyParams.keyId:
+      name: keyId
+      in: path
+      required: true
+      description: The key id.
+      schema:
+        type: string
+    Zuplo.Common.AccountParams:
+      name: accountName
+      in: path
+      required: true
+      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
+      schema:
+        type: string
+    Zuplo.ApiKeys.BucketParams.bucketName:
+      name: bucketName
+      in: path
+      required: true
+      description: The name of the bucket. Zuplo automatically creates a bucket for your project. You can find it in youe Zuplo Portal under Settings > Project Information.
+      schema:
+        type: string
+    Zuplo.ApiKeys.TagQueryParam:
+      name: tag
+      in: query
+      required: false
+      description: Query by tag. Example usage is `tag.account=foo`, where `account` is the name of the tag property and `foo` is the value.
+      schema:
+        type: string
+      explode: false
+  responses:
+    RateLimitWithRetryAfter:
+      description: Rate Limiting Response
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - type
+            - title
+            - status
+            examples:
+            - type: https://httpproblems.com/http-status/429
+              title: Too Many Requests
+              status: 429
+              instance: /foo/bar
+            properties:
+              type:
+                type: string
+                example: https://httpproblems.com/http-status/429
+                description: A URI reference that identifies the problem.
+              title:
+                type: string
+                example: Too Many Requests
+                description: A short, human-readable summary of the problem.
+              status:
+                type: number
+                example: 429
+                description: The HTTP status code.
+              instance:
+                type: string
+                example: /foo/bar
+      headers:
+        retry-after:
+          description: The number of seconds to wait before making a new request.
+          schema:
+            type: integer
+            example: 60
   schemas:
+    Zuplo.HttpProblemDetails.BadRequestProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/400
+        title:
+          type: string
+          enum:
+          - Bad Request
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/400
+        title: Bad Request
+        status: 400
+    ApiKeyBulkCreateOrUpdateBody:
+      type: array
+      items:
+        $ref: '#/components/schemas/Zuplo.ApiKeys.ApiKeyCreateOrUpdateBody'
+      example:
+      - description: My secret api key
+        expiresOn: '2023-04-20T05:54:34.408Z'
+        key: zpka_EXAMPLE_KEY_REDACTED_FOR_DOCS_1
+      - description: My secret api key2
+        expiresOn: '2023-05-20T05:54:34.408Z'
+        key: zpka_EXAMPLE_KEY_REDACTED_FOR_DOCS_2
+    Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/500
+        title:
+          type: string
+          enum:
+          - Internal Server Error
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/500
+        title: Internal Server Error
+        status: 500
+    Zuplo.HttpProblemDetails.NotFoundProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/404
+        title:
+          type: string
+          enum:
+          - Not Found
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/404
+        title: Not Found
+        status: 404
+    Zuplo.ApiKeys.ApiKeyCreateOrUpdateBody:
+      type: object
+      properties:
+        expiresOn:
+          type: string
+          format: date-time
+          description: When the key expires.
+          x-example: '2023-04-18T05:54:34.408Z'
+        description:
+          type: string
+          description: The description of the api key.
+        key:
+          type: string
+          description: The API key's value. You can use this parameter to override Zuplo's default key format, but this is not recommended as you will lose our [API Key Leak Detection](https://zuplo.com/docs/articles/api-key-leak-detection)
+      example:
+        description: My secret api key
+        expiresOn: '2023-04-20T05:54:34.408Z'
+        key: zpka_EXAMPLE_KEY_REDACTED_FOR_DOCS_1
+    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/401
+        title:
+          type: string
+          enum:
+          - Unauthorized
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/401
+        title: Unauthorized
+        status: 401
+    Zuplo.ApiKeys.KeyFormat:
+      type: string
+      enum:
+      - none
+      - visible
+      - masked
+    Zuplo.ApiKeys.ApiKeys:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Zuplo.ApiKeys.ApiKey'
+        limit:
+          type: integer
+          format: uint32
+          example: 1000
+        offset:
+          type: integer
+          format: uint32
+          example: 0
+        total:
+          type: integer
+          format: uint32
+      example:
+        data:
+        - createdOn: '2023-04-20T05:54:34.408Z'
+          updatedOn: '2023-04-20T05:54:34.408Z'
+          id: key_m1m4ol223R0kGHGZY7tPQMQl
+          description: My secret api key
+          expiresOn: '2023-04-20T05:54:34.408Z'
+          key: zpka_EXAMPLE_KEY_REDACTED_FOR_DOCS_1
+        limit: 1000
+        offset: 0
     Zuplo.ApiKeys.ApiKey:
       type: object
       required:
@@ -342,290 +626,6 @@ components:
         description: My secret api key
         expiresOn: '2023-04-20T05:54:34.408Z'
         key: zpka_EXAMPLE_KEY_REDACTED_FOR_DOCS_1
-    Zuplo.HttpProblemDetails.BadRequestProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/400
-        title:
-          type: string
-          enum:
-          - Bad Request
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/400
-        title: Bad Request
-        status: 400
-    Zuplo.HttpProblemDetails.NotFoundProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/404
-        title:
-          type: string
-          enum:
-          - Not Found
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/404
-        title: Not Found
-        status: 404
-    Zuplo.ApiKeys.ApiKeys:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Zuplo.ApiKeys.ApiKey'
-        limit:
-          type: integer
-          format: uint32
-          example: 1000
-        offset:
-          type: integer
-          format: uint32
-          example: 0
-        total:
-          type: integer
-          format: uint32
-      example:
-        data:
-        - createdOn: '2023-04-20T05:54:34.408Z'
-          updatedOn: '2023-04-20T05:54:34.408Z'
-          id: key_m1m4ol223R0kGHGZY7tPQMQl
-          description: My secret api key
-          expiresOn: '2023-04-20T05:54:34.408Z'
-          key: zpka_EXAMPLE_KEY_REDACTED_FOR_DOCS_1
-        limit: 1000
-        offset: 0
-    Zuplo.ApiKeys.KeyFormat:
-      type: string
-      enum:
-      - none
-      - visible
-      - masked
-    Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/500
-        title:
-          type: string
-          enum:
-          - Internal Server Error
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/500
-        title: Internal Server Error
-        status: 500
-    ApiKeyBulkCreateOrUpdateBody:
-      type: array
-      items:
-        $ref: '#/components/schemas/Zuplo.ApiKeys.ApiKeyCreateOrUpdateBody'
-      example:
-      - description: My secret api key
-        expiresOn: '2023-04-20T05:54:34.408Z'
-        key: zpka_EXAMPLE_KEY_REDACTED_FOR_DOCS_1
-      - description: My secret api key2
-        expiresOn: '2023-05-20T05:54:34.408Z'
-        key: zpka_EXAMPLE_KEY_REDACTED_FOR_DOCS_2
-    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/401
-        title:
-          type: string
-          enum:
-          - Unauthorized
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/401
-        title: Unauthorized
-        status: 401
-    Zuplo.ApiKeys.ApiKeyCreateOrUpdateBody:
-      type: object
-      properties:
-        expiresOn:
-          type: string
-          format: date-time
-          description: When the key expires.
-          x-example: '2023-04-18T05:54:34.408Z'
-        description:
-          type: string
-          description: The description of the api key.
-        key:
-          type: string
-          description: The API key's value. You can use this parameter to override Zuplo's default key format, but this is not recommended as you will lose our [API Key Leak Detection](https://zuplo.com/docs/articles/api-key-leak-detection)
-      example:
-        description: My secret api key
-        expiresOn: '2023-04-20T05:54:34.408Z'
-        key: zpka_EXAMPLE_KEY_REDACTED_FOR_DOCS_1
-  parameters:
-    Zuplo.ApiKeys.ConsumerParams.consumerName:
-      name: consumerName
-      in: path
-      required: true
-      description: The name of the consumer.
-      schema:
-        type: string
-    Zuplo.Common.AccountParams:
-      name: accountName
-      in: path
-      required: true
-      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
-      schema:
-        type: string
-    Zuplo.ApiKeys.BucketParams.bucketName:
-      name: bucketName
-      in: path
-      required: true
-      description: The name of the bucket. Zuplo automatically creates a bucket for your project. You can find it in youe Zuplo Portal under Settings > Project Information.
-      schema:
-        type: string
-    Zuplo.ApiKeys.TagQueryParam:
-      name: tag
-      in: query
-      required: false
-      description: Query by tag. Example usage is `tag.account=foo`, where `account` is the name of the tag property and `foo` is the value.
-      schema:
-        type: string
-      explode: false
-    Zuplo.ApiKeys.ApiKeyParams.keyId:
-      name: keyId
-      in: path
-      required: true
-      description: The key id.
-      schema:
-        type: string
-    Zuplo.ApiKeys.KeyFormatQueryParam:
-      name: key-format
-      in: query
-      required: false
-      description: 'The format of the key to return.
-
-        `none`: Key is completely hidden.
-
-        `visible`: Key is completely visible.
-
-        `masked`: Part of key suffix is visible.'
-      schema:
-        $ref: '#/components/schemas/Zuplo.ApiKeys.KeyFormat'
-        x-example: masked
-      x-example: masked
-      explode: false
-  responses:
-    RateLimitWithRetryAfter:
-      description: Rate Limiting Response
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-            - type
-            - title
-            - status
-            examples:
-            - type: https://httpproblems.com/http-status/429
-              title: Too Many Requests
-              status: 429
-              instance: /foo/bar
-            properties:
-              type:
-                type: string
-                example: https://httpproblems.com/http-status/429
-                description: A URI reference that identifies the problem.
-              title:
-                type: string
-                example: Too Many Requests
-                description: A short, human-readable summary of the problem.
-              status:
-                type: number
-                example: 429
-                description: The HTTP status code.
-              instance:
-                type: string
-                example: /foo/bar
-      headers:
-        retry-after:
-          description: The number of seconds to wait before making a new request.
-          schema:
-            type: integer
-            example: 60
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

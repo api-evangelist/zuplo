@@ -249,33 +249,61 @@ paths:
       tags:
       - Tunnels
 components:
+  parameters:
+    Zuplo.Tunnels.TunnelIdParam:
+      name: tunnelId
+      in: path
+      required: true
+      description: The ID of the tunnel.
+      schema:
+        type: string
+    Zuplo.Tunnels.TunnelTeardownStatusParams.operationId:
+      name: operationId
+      in: path
+      required: true
+      description: The ID of the deletion operation.
+      schema:
+        type: string
+    Zuplo.Common.AccountParams:
+      name: accountName
+      in: path
+      required: true
+      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
+      schema:
+        type: string
   schemas:
-    Zuplo.Tunnels.Tunnel:
+    Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
       type: object
       required:
-      - tunnelId
-      - name
-      - token
+      - type
+      - title
       properties:
-        tunnelId:
+        type:
           type: string
-          example: tnl_JcHFzTcJ9y4GU69lKBOaxFYU
-          readOnly: true
-        name:
+          enum:
+          - https://httpproblems.com/http-status/500
+        title:
           type: string
-          pattern: ^[a-zA-Z0-9-]{3,24}$
-          description: A friendly name for the tunnel.
-          example: api-service-tunnel
-        token:
-          type: string
-          description: Set your TUNNEL_TOKEN to this value to connect to the tunnel.
-          example: eyJhIjoiODJh[..]m89In0=
-          readOnly: true
-      description: Tunnels allow you to expose services running on bare metal, on-premises, or other non-cloud providers to the Zuplo platform. [Further reading](https://zuplo.com/docs/articles/secure-tunnel).
+          enum:
+          - Internal Server Error
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
       example:
-        tunnelId: tnl_JcHFzTcJ9y4GU69lKBOaxFYU
-        name: api-service-tunnel
-        token: eyJhIjoiODJhNGM0ZTBlYWY3ZmU3YjQyMWRlZHU1ODhlNjg1ZGMiLCJ0IjoiNjY3ZWZhODktYzIyNS00NTIyLWI0M2EtYTgwYzY0OTgxMGY1IiwicyI6IkY5RGdVNnNNOTJWT245OUlUSWxMazVwY3lHV0ZLVG1jcHg2d0I5TkR4Vm89In0=
+        type: https://httpproblems.com/http-status/500
+        title: Internal Server Error
+        status: 500
     Zuplo.HttpProblemDetails.BadRequestProblemResponse:
       type: object
       required:
@@ -364,53 +392,6 @@ components:
         data:
         - id: tnl_JcHFzTcJ9y4GU69lKBOaxFYU
           name: api-service-tunnel
-    Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/500
-        title:
-          type: string
-          enum:
-          - Internal Server Error
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/500
-        title: Internal Server Error
-        status: 500
-    Zuplo.Tunnels.TunnelListItem:
-      type: object
-      required:
-      - id
-      - name
-      properties:
-        id:
-          type: string
-          example: tnl_JcHFzTcJ9y4GU69lKBOaxFYU
-          readOnly: true
-        name:
-          type: string
-          pattern: ^[a-zA-Z0-9-]{3,24}$
-          description: A friendly name for the tunnel.
-          example: api-service-tunnel
     Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
       type: object
       required:
@@ -443,6 +424,47 @@ components:
         type: https://httpproblems.com/http-status/401
         title: Unauthorized
         status: 401
+    Zuplo.Tunnels.TunnelListItem:
+      type: object
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          example: tnl_JcHFzTcJ9y4GU69lKBOaxFYU
+          readOnly: true
+        name:
+          type: string
+          pattern: ^[a-zA-Z0-9-]{3,24}$
+          description: A friendly name for the tunnel.
+          example: api-service-tunnel
+    Zuplo.Tunnels.Tunnel:
+      type: object
+      required:
+      - tunnelId
+      - name
+      - token
+      properties:
+        tunnelId:
+          type: string
+          example: tnl_JcHFzTcJ9y4GU69lKBOaxFYU
+          readOnly: true
+        name:
+          type: string
+          pattern: ^[a-zA-Z0-9-]{3,24}$
+          description: A friendly name for the tunnel.
+          example: api-service-tunnel
+        token:
+          type: string
+          description: Set your TUNNEL_TOKEN to this value to connect to the tunnel.
+          example: eyJhIjoiODJh[..]m89In0=
+          readOnly: true
+      description: Tunnels allow you to expose services running on bare metal, on-premises, or other non-cloud providers to the Zuplo platform. [Further reading](https://zuplo.com/docs/articles/secure-tunnel).
+      example:
+        tunnelId: tnl_JcHFzTcJ9y4GU69lKBOaxFYU
+        name: api-service-tunnel
+        token: eyJhIjoiODJhNGM0ZTBlYWY3ZmU3YjQyMWRlZHU1ODhlNjg1ZGMiLCJ0IjoiNjY3ZWZhODktYzIyNS00NTIyLWI0M2EtYTgwYzY0OTgxMGY1IiwicyI6IkY5RGdVNnNNOTJWT245OUlUSWxMazVwY3lHV0ZLVG1jcHg2d0I5TkR4Vm89In0=
     Zuplo.Tunnels.TunnelTeardownOperation:
       type: object
       required:
@@ -465,28 +487,6 @@ components:
           example: Successfully torn down tunnel.
         details:
           type: string
-  parameters:
-    Zuplo.Common.AccountParams:
-      name: accountName
-      in: path
-      required: true
-      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
-      schema:
-        type: string
-    Zuplo.Tunnels.TunnelIdParam:
-      name: tunnelId
-      in: path
-      required: true
-      description: The ID of the tunnel.
-      schema:
-        type: string
-    Zuplo.Tunnels.TunnelTeardownStatusParams.operationId:
-      name: operationId
-      in: path
-      required: true
-      description: The ID of the deletion operation.
-      schema:
-        type: string
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
