@@ -250,11 +250,11 @@ paths:
       - Tunnels
 components:
   parameters:
-    Zuplo.Tunnels.TunnelIdParam:
-      name: tunnelId
+    Zuplo.Common.AccountParams:
+      name: accountName
       in: path
       required: true
-      description: The ID of the tunnel.
+      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
       schema:
         type: string
     Zuplo.Tunnels.TunnelTeardownStatusParams.operationId:
@@ -264,46 +264,14 @@ components:
       description: The ID of the deletion operation.
       schema:
         type: string
-    Zuplo.Common.AccountParams:
-      name: accountName
+    Zuplo.Tunnels.TunnelIdParam:
+      name: tunnelId
       in: path
       required: true
-      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
+      description: The ID of the tunnel.
       schema:
         type: string
   schemas:
-    Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/500
-        title:
-          type: string
-          enum:
-          - Internal Server Error
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/500
-        title: Internal Server Error
-        status: 500
     Zuplo.HttpProblemDetails.BadRequestProblemResponse:
       type: object
       required:
@@ -336,38 +304,6 @@ components:
         type: https://httpproblems.com/http-status/400
         title: Bad Request
         status: 400
-    Zuplo.HttpProblemDetails.NotFoundProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/404
-        title:
-          type: string
-          enum:
-          - Not Found
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/404
-        title: Not Found
-        status: 404
     Zuplo.Tunnels.TunnelList:
       type: object
       required:
@@ -392,6 +328,53 @@ components:
         data:
         - id: tnl_JcHFzTcJ9y4GU69lKBOaxFYU
           name: api-service-tunnel
+    Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/500
+        title:
+          type: string
+          enum:
+          - Internal Server Error
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/500
+        title: Internal Server Error
+        status: 500
+    Zuplo.Tunnels.TunnelListItem:
+      type: object
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          example: tnl_JcHFzTcJ9y4GU69lKBOaxFYU
+          readOnly: true
+        name:
+          type: string
+          pattern: ^[a-zA-Z0-9-]{3,24}$
+          description: A friendly name for the tunnel.
+          example: api-service-tunnel
     Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
       type: object
       required:
@@ -424,21 +407,60 @@ components:
         type: https://httpproblems.com/http-status/401
         title: Unauthorized
         status: 401
-    Zuplo.Tunnels.TunnelListItem:
+    Zuplo.HttpProblemDetails.NotFoundProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/404
+        title:
+          type: string
+          enum:
+          - Not Found
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/404
+        title: Not Found
+        status: 404
+    Zuplo.Tunnels.TunnelTeardownOperation:
       type: object
       required:
       - id
-      - name
+      - status
       properties:
         id:
           type: string
-          example: tnl_JcHFzTcJ9y4GU69lKBOaxFYU
+          example: tst_1vmvAjaCun9Mfeosn3Og4ddD
           readOnly: true
-        name:
+        status:
           type: string
-          pattern: ^[a-zA-Z0-9-]{3,24}$
-          description: A friendly name for the tunnel.
-          example: api-service-tunnel
+          enum:
+          - in-progress
+          - success
+          - error
+          example: success
+        message:
+          type: string
+          example: Successfully torn down tunnel.
+        details:
+          type: string
     Zuplo.Tunnels.Tunnel:
       type: object
       required:
@@ -465,28 +487,6 @@ components:
         tunnelId: tnl_JcHFzTcJ9y4GU69lKBOaxFYU
         name: api-service-tunnel
         token: eyJhIjoiODJhNGM0ZTBlYWY3ZmU3YjQyMWRlZHU1ODhlNjg1ZGMiLCJ0IjoiNjY3ZWZhODktYzIyNS00NTIyLWI0M2EtYTgwYzY0OTgxMGY1IiwicyI6IkY5RGdVNnNNOTJWT245OUlUSWxMazVwY3lHV0ZLVG1jcHg2d0I5TkR4Vm89In0=
-    Zuplo.Tunnels.TunnelTeardownOperation:
-      type: object
-      required:
-      - id
-      - status
-      properties:
-        id:
-          type: string
-          example: tst_1vmvAjaCun9Mfeosn3Og4ddD
-          readOnly: true
-        status:
-          type: string
-          enum:
-          - in-progress
-          - success
-          - error
-          example: success
-        message:
-          type: string
-          example: Successfully torn down tunnel.
-        details:
-          type: string
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

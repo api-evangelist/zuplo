@@ -236,29 +236,186 @@ paths:
       tags:
       - Deployments
 components:
-  parameters:
-    Zuplo.Common.DeployParams:
-      name: deploymentName
-      in: path
-      required: true
-      description: The name of the deployment. You can find this in the Zuplo Portal under Settings > Environments.
-      schema:
-        type: string
-    Zuplo.Common.AccountProjectParams.projectName:
-      name: projectName
-      in: path
-      required: true
-      description: The name of the project. You can find this in your Zuplo Portal under Settings > Project Information.
-      schema:
-        type: string
-    Zuplo.Common.AccountParams:
-      name: accountName
-      in: path
-      required: true
-      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
-      schema:
-        type: string
   schemas:
+    Zuplo.Deployments.DeploymentsList:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Zuplo.Deployments.Deployment'
+      example:
+        data:
+        - name: lime-fox-main-bbe7540
+          label: main
+          urlParameter: main
+          createdOn: '2023-07-25T23:41:41.468Z'
+          updatedOn: '2023-07-25T23:41:41.468Z'
+          loggingId: chocolate_great_buzzard::lime-fox::main::main::bbe7540
+          accountName: chocolate_great_buzzard
+          projectName: lime-fox
+          state: STARTED
+          message: ''
+          branchName: main
+          url: https://lime-fox-main-bbe7540.zuplo.app
+          environmentType: PRODUCTION
+    Zuplo.DeploymentStatus.DeploymentStatus:
+      type: object
+      required:
+      - status
+      - url
+      - steps
+      - buildResult
+      properties:
+        status:
+          type: string
+          enum:
+          - SUCCESS
+          - ERROR
+          - IN_PROGRESS
+          example: SUCCESS
+        url:
+          type: string
+          example: https://api.zuplo.com/v1/deployments/lime-fox-main-bbe7540
+        steps:
+          type: object
+          additionalProperties: {}
+        buildResult:
+          type: object
+          additionalProperties: {}
+      description: Status of a Zuplo project deployment, including the status, build results, and a URL to view more details.
+      example:
+        status: SUCCESS
+        url: https://api.zuplo.com/v1/deployments/lime-fox-main-bbe7540
+        steps: {}
+        buildResult: {}
+    Zuplo.HttpProblemDetails.BadRequestProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/400
+        title:
+          type: string
+          enum:
+          - Bad Request
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/400
+        title: Bad Request
+        status: 400
+    Zuplo.Sources.Source:
+      type: object
+      required:
+      - uploadUrl
+      properties:
+        uploadUrl:
+          type: string
+          example: https://storage.googleapis.com/[..]1fac8da132b9
+      example:
+        uploadUrl: https://storage.googleapis.com/[..]1fac8da132b9
+    Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/500
+        title:
+          type: string
+          enum:
+          - Internal Server Error
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/500
+        title: Internal Server Error
+        status: 500
+    Zuplo.Deploys.SourceCreateBody:
+      type: object
+      required:
+      - accountName
+      - projectName
+      - branchName
+      properties:
+        accountName:
+          type: string
+          description: The name of the account
+          example: my-account
+        projectName:
+          type: string
+          description: The name of the project
+          example: my-project
+        branchName:
+          type: string
+          description: The name of the branch for deployment
+          example: main
+    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/401
+        title:
+          type: string
+          enum:
+          - Unauthorized
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/401
+        title: Unauthorized
+        status: 401
     Zuplo.Deployments.Deployment:
       type: object
       required:
@@ -342,80 +499,6 @@ components:
           type: string
       example:
         status: request enqueued
-    Zuplo.HttpProblemDetails.BadRequestProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/400
-        title:
-          type: string
-          enum:
-          - Bad Request
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/400
-        title: Bad Request
-        status: 400
-    Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/500
-        title:
-          type: string
-          enum:
-          - Internal Server Error
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/500
-        title: Internal Server Error
-        status: 500
-    Zuplo.Sources.Source:
-      type: object
-      required:
-      - uploadUrl
-      properties:
-        uploadUrl:
-          type: string
-          example: https://storage.googleapis.com/[..]1fac8da132b9
-      example:
-        uploadUrl: https://storage.googleapis.com/[..]1fac8da132b9
     Zuplo.HttpProblemDetails.NotFoundProblemResponse:
       type: object
       required:
@@ -448,111 +531,28 @@ components:
         type: https://httpproblems.com/http-status/404
         title: Not Found
         status: 404
-    Zuplo.Deploys.SourceCreateBody:
-      type: object
-      required:
-      - accountName
-      - projectName
-      - branchName
-      properties:
-        accountName:
-          type: string
-          description: The name of the account
-          example: my-account
-        projectName:
-          type: string
-          description: The name of the project
-          example: my-project
-        branchName:
-          type: string
-          description: The name of the branch for deployment
-          example: main
-    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/401
-        title:
-          type: string
-          enum:
-          - Unauthorized
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/401
-        title: Unauthorized
-        status: 401
-    Zuplo.DeploymentStatus.DeploymentStatus:
-      type: object
-      required:
-      - status
-      - url
-      - steps
-      - buildResult
-      properties:
-        status:
-          type: string
-          enum:
-          - SUCCESS
-          - ERROR
-          - IN_PROGRESS
-          example: SUCCESS
-        url:
-          type: string
-          example: https://api.zuplo.com/v1/deployments/lime-fox-main-bbe7540
-        steps:
-          type: object
-          additionalProperties: {}
-        buildResult:
-          type: object
-          additionalProperties: {}
-      description: Status of a Zuplo project deployment, including the status, build results, and a URL to view more details.
-      example:
-        status: SUCCESS
-        url: https://api.zuplo.com/v1/deployments/lime-fox-main-bbe7540
-        steps: {}
-        buildResult: {}
-    Zuplo.Deployments.DeploymentsList:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Zuplo.Deployments.Deployment'
-      example:
-        data:
-        - name: lime-fox-main-bbe7540
-          label: main
-          urlParameter: main
-          createdOn: '2023-07-25T23:41:41.468Z'
-          updatedOn: '2023-07-25T23:41:41.468Z'
-          loggingId: chocolate_great_buzzard::lime-fox::main::main::bbe7540
-          accountName: chocolate_great_buzzard
-          projectName: lime-fox
-          state: STARTED
-          message: ''
-          branchName: main
-          url: https://lime-fox-main-bbe7540.zuplo.app
-          environmentType: PRODUCTION
+  parameters:
+    Zuplo.Common.AccountParams:
+      name: accountName
+      in: path
+      required: true
+      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
+      schema:
+        type: string
+    Zuplo.Common.DeployParams:
+      name: deploymentName
+      in: path
+      required: true
+      description: The name of the deployment. You can find this in the Zuplo Portal under Settings > Environments.
+      schema:
+        type: string
+    Zuplo.Common.AccountProjectParams.projectName:
+      name: projectName
+      in: path
+      required: true
+      description: The name of the project. You can find this in your Zuplo Portal under Settings > Project Information.
+      schema:
+        type: string
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

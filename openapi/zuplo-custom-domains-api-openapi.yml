@@ -161,14 +161,31 @@ paths:
       tags:
       - Custom Domains
 components:
+  parameters:
+    Zuplo.Common.AccountParams:
+      name: accountName
+      in: path
+      required: true
+      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
+      schema:
+        type: string
+    Zuplo.CustomDomains.CustomDomainDeleteQuery.deploymentName:
+      name: deploymentName
+      in: query
+      required: false
+      description: The deployment associated with the hostname, when deleting a deployment-specific mapping.
+      schema:
+        type: string
+      explode: false
+    Zuplo.CustomDomains.CustomDomainDeleteQuery.hostname:
+      name: hostname
+      in: query
+      required: true
+      description: The hostname of the custom domain to delete.
+      schema:
+        type: string
+      explode: false
   schemas:
-    Zuplo.CustomDomains.CustomDomainEnvironmentType:
-      type: string
-      enum:
-      - PRODUCTION
-      - PREVIEW
-      - WORKING_COPY
-      description: The environment type targeted by a custom domain deployment.
     Zuplo.CustomDomains.CustomDomainMutationResult:
       type: object
       required:
@@ -216,14 +233,36 @@ components:
           type: TXT
           value: zuplo-verification-token
         cname: todo-list-api-main-59eec11.zuplo.app
-    Zuplo.CustomDomains.CustomDomainProvider:
+    Zuplo.CustomDomains.CustomDomainStage:
       type: string
       enum:
-      - cloudflare
-      - amazon
-      - custom
-      - alias
-      description: The provider backing a custom domain.
+      - api
+      - dev-portal
+      description: The stage exposed by a custom domain.
+    Zuplo.CustomDomains.OwnershipVerification:
+      type: object
+      required:
+      - name
+      - type
+      - value
+      properties:
+        name:
+          type: string
+          description: The DNS record name to create.
+          example: _zuplo.api.example.com
+        type:
+          type: string
+          description: The DNS record type to create.
+          example: TXT
+        value:
+          type: string
+          description: The DNS record value to create.
+          example: zuplo-verification-token
+      description: DNS record details used to verify domain ownership.
+      example:
+        name: _zuplo.api.example.com
+        type: TXT
+        value: zuplo-verification-token
     Zuplo.HttpProblemDetails.BadRequestProblemResponse:
       type: object
       required:
@@ -256,6 +295,214 @@ components:
         type: https://httpproblems.com/http-status/400
         title: Bad Request
         status: 400
+    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/401
+        title:
+          type: string
+          enum:
+          - Unauthorized
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/401
+        title: Unauthorized
+        status: 401
+    Zuplo.CustomDomains.CustomDomainsList:
+      type: object
+      required:
+      - data
+      - offset
+      - limit
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Zuplo.CustomDomains.CustomDomain'
+          description: The custom domains returned for the account.
+        offset:
+          type: integer
+          format: uint32
+          description: The number of records skipped.
+          example: 0
+        limit:
+          type: integer
+          format: uint32
+          description: The maximum number of records returned.
+          example: 100
+      description: Response containing a paginated list of custom domains.
+      example:
+        data:
+        - id: cdm_01HZX8D7A1M9S0K4Y2N6P3Q8R5
+          accountName: chocolate_great_buzzard
+          projectName: todo-list-api
+          deployments:
+          - deploymentName: todo-list-api-main-59eec11
+            branch: main
+            environmentType: PRODUCTION
+            isDefault: true
+            stage: api
+            cname: todo-list-api-main-59eec11.zuplo.app
+          hostname: api.example.com
+          provider: cloudflare
+        offset: 0
+        limit: 100
+    Zuplo.CustomDomains.CustomDomain:
+      type: object
+      required:
+      - id
+      - accountName
+      - projectName
+      - deployments
+      - hostname
+      - provider
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the custom domain.
+          example: cdm_01HZX8D7A1M9S0K4Y2N6P3Q8R5
+        accountName:
+          type: string
+          description: The account that owns the custom domain.
+          example: chocolate_great_buzzard
+        projectName:
+          type: string
+          description: The project associated with the custom domain.
+          example: todo-list-api
+        deployments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Zuplo.CustomDomains.CustomDomainDeployment'
+          description: The deployments currently mapped to this hostname.
+        hostname:
+          type: string
+          description: The hostname assigned to the custom domain.
+          example: api.example.com
+        provider:
+          allOf:
+          - $ref: '#/components/schemas/Zuplo.CustomDomains.CustomDomainProvider'
+          description: The provider backing the custom domain.
+          example: cloudflare
+      description: A custom domain configured for an account.
+      example:
+        id: cdm_01HZX8D7A1M9S0K4Y2N6P3Q8R5
+        accountName: chocolate_great_buzzard
+        projectName: todo-list-api
+        deployments:
+        - deploymentName: todo-list-api-main-59eec11
+          branch: main
+          environmentType: PRODUCTION
+          isDefault: true
+          stage: api
+          cname: todo-list-api-main-59eec11.zuplo.app
+        hostname: api.example.com
+        provider: cloudflare
+    Zuplo.CustomDomains.CustomDomainProvider:
+      type: string
+      enum:
+      - cloudflare
+      - amazon
+      - custom
+      - alias
+      description: The provider backing a custom domain.
+    Zuplo.CustomDomains.CustomDomainEnvironmentType:
+      type: string
+      enum:
+      - PRODUCTION
+      - PREVIEW
+      - WORKING_COPY
+      description: The environment type targeted by a custom domain deployment.
+    Zuplo.CustomDomains.CustomDomainUpdateBody:
+      type: object
+      required:
+      - hostname
+      properties:
+        hostname:
+          type: string
+          description: The hostname to update.
+          example: api.example.com
+        deploymentName:
+          type: string
+          description: The deployment to associate with the hostname.
+          example: todo-list-api-main-59eec11
+        isDefault:
+          type: boolean
+          description: Whether this domain should be the default domain for the deployment.
+          example: true
+      description: Request body for updating a custom domain.
+      example:
+        hostname: api.example.com
+        deploymentName: todo-list-api-main-59eec11
+        isDefault: true
+    Zuplo.CustomDomains.CustomDomainDeployment:
+      type: object
+      required:
+      - deploymentName
+      - branch
+      - environmentType
+      - isDefault
+      - stage
+      - cname
+      properties:
+        deploymentName:
+          type:
+          - string
+          - 'null'
+          description: The deployment name associated with the custom domain.
+          example: todo-list-api-main-59eec11
+        branch:
+          type:
+          - string
+          - 'null'
+          description: The branch associated with the deployment.
+          example: main
+        environmentType:
+          allOf:
+          - $ref: '#/components/schemas/Zuplo.CustomDomains.CustomDomainEnvironmentType'
+          description: The environment type associated with the deployment.
+          example: PRODUCTION
+        isDefault:
+          type: boolean
+          description: Whether this deployment is the default for the hostname.
+          example: true
+        stage:
+          allOf:
+          - $ref: '#/components/schemas/Zuplo.CustomDomains.CustomDomainStage'
+          description: The stage exposed by this custom domain mapping.
+          example: api
+        cname:
+          type:
+          - string
+          - 'null'
+          description: The CNAME target for this deployment.
+          example: todo-list-api-main-59eec11.zuplo.app
+      description: A deployment bound to a custom domain.
+      example:
+        deploymentName: todo-list-api-main-59eec11
+        branch: main
+        environmentType: PRODUCTION
+        isDefault: true
+        stage: api
+        cname: todo-list-api-main-59eec11.zuplo.app
     Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
       type: object
       required:
@@ -321,253 +568,6 @@ components:
         stage: api
         isDefault: true
         isAlias: false
-    Zuplo.CustomDomains.CustomDomain:
-      type: object
-      required:
-      - id
-      - accountName
-      - projectName
-      - deployments
-      - hostname
-      - provider
-      properties:
-        id:
-          type: string
-          description: The unique identifier for the custom domain.
-          example: cdm_01HZX8D7A1M9S0K4Y2N6P3Q8R5
-        accountName:
-          type: string
-          description: The account that owns the custom domain.
-          example: chocolate_great_buzzard
-        projectName:
-          type: string
-          description: The project associated with the custom domain.
-          example: todo-list-api
-        deployments:
-          type: array
-          items:
-            $ref: '#/components/schemas/Zuplo.CustomDomains.CustomDomainDeployment'
-          description: The deployments currently mapped to this hostname.
-        hostname:
-          type: string
-          description: The hostname assigned to the custom domain.
-          example: api.example.com
-        provider:
-          allOf:
-          - $ref: '#/components/schemas/Zuplo.CustomDomains.CustomDomainProvider'
-          description: The provider backing the custom domain.
-          example: cloudflare
-      description: A custom domain configured for an account.
-      example:
-        id: cdm_01HZX8D7A1M9S0K4Y2N6P3Q8R5
-        accountName: chocolate_great_buzzard
-        projectName: todo-list-api
-        deployments:
-        - deploymentName: todo-list-api-main-59eec11
-          branch: main
-          environmentType: PRODUCTION
-          isDefault: true
-          stage: api
-          cname: todo-list-api-main-59eec11.zuplo.app
-        hostname: api.example.com
-        provider: cloudflare
-    Zuplo.CustomDomains.OwnershipVerification:
-      type: object
-      required:
-      - name
-      - type
-      - value
-      properties:
-        name:
-          type: string
-          description: The DNS record name to create.
-          example: _zuplo.api.example.com
-        type:
-          type: string
-          description: The DNS record type to create.
-          example: TXT
-        value:
-          type: string
-          description: The DNS record value to create.
-          example: zuplo-verification-token
-      description: DNS record details used to verify domain ownership.
-      example:
-        name: _zuplo.api.example.com
-        type: TXT
-        value: zuplo-verification-token
-    Zuplo.CustomDomains.CustomDomainUpdateBody:
-      type: object
-      required:
-      - hostname
-      properties:
-        hostname:
-          type: string
-          description: The hostname to update.
-          example: api.example.com
-        deploymentName:
-          type: string
-          description: The deployment to associate with the hostname.
-          example: todo-list-api-main-59eec11
-        isDefault:
-          type: boolean
-          description: Whether this domain should be the default domain for the deployment.
-          example: true
-      description: Request body for updating a custom domain.
-      example:
-        hostname: api.example.com
-        deploymentName: todo-list-api-main-59eec11
-        isDefault: true
-    Zuplo.CustomDomains.CustomDomainsList:
-      type: object
-      required:
-      - data
-      - offset
-      - limit
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Zuplo.CustomDomains.CustomDomain'
-          description: The custom domains returned for the account.
-        offset:
-          type: integer
-          format: uint32
-          description: The number of records skipped.
-          example: 0
-        limit:
-          type: integer
-          format: uint32
-          description: The maximum number of records returned.
-          example: 100
-      description: Response containing a paginated list of custom domains.
-      example:
-        data:
-        - id: cdm_01HZX8D7A1M9S0K4Y2N6P3Q8R5
-          accountName: chocolate_great_buzzard
-          projectName: todo-list-api
-          deployments:
-          - deploymentName: todo-list-api-main-59eec11
-            branch: main
-            environmentType: PRODUCTION
-            isDefault: true
-            stage: api
-            cname: todo-list-api-main-59eec11.zuplo.app
-          hostname: api.example.com
-          provider: cloudflare
-        offset: 0
-        limit: 100
-    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/401
-        title:
-          type: string
-          enum:
-          - Unauthorized
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/401
-        title: Unauthorized
-        status: 401
-    Zuplo.CustomDomains.CustomDomainDeployment:
-      type: object
-      required:
-      - deploymentName
-      - branch
-      - environmentType
-      - isDefault
-      - stage
-      - cname
-      properties:
-        deploymentName:
-          type:
-          - string
-          - 'null'
-          description: The deployment name associated with the custom domain.
-          example: todo-list-api-main-59eec11
-        branch:
-          type:
-          - string
-          - 'null'
-          description: The branch associated with the deployment.
-          example: main
-        environmentType:
-          allOf:
-          - $ref: '#/components/schemas/Zuplo.CustomDomains.CustomDomainEnvironmentType'
-          description: The environment type associated with the deployment.
-          example: PRODUCTION
-        isDefault:
-          type: boolean
-          description: Whether this deployment is the default for the hostname.
-          example: true
-        stage:
-          allOf:
-          - $ref: '#/components/schemas/Zuplo.CustomDomains.CustomDomainStage'
-          description: The stage exposed by this custom domain mapping.
-          example: api
-        cname:
-          type:
-          - string
-          - 'null'
-          description: The CNAME target for this deployment.
-          example: todo-list-api-main-59eec11.zuplo.app
-      description: A deployment bound to a custom domain.
-      example:
-        deploymentName: todo-list-api-main-59eec11
-        branch: main
-        environmentType: PRODUCTION
-        isDefault: true
-        stage: api
-        cname: todo-list-api-main-59eec11.zuplo.app
-    Zuplo.CustomDomains.CustomDomainStage:
-      type: string
-      enum:
-      - api
-      - dev-portal
-      description: The stage exposed by a custom domain.
-  parameters:
-    Zuplo.CustomDomains.CustomDomainDeleteQuery.deploymentName:
-      name: deploymentName
-      in: query
-      required: false
-      description: The deployment associated with the hostname, when deleting a deployment-specific mapping.
-      schema:
-        type: string
-      explode: false
-    Zuplo.Common.AccountParams:
-      name: accountName
-      in: path
-      required: true
-      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
-      schema:
-        type: string
-    Zuplo.CustomDomains.CustomDomainDeleteQuery.hostname:
-      name: hostname
-      in: query
-      required: true
-      description: The hostname of the custom domain to delete.
-      schema:
-        type: string
-      explode: false
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

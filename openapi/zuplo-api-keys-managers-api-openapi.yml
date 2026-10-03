@@ -158,11 +158,11 @@ paths:
       - API Keys - Managers
 components:
   parameters:
-    Zuplo.ApiKeys.ManagerParams.managerId:
-      name: managerId
+    Zuplo.Common.AccountParams:
+      name: accountName
       in: path
       required: true
-      description: The manager id
+      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
       schema:
         type: string
     Zuplo.ApiKeys.ConsumerParams.consumerName:
@@ -172,11 +172,11 @@ components:
       description: The name of the consumer.
       schema:
         type: string
-    Zuplo.Common.AccountParams:
-      name: accountName
+    Zuplo.ApiKeys.ManagerParams.managerId:
+      name: managerId
       in: path
       required: true
-      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
+      description: The manager id
       schema:
         type: string
     Zuplo.ApiKeys.BucketParams.bucketName:
@@ -186,44 +186,6 @@ components:
       description: The name of the bucket. Zuplo automatically creates a bucket for your project. You can find it in youe Zuplo Portal under Settings > Project Information.
       schema:
         type: string
-  responses:
-    RateLimitWithRetryAfter:
-      description: Rate Limiting Response
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-            - type
-            - title
-            - status
-            examples:
-            - type: https://httpproblems.com/http-status/429
-              title: Too Many Requests
-              status: 429
-              instance: /foo/bar
-            properties:
-              type:
-                type: string
-                example: https://httpproblems.com/http-status/429
-                description: A URI reference that identifies the problem.
-              title:
-                type: string
-                example: Too Many Requests
-                description: A short, human-readable summary of the problem.
-              status:
-                type: number
-                example: 429
-                description: The HTTP status code.
-              instance:
-                type: string
-                example: /foo/bar
-      headers:
-        retry-after:
-          description: The number of seconds to wait before making a new request.
-          schema:
-            type: integer
-            example: 60
   schemas:
     Zuplo.HttpProblemDetails.BadRequestProblemResponse:
       type: object
@@ -289,98 +251,6 @@ components:
         type: https://httpproblems.com/http-status/500
         title: Internal Server Error
         status: 500
-    Zuplo.HttpProblemDetails.NotFoundProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/404
-        title:
-          type: string
-          enum:
-          - Not Found
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/404
-        title: Not Found
-        status: 404
-    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/401
-        title:
-          type: string
-          enum:
-          - Unauthorized
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/401
-        title: Unauthorized
-        status: 401
-    Zuplo.ApiKeys.Managers:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Zuplo.ApiKeys.Manager'
-        limit:
-          type: integer
-          format: uint32
-          example: 1000
-        offset:
-          type: integer
-          format: uint32
-          example: 0
-        total:
-          type: integer
-          format: uint32
-      example:
-        data:
-        - createdOn: '2023-04-20T05:54:34.408Z'
-          id: managerId
-          email: bob@example.com
-          sub: sub-oauth2|113533232396018044159
-        limit: 1000
-        offset: 0
     Zuplo.ApiKeys.Manager:
       type: object
       required:
@@ -418,6 +288,136 @@ components:
       example:
         email: bob@example.com
         sub: sub-oauth2|113533232396018044159
+    Zuplo.ApiKeys.Managers:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Zuplo.ApiKeys.Manager'
+        limit:
+          type: integer
+          format: uint32
+          example: 1000
+        offset:
+          type: integer
+          format: uint32
+          example: 0
+        total:
+          type: integer
+          format: uint32
+      example:
+        data:
+        - createdOn: '2023-04-20T05:54:34.408Z'
+          id: managerId
+          email: bob@example.com
+          sub: sub-oauth2|113533232396018044159
+        limit: 1000
+        offset: 0
+    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/401
+        title:
+          type: string
+          enum:
+          - Unauthorized
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/401
+        title: Unauthorized
+        status: 401
+    Zuplo.HttpProblemDetails.NotFoundProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/404
+        title:
+          type: string
+          enum:
+          - Not Found
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/404
+        title: Not Found
+        status: 404
+  responses:
+    RateLimitWithRetryAfter:
+      description: Rate Limiting Response
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - type
+            - title
+            - status
+            examples:
+            - type: https://httpproblems.com/http-status/429
+              title: Too Many Requests
+              status: 429
+              instance: /foo/bar
+            properties:
+              type:
+                type: string
+                example: https://httpproblems.com/http-status/429
+                description: A URI reference that identifies the problem.
+              title:
+                type: string
+                example: Too Many Requests
+                description: A short, human-readable summary of the problem.
+              status:
+                type: number
+                example: 429
+                description: The HTTP status code.
+              instance:
+                type: string
+                example: /foo/bar
+      headers:
+        retry-after:
+          description: The number of seconds to wait before making a new request.
+          schema:
+            type: integer
+            example: 60
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

@@ -110,11 +110,11 @@ paths:
               $ref: '#/components/schemas/Zuplo.Variables.VariableUpdateBody'
 components:
   parameters:
-    Zuplo.Common.AccountProjectParams.projectName:
-      name: projectName
+    Zuplo.Common.AccountParams:
+      name: accountName
       in: path
       required: true
-      description: The name of the project. You can find this in your Zuplo Portal under Settings > Project Information.
+      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
       schema:
         type: string
     Zuplo.Common.VariableParams:
@@ -131,14 +131,22 @@ components:
       description: The name of the branch in your source control provider.
       schema:
         type: string
-    Zuplo.Common.AccountParams:
-      name: accountName
+    Zuplo.Common.AccountProjectParams.projectName:
+      name: projectName
       in: path
       required: true
-      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
+      description: The name of the project. You can find this in your Zuplo Portal under Settings > Project Information.
       schema:
         type: string
   schemas:
+    Zuplo.Variables.VariableUpdateBody:
+      type: object
+      properties:
+        value:
+          type: string
+          description: The value of the variable.
+      example:
+        value: '89333'
     Zuplo.HttpProblemDetails.BadRequestProblemResponse:
       type: object
       required:
@@ -171,102 +179,6 @@ components:
         type: https://httpproblems.com/http-status/400
         title: Bad Request
         status: 400
-    Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/500
-        title:
-          type: string
-          enum:
-          - Internal Server Error
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/500
-        title: Internal Server Error
-        status: 500
-    Zuplo.HttpProblemDetails.NotFoundProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/404
-        title:
-          type: string
-          enum:
-          - Not Found
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/404
-        title: Not Found
-        status: 404
-    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/401
-        title:
-          type: string
-          enum:
-          - Unauthorized
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/401
-        title: Unauthorized
-        status: 401
     Zuplo.Variables.Variable:
       type: object
       required:
@@ -311,14 +223,70 @@ components:
         branch: main
         createdOn: '2023-04-18T05:54:34.408Z'
         updatedOn: '2023-04-20T05:54:34.408Z'
-    Zuplo.Variables.VariableUpdateBody:
+    Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
       type: object
+      required:
+      - type
+      - title
       properties:
-        value:
+        type:
           type: string
-          description: The value of the variable.
+          enum:
+          - https://httpproblems.com/http-status/500
+        title:
+          type: string
+          enum:
+          - Internal Server Error
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
       example:
-        value: '89333'
+        type: https://httpproblems.com/http-status/500
+        title: Internal Server Error
+        status: 500
+    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/401
+        title:
+          type: string
+          enum:
+          - Unauthorized
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/401
+        title: Unauthorized
+        status: 401
     Zuplo.Variables.VariableCreateBody:
       type: object
       required:
@@ -341,6 +309,38 @@ components:
         name: PORTAL_ID
         isSecret: false
         value: '89333'
+    Zuplo.HttpProblemDetails.NotFoundProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/404
+        title:
+          type: string
+          enum:
+          - Not Found
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/404
+        title: Not Found
+        status: 404
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

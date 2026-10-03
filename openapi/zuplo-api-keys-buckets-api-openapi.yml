@@ -224,25 +224,22 @@ paths:
       tags:
       - API Keys - Buckets
 components:
+  parameters:
+    Zuplo.Common.AccountParams:
+      name: accountName
+      in: path
+      required: true
+      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
+      schema:
+        type: string
+    Zuplo.ApiKeys.BucketParams.bucketName:
+      name: bucketName
+      in: path
+      required: true
+      description: The name of the bucket. Zuplo automatically creates a bucket for your project. You can find it in youe Zuplo Portal under Settings > Project Information.
+      schema:
+        type: string
   schemas:
-    Zuplo.ApiKeys.BucketUpdateBody:
-      type: object
-      properties:
-        description:
-          type: string
-          description: A description of the bucket.
-          x-example: Bucket for zuplo consumers
-        tags:
-          type: object
-          additionalProperties:
-            type: string
-          description: Key value pairs to associate with the bucket.
-          x-example:
-            foo: baz
-      example:
-        description: Bucket for zuplo consumers
-        tags:
-          foo: bar
     Zuplo.HttpProblemDetails.BadRequestProblemResponse:
       type: object
       required:
@@ -275,6 +272,86 @@ components:
         type: https://httpproblems.com/http-status/400
         title: Bad Request
         status: 400
+    Zuplo.ApiKeys.BucketUpdateBody:
+      type: object
+      properties:
+        description:
+          type: string
+          description: A description of the bucket.
+          x-example: Bucket for zuplo consumers
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+          description: Key value pairs to associate with the bucket.
+          x-example:
+            foo: baz
+      example:
+        description: Bucket for zuplo consumers
+        tags:
+          foo: bar
+    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/401
+        title:
+          type: string
+          enum:
+          - Unauthorized
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/401
+        title: Unauthorized
+        status: 401
+    Zuplo.ApiKeys.Buckets:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Zuplo.ApiKeys.Bucket'
+        limit:
+          type: integer
+          format: uint32
+          example: 1000
+        offset:
+          type: integer
+          format: uint32
+          example: 0
+        total:
+          type: integer
+          format: uint32
+      example:
+        data:
+        - id: bckt_pCcNMjERFSoh5xIQir7o99Z6KDoLp36e
+          name: my-bucket
+          createdOn: '2023-07-24T19:26:36.000Z'
+          updatedOn: '2023-07-24T19:26:36.000Z'
+          description: Bucket for zuplo consumers
+          isRetrievable: true
+          tags:
+            foo: bar
     Zuplo.ApiKeys.Bucket:
       type: object
       required:
@@ -329,68 +406,6 @@ components:
         isRetrievable: true
         tags:
           foo: bar
-    Zuplo.ApiKeys.Buckets:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Zuplo.ApiKeys.Bucket'
-        limit:
-          type: integer
-          format: uint32
-          example: 1000
-        offset:
-          type: integer
-          format: uint32
-          example: 0
-        total:
-          type: integer
-          format: uint32
-      example:
-        data:
-        - id: bckt_pCcNMjERFSoh5xIQir7o99Z6KDoLp36e
-          name: my-bucket
-          createdOn: '2023-07-24T19:26:36.000Z'
-          updatedOn: '2023-07-24T19:26:36.000Z'
-          description: Bucket for zuplo consumers
-          isRetrievable: true
-          tags:
-            foo: bar
-    Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/500
-        title:
-          type: string
-          enum:
-          - Internal Server Error
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/500
-        title: Internal Server Error
-        status: 500
     Zuplo.HttpProblemDetails.NotFoundProblemResponse:
       type: object
       required:
@@ -423,38 +438,6 @@ components:
         type: https://httpproblems.com/http-status/404
         title: Not Found
         status: 404
-    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/401
-        title:
-          type: string
-          enum:
-          - Unauthorized
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/401
-        title: Unauthorized
-        status: 401
     Zuplo.ApiKeys.BucketCreateBody:
       type: object
       required:
@@ -481,6 +464,38 @@ components:
         description: Bucket for zuplo consumers
         tags:
           foo: bar
+    Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/500
+        title:
+          type: string
+          enum:
+          - Internal Server Error
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/500
+        title: Internal Server Error
+        status: 500
   responses:
     RateLimitWithRetryAfter:
       description: Rate Limiting Response
@@ -519,21 +534,6 @@ components:
           schema:
             type: integer
             example: 60
-  parameters:
-    Zuplo.ApiKeys.BucketParams.bucketName:
-      name: bucketName
-      in: path
-      required: true
-      description: The name of the bucket. Zuplo automatically creates a bucket for your project. You can find it in youe Zuplo Portal under Settings > Project Information.
-      schema:
-        type: string
-    Zuplo.Common.AccountParams:
-      name: accountName
-      in: path
-      required: true
-      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
-      schema:
-        type: string
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
