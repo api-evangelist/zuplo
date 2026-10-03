@@ -768,3 +768,10 @@ maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 specificationVersion: '0.23'
+x-correction-request:
+  requested: '2026-10-03'
+  source:
+  - apis.io Influence-tier request queue (kinlane-test-influence)
+  request: 'Influence-tier artifact submission 24f613f7 (2026-09-24): MCP at https://zuplo.com/.well-known/mcp/com.zuplo-platform-server-card.json.
+    Verify it is live and real (MCP: initialize/tools/list or server card; OpenAPI: paths), then record it as a
+    pointer and harvest it.'
