@@ -377,6 +377,8 @@ apis:
   humanURL: https://zuplo.com/docs/articles/developer-api
   baseURL: https://dev.zuplo.com
   tags:
+  - OpenAPI
+  tags_raw:
   - Open API
   properties:
   - type: OpenAPI
@@ -441,6 +443,7 @@ tags:
 - API Management
 - Gateways
 - Platform
+- API Gateway
 type: Index
 deliveryModel:
   model: unknown
@@ -476,6 +479,9 @@ accessModel:
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/zuplo.png
 access: 3rd-Party
 common:
+- type: CapabilityMap
+  url: capabilities/zuplo-capability-edges.yml
+  name: Zuplo Business Capability Map
 - type: VendorFacets
   url: vendor-facets/zuplo-vendor-facets.yml
 - type: Website
