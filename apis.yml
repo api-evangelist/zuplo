@@ -1,5 +1,354 @@
 aid: zuplo
+
 url: https://raw.githubusercontent.com/api-evangelist/zuplo/refs/heads/main/apis.yml
+
+name: Zuplo
+
+tags:
+- AI Gateway
+- API Management
+- Gateways
+- Platform
+- API Gateway
+- MCP Gateway
+- Auth
+- Rate Limiting
+- Spend Management
+- Developer Tools
+
+deliveryModel:
+  model: unknown
+  license_evidence:
+    repo: zuplo/zuplo
+    spdx: none
+    stars: 37
+  open_source: unknown
+  commercial: true
+  callable_host: true
+  label: Delivery model not determined — needs a product licence on record
+  confidence: low
+  source:
+  - openapi
+  - pricing
+  - repository-unlicensed
+  generated: '2026-09-25'
+  method: derived
+
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: medium
+  source:
+  - plans
+  - authentication
+  - security
+  generated: '2026-09-03'
+  method: derived
+
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/zuplo.png
+
+access: 3rd-Party
+
+created: '2025-01-08'
+
+modified: '2026-05-19'
+
+position: Consuming
+
+description: Zuplo is the API management platform for developers. Build, deploy, and
+  scale APIs faster with Zuplo.
+
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
+
+specificationVersion: '0.23'
+
+common:
+- type: FinOps
+  url: finops/zuplo-finops.yml
+- type: RateLimits
+  url: rate-limits/zuplo-rate-limits.yml
+- type: Plans
+  url: plans/zuplo-plans-pricing.yml
+- type: Spectral
+  url: rules/zuplo-rules.yml
+- type: Spectral
+  url: rules/zuplo-jsonschema-spectral-rules.yml
+- type: JSONLD
+  url: json-ld/zuplo-context.jsonld
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DataModel
+  url: data-model/zuplo-data-model.yml
+- type: ChangeLog
+  url: changelog/zuplo-changelog.yml
+- type: ErrorCatalog
+  url: errors/zuplo-problem-types.yml
+- type: Conformance
+  url: conformance/zuplo-conformance.yml
+- type: LLMsTxt
+  url: llms/zuplo-llms.txt
+- type: MCPServer
+  url: mcp/zuplo-mcp.yml
+- type: SecurityTxt
+  url: well-known/zuplo-help-security.txt
+- type: WellKnown
+  url: well-known/zuplo-well-known.yml
+- type: Hosts
+  url: hosts/zuplo-hosts.yml
+- type: Vendors
+  url: vendors/zuplo-vendors.yml
+- type: SDKs
+  url: packages/zuplo-packages.yml
+- type: Packages
+  url: packages/zuplo-packages.yml
+- type: VendorFacets
+  url: vendor-facets/zuplo-vendor-facets.yml
+- type: Website
+  url: https://www.zuplo.com/
+- type: Roadmap
+  url: https://zuplo.com/roadmap
+- type: AgenticAccess
+  url: agentic-access/zuplo-agentic-access.yml
+- type: DomainSecurity
+  url: security/zuplo-domain-security.yml
+- type: Authentication
+  url: authentication/zuplo-authentication.yml
+- name: Agent Skills
+  url: https://github.com/zuplo/tools
+  type: AgentSkills
+- type: PostmanWorkspace
+  url: https://www.postman.com/kinlaneapi/zuplo/overview
+- type: Arazzo
+  url: arazzo/zuplo-add-consumer-manager-workflow.yml
+  name: Zuplo Add a Manager to a Consumer
+- type: Arazzo
+  url: arazzo/zuplo-bulk-issue-consumer-keys-workflow.yml
+  name: Zuplo Bulk-Issue API Keys to a Consumer
+- type: Arazzo
+  url: arazzo/zuplo-create-consumer-and-key-workflow.yml
+  name: Zuplo Create a Consumer and Issue an API Key
+- type: Arazzo
+  url: arazzo/zuplo-deactivate-consumer-key-workflow.yml
+  name: Zuplo Deactivate a Consumer's API Key
+- type: Arazzo
+  url: arazzo/zuplo-discover-account-and-buckets-workflow.yml
+  name: Zuplo Discover Account and List Its Buckets
+- type: Arazzo
+  url: arazzo/zuplo-find-and-update-bucket-workflow.yml
+  name: Zuplo Find and Update an API Key Bucket
+- type: Arazzo
+  url: arazzo/zuplo-find-consumer-update-metadata-workflow.yml
+  name: Zuplo Find a Consumer and Update Its Metadata
+- type: Arazzo
+  url: arazzo/zuplo-find-then-delete-consumer-workflow.yml
+  name: Zuplo Find and Delete a Consumer
+- type: Arazzo
+  url: arazzo/zuplo-map-custom-domain-workflow.yml
+  name: Zuplo Map a Custom Domain to a Deployment
+- type: Arazzo
+  url: arazzo/zuplo-onboard-consumer-with-key-workflow.yml
+  name: Zuplo Onboard a Consumer With an API Key
+- type: Arazzo
+  url: arazzo/zuplo-provision-api-key-bucket-workflow.yml
+  name: Zuplo Provision an API Key Bucket
+- type: Arazzo
+  url: arazzo/zuplo-provision-tunnel-workflow.yml
+  name: Zuplo Provision a Secure Tunnel
+- type: Arazzo
+  url: arazzo/zuplo-redeploy-project-deployment-workflow.yml
+  name: Zuplo Inspect and Redeploy a Project Deployment
+- type: Arazzo
+  url: arazzo/zuplo-repoint-custom-domain-workflow.yml
+  name: Zuplo Repoint a Custom Domain to a New Deployment
+- type: Arazzo
+  url: arazzo/zuplo-rotate-consumer-key-workflow.yml
+  name: Zuplo Rotate a Consumer's API Keys
+- type: Arazzo
+  url: arazzo/zuplo-rotate-tunnel-token-workflow.yml
+  name: Zuplo Rotate a Tunnel Token
+- type: Arazzo
+  url: arazzo/zuplo-set-variable-and-redeploy-workflow.yml
+  name: Zuplo Set an Environment Variable and Redeploy
+- type: Arazzo
+  url: arazzo/zuplo-update-variable-and-redeploy-workflow.yml
+  name: Zuplo Update an Environment Variable and Redeploy
+- url: https://zuplo.com/docs/articles/what-is-zuplo
+  name: What is Zuplo? - Zuplo Docs
+  type: Documentation
+  description: 'null'
+- url: https://zuplo.com/pricing
+  name: Affordable Plans for Every Team | Zuplo
+  type: Pricing
+  description: 'null'
+- url: https://zuplo.com/blog
+  name: Zuplo Blog - Articles on API Development and Best Practices
+  type: Blog
+  description: 'null'
+- url: https://auth.zuplo.com/u/login/identifier
+  name: Log in | Zuplo
+  type: Login
+  description: 'null'
+- url: https://auth.zuplo.com/u/signup/identifier
+  name: Log in | Zuplo
+  type: Signup
+  description: 'null'
+- url: https://zuplo.com/docs/articles/support
+  name: Support - Zuplo Docs
+  type: Support
+  description: 'null'
+- url: https://zuplo.com/resources
+  name: Zuplo Resources
+  type: Customers
+  description: 'null'
+- url: https://zuplo.com/changelog
+  name: Zuplo Changelog - Latest platform updates and new features
+  type: ChangeLog
+  description: 'null'
+- url: https://zuplo.com/integrations
+  name: Zuplo Integrations
+  type: Integrations
+  description: 'null'
+- url: https://zuplo.com/about
+  name: About Zuplo
+  type: About
+  description: 'null'
+- url: https://status.zuplo.com/
+  name: Zuplo Status
+  type: StatusPage
+  description: 'null'
+- url: https://zuplo.com/legal/privacy-policy
+  name: Privacy Policy - Zuplo
+  type: PrivacyPolicy
+  description: 'null'
+- url: https://zuplo.com/legal/terms
+  name: Terms of Service - Zuplo
+  type: TermsOfService
+  description: 'null'
+- url: https://zuplo.com/legal/security-policy
+  name: Security Policies - Zuplo
+  type: Security
+  description: 'null'
+- url: https://trust.zuplo.com/
+  name: Trust Center - Zuplo
+  type: Trust
+  description: 'null'
+- url: https://zuplo.com/docs
+  name: Zuplo Docs
+  type: GettingStarted
+  description: 'null'
+- url: https://zuplo.com/learning-center
+  name: Zuplo Learning Center
+  type: LearningCenter
+  description: 'null'
+- url: https://zuplo.com/features/developer-portal
+  name: API Developer Portal - Zuplo
+  type: DeveloperPortal
+  description: 'null'
+- url: https://zuplo.com/features/api-management
+  name: API Management - Zuplo
+  type: APIManagement
+  description: 'null'
+- url: https://zuplo.com/features/programmable
+  name: Programmable API Gateway - Zuplo
+  type: Features
+  description: 'null'
+- url: https://zuplo.com/features/rate-limiting
+  name: API Rate Limiting - Zuplo
+  type: RateLimiting
+  description: 'null'
+- url: https://zuplo.com/features/api-key-management
+  name: API Key Management - Zuplo
+  type: APIKeyManagement
+  description: 'null'
+- url: https://zuplo.com/features/api-monetization
+  name: API Monetization - Zuplo
+  type: Monetization
+  description: 'null'
+- url: https://zuplo.com/features/api-security
+  name: API Security - Zuplo
+  type: Security
+  description: 'null'
+- url: https://zuplo.com/features/api-governance
+  name: API Governance - Zuplo
+  type: Governance
+  description: 'null'
+- url: https://zuplo.com/features/open-api
+  name: OpenAPI Native API Gateway - Zuplo
+  type: OpenAPI
+  description: 'null'
+- url: https://zuplo.com/features/gitops
+  name: GitOps - Zuplo
+  type: GitOps
+  description: 'null'
+- url: https://zuplo.com/features/multi-cloud
+  name: Multi-cloud API Gateway - Zuplo
+  type: MultiCloud
+  description: 'null'
+- url: https://zuplo.com/features/unlimited-environments
+  name: Unlimited API Development Environments - Zuplo
+  type: Environments
+  description: 'null'
+- url: https://zuplo.com/features/self-serve-devx
+  name: Self-Serve DevX - Zuplo
+  type: SelfService
+  description: 'null'
+- url: https://zuplo.com/features/ai-gateway
+  name: AI Gateway - Zuplo
+  type: AIGateway
+  description: 'null'
+- url: https://zuplo.com/mcp-servers
+  name: Zuplo MCP Servers
+  type: MCPServers
+  description: 'null'
+- url: https://github.com/zuplo
+  name: Zuplo GitHub Organization
+  type: GitHub
+  description: 'null'
+- url: https://github.com/zuplo/zuplo
+  name: Zuplo GitHub Repository
+  type: GitHubRepo
+  description: 'null'
+- url: https://github.com/zuplo/zudoku
+  name: Zudoku - API Documentation Framework
+  type: GitHubRepo
+  description: 'null'
+- url: https://github.com/zuplo/rate-my-openapi
+  name: Rate My OpenAPI
+  type: GitHubRepo
+  description: 'null'
+- url: https://x.com/zuplo
+  name: Zuplo on X
+  type: X
+  description: 'null'
+- url: https://www.linkedin.com/company/zuplo
+  name: Zuplo on LinkedIn
+  type: LinkedIn
+  description: 'null'
+- url: https://discord.com/invite/stPRhjbA55
+  name: Zuplo Discord Community
+  type: Discord
+  description: 'null'
+- url: https://zuplo.com/careers
+  name: Careers at Zuplo
+  type: Careers
+  description: 'null'
+- url: https://zuplo.com/support
+  name: Zuplo Support & Help Center
+  type: HelpCenter
+  description: 'null'
+- url: https://zuplo.com/api-management
+  name: Zuplo API Management Overview
+  type: Overview
+  description: 'null'
+- type: LlmsText
+  url: https://zuplo.com/llms.txt
+
 apis:
 - aid: zuplo:zuplo-api-keys-buckets-api
   name: Zuplo API Keys - Buckets API
@@ -435,295 +784,11 @@ apis:
     url: vocabulary/zuplo-vocabulary.yml
   - type: GettingStarted
     url: https://zuplo.com/docs/articles/api-key-api
-name: Zuplo
-tags:
-- AI Gateway
-- API Management
-- Gateways
-- Platform
 type: Index
-deliveryModel:
-  model: unknown
-  license_evidence:
-    repo: zuplo/zuplo
-    spdx: none
-    stars: 37
-  open_source: unknown
-  commercial: true
-  callable_host: true
-  label: Delivery model not determined — needs a product licence on record
-  confidence: low
-  source:
-  - openapi
-  - pricing
-  - repository-unlicensed
-  generated: '2026-09-25'
-  method: derived
-accessModel:
-  pricing: freemium
-  onboarding: self-serve
-  trial: false
-  try_now: true
-  public: false
-  label: Freemium · Self-serve signup
-  confidence: medium
-  source:
-  - plans
-  - authentication
-  - security
-  generated: '2026-09-03'
-  method: derived
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/zuplo.png
-access: 3rd-Party
-common:
-- type: VendorFacets
-  url: vendor-facets/zuplo-vendor-facets.yml
-- type: Website
-  url: https://www.zuplo.com/
-- type: Roadmap
-  url: https://zuplo.com/roadmap
-- type: AgenticAccess
-  url: agentic-access/zuplo-agentic-access.yml
-- type: DomainSecurity
-  url: security/zuplo-domain-security.yml
-- type: Authentication
-  url: authentication/zuplo-authentication.yml
-- name: Agent Skills
-  url: https://github.com/zuplo/tools
-  type: AgentSkills
-- type: PostmanWorkspace
-  url: https://www.postman.com/kinlaneapi/zuplo/overview
-- type: Arazzo
-  url: arazzo/zuplo-add-consumer-manager-workflow.yml
-  name: Zuplo Add a Manager to a Consumer
-- type: Arazzo
-  url: arazzo/zuplo-bulk-issue-consumer-keys-workflow.yml
-  name: Zuplo Bulk-Issue API Keys to a Consumer
-- type: Arazzo
-  url: arazzo/zuplo-create-consumer-and-key-workflow.yml
-  name: Zuplo Create a Consumer and Issue an API Key
-- type: Arazzo
-  url: arazzo/zuplo-deactivate-consumer-key-workflow.yml
-  name: Zuplo Deactivate a Consumer's API Key
-- type: Arazzo
-  url: arazzo/zuplo-discover-account-and-buckets-workflow.yml
-  name: Zuplo Discover Account and List Its Buckets
-- type: Arazzo
-  url: arazzo/zuplo-find-and-update-bucket-workflow.yml
-  name: Zuplo Find and Update an API Key Bucket
-- type: Arazzo
-  url: arazzo/zuplo-find-consumer-update-metadata-workflow.yml
-  name: Zuplo Find a Consumer and Update Its Metadata
-- type: Arazzo
-  url: arazzo/zuplo-find-then-delete-consumer-workflow.yml
-  name: Zuplo Find and Delete a Consumer
-- type: Arazzo
-  url: arazzo/zuplo-map-custom-domain-workflow.yml
-  name: Zuplo Map a Custom Domain to a Deployment
-- type: Arazzo
-  url: arazzo/zuplo-onboard-consumer-with-key-workflow.yml
-  name: Zuplo Onboard a Consumer With an API Key
-- type: Arazzo
-  url: arazzo/zuplo-provision-api-key-bucket-workflow.yml
-  name: Zuplo Provision an API Key Bucket
-- type: Arazzo
-  url: arazzo/zuplo-provision-tunnel-workflow.yml
-  name: Zuplo Provision a Secure Tunnel
-- type: Arazzo
-  url: arazzo/zuplo-redeploy-project-deployment-workflow.yml
-  name: Zuplo Inspect and Redeploy a Project Deployment
-- type: Arazzo
-  url: arazzo/zuplo-repoint-custom-domain-workflow.yml
-  name: Zuplo Repoint a Custom Domain to a New Deployment
-- type: Arazzo
-  url: arazzo/zuplo-rotate-consumer-key-workflow.yml
-  name: Zuplo Rotate a Consumer's API Keys
-- type: Arazzo
-  url: arazzo/zuplo-rotate-tunnel-token-workflow.yml
-  name: Zuplo Rotate a Tunnel Token
-- type: Arazzo
-  url: arazzo/zuplo-set-variable-and-redeploy-workflow.yml
-  name: Zuplo Set an Environment Variable and Redeploy
-- type: Arazzo
-  url: arazzo/zuplo-update-variable-and-redeploy-workflow.yml
-  name: Zuplo Update an Environment Variable and Redeploy
-- url: https://zuplo.com/docs/articles/what-is-zuplo
-  name: What is Zuplo? - Zuplo Docs
-  type: Documentation
-  description: 'null'
-- url: https://zuplo.com/pricing
-  name: Affordable Plans for Every Team | Zuplo
-  type: Pricing
-  description: 'null'
-- url: https://zuplo.com/blog
-  name: Zuplo Blog - Articles on API Development and Best Practices
-  type: Blog
-  description: 'null'
-- url: https://auth.zuplo.com/u/login/identifier
-  name: Log in | Zuplo
-  type: Login
-  description: 'null'
-- url: https://auth.zuplo.com/u/signup/identifier
-  name: Log in | Zuplo
-  type: Signup
-  description: 'null'
-- url: https://zuplo.com/docs/articles/support
-  name: Support - Zuplo Docs
-  type: Support
-  description: 'null'
-- url: https://zuplo.com/resources
-  name: Zuplo Resources
-  type: Customers
-  description: 'null'
-- url: https://zuplo.com/changelog
-  name: Zuplo Changelog - Latest platform updates and new features
-  type: ChangeLog
-  description: 'null'
-- url: https://zuplo.com/integrations
-  name: Zuplo Integrations
-  type: Integrations
-  description: 'null'
-- url: https://zuplo.com/about
-  name: About Zuplo
-  type: About
-  description: 'null'
-- url: https://status.zuplo.com/
-  name: Zuplo Status
-  type: StatusPage
-  description: 'null'
-- url: https://zuplo.com/legal/privacy-policy
-  name: Privacy Policy - Zuplo
-  type: PrivacyPolicy
-  description: 'null'
-- url: https://zuplo.com/legal/terms
-  name: Terms of Service - Zuplo
-  type: TermsOfService
-  description: 'null'
-- url: https://zuplo.com/legal/security-policy
-  name: Security Policies - Zuplo
-  type: Security
-  description: 'null'
-- url: https://trust.zuplo.com/
-  name: Trust Center - Zuplo
-  type: Trust
-  description: 'null'
-- url: https://zuplo.com/docs
-  name: Zuplo Docs
-  type: GettingStarted
-  description: 'null'
-- url: https://zuplo.com/learning-center
-  name: Zuplo Learning Center
-  type: LearningCenter
-  description: 'null'
-- url: https://zuplo.com/features/developer-portal
-  name: API Developer Portal - Zuplo
-  type: DeveloperPortal
-  description: 'null'
-- url: https://zuplo.com/features/api-management
-  name: API Management - Zuplo
-  type: APIManagement
-  description: 'null'
-- url: https://zuplo.com/features/programmable
-  name: Programmable API Gateway - Zuplo
-  type: Features
-  description: 'null'
-- url: https://zuplo.com/features/rate-limiting
-  name: API Rate Limiting - Zuplo
-  type: RateLimiting
-  description: 'null'
-- url: https://zuplo.com/features/api-key-management
-  name: API Key Management - Zuplo
-  type: APIKeyManagement
-  description: 'null'
-- url: https://zuplo.com/features/api-monetization
-  name: API Monetization - Zuplo
-  type: Monetization
-  description: 'null'
-- url: https://zuplo.com/features/api-security
-  name: API Security - Zuplo
-  type: Security
-  description: 'null'
-- url: https://zuplo.com/features/api-governance
-  name: API Governance - Zuplo
-  type: Governance
-  description: 'null'
-- url: https://zuplo.com/features/open-api
-  name: OpenAPI Native API Gateway - Zuplo
-  type: OpenAPI
-  description: 'null'
-- url: https://zuplo.com/features/gitops
-  name: GitOps - Zuplo
-  type: GitOps
-  description: 'null'
-- url: https://zuplo.com/features/multi-cloud
-  name: Multi-cloud API Gateway - Zuplo
-  type: MultiCloud
-  description: 'null'
-- url: https://zuplo.com/features/unlimited-environments
-  name: Unlimited API Development Environments - Zuplo
-  type: Environments
-  description: 'null'
-- url: https://zuplo.com/features/self-serve-devx
-  name: Self-Serve DevX - Zuplo
-  type: SelfService
-  description: 'null'
-- url: https://zuplo.com/features/ai-gateway
-  name: AI Gateway - Zuplo
-  type: AIGateway
-  description: 'null'
-- url: https://zuplo.com/mcp-servers
-  name: Zuplo MCP Servers
-  type: MCPServers
-  description: 'null'
-- url: https://github.com/zuplo
-  name: Zuplo GitHub Organization
-  type: GitHub
-  description: 'null'
-- url: https://github.com/zuplo/zuplo
-  name: Zuplo GitHub Repository
-  type: GitHubRepo
-  description: 'null'
-- url: https://github.com/zuplo/zudoku
-  name: Zudoku - API Documentation Framework
-  type: GitHubRepo
-  description: 'null'
-- url: https://github.com/zuplo/rate-my-openapi
-  name: Rate My OpenAPI
-  type: GitHubRepo
-  description: 'null'
-- url: https://x.com/zuplo
-  name: Zuplo on X
-  type: X
-  description: 'null'
-- url: https://www.linkedin.com/company/zuplo
-  name: Zuplo on LinkedIn
-  type: LinkedIn
-  description: 'null'
-- url: https://discord.com/invite/stPRhjbA55
-  name: Zuplo Discord Community
-  type: Discord
-  description: 'null'
-- url: https://zuplo.com/careers
-  name: Careers at Zuplo
-  type: Careers
-  description: 'null'
-- url: https://zuplo.com/support
-  name: Zuplo Support & Help Center
-  type: HelpCenter
-  description: 'null'
-- url: https://zuplo.com/api-management
-  name: Zuplo API Management Overview
-  type: Overview
-  description: 'null'
-- type: LlmsText
-  url: https://zuplo.com/llms.txt
-created: '2025-01-08'
-modified: '2026-05-19'
-position: Consuming
+
 segments:
 - Gateways
-description: Zuplo is the API management platform for developers. Build, deploy, and
-  scale APIs faster with Zuplo.
+
 integrations:
 - name: Zuplo
 - name: GitHub
@@ -764,10 +829,7 @@ integrations:
 - name: G2 Best ROI
 - name: G2 Easiest To Use
 - name: G2 Fastest Implementation
-maintainers:
-- FN: Kin Lane
-  email: kin@apievangelist.com
-specificationVersion: '0.23'
+
 x-correction-request:
   requested: '2026-10-03'
   source:
@@ -775,3 +837,9 @@ x-correction-request:
   request: 'Influence-tier artifact submission 24f613f7 (2026-09-24): MCP at https://zuplo.com/.well-known/mcp/com.zuplo-platform-server-card.json.
     Verify it is live and real (MCP: initialize/tools/list or server card; OpenAPI: paths), then record it as a
     pointer and harvest it.'
+x-enrichment:
+  date: '2026-10-04'
+  status: enriched
+  artifacts_added: 33
+  pass: modular-v1
+  engine: identity=local,contract=local,surfaces=local,docs=local,regulatory=local

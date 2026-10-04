@@ -224,22 +224,61 @@ paths:
       tags:
       - API Keys - Buckets
 components:
-  parameters:
-    Zuplo.Common.AccountParams:
-      name: accountName
-      in: path
-      required: true
-      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
-      schema:
-        type: string
-    Zuplo.ApiKeys.BucketParams.bucketName:
-      name: bucketName
-      in: path
-      required: true
-      description: The name of the bucket. Zuplo automatically creates a bucket for your project. You can find it in youe Zuplo Portal under Settings > Project Information.
-      schema:
-        type: string
   schemas:
+    Zuplo.ApiKeys.Bucket:
+      type: object
+      required:
+      - createdOn
+      - updatedOn
+      - id
+      - name
+      properties:
+        createdOn:
+          type: string
+          format: date-time
+          description: When the item was created.
+          example: '2023-04-18T05:54:34.408Z'
+          readOnly: true
+        updatedOn:
+          type: string
+          format: date-time
+          description: When the item was last updated.
+          example: '2023-04-20T05:54:34.408Z'
+          readOnly: true
+        id:
+          type: string
+          x-example: bckt_pCcNMjERFSoh5xIQir7o99Z6KDoLp36e
+          readOnly: true
+        isRetrievable:
+          type: boolean
+          description: Whether the API keys stored in the bucket are retrievable
+          x-example: true
+        name:
+          type: string
+          pattern: ^[a-z0-9-]{5,128}$
+          description: A friendly name for the bucket.
+          x-example: my-bucket
+        description:
+          type: string
+          description: A description of the bucket.
+          x-example: Bucket for zuplo consumers
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+          description: Key value pairs to associate with the bucket.
+          x-example:
+            foo: baz
+      description: Top level group for API key mangement. A bucket could be used with a single Zuplo environment or shared among multiple environments or projects. By default a Zuplo API Gateway project will be created with several buckets that map to production, preview, and working copy environments.
+      example:
+        id: bckt_pCcNMjERFSoh5xIQir7o99Z6KDoLp36e
+        name: my-bucket
+        createdOn: '2023-07-24T19:26:36.000Z'
+        updatedOn: '2023-07-24T19:26:36.000Z'
+        description: Bucket for zuplo consumers
+        isRetrievable: true
+        tags:
+          foo: bar
     Zuplo.HttpProblemDetails.BadRequestProblemResponse:
       type: object
       required:
@@ -272,6 +311,70 @@ components:
         type: https://httpproblems.com/http-status/400
         title: Bad Request
         status: 400
+    Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/500
+        title:
+          type: string
+          enum:
+          - Internal Server Error
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/500
+        title: Internal Server Error
+        status: 500
+    Zuplo.HttpProblemDetails.NotFoundProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/404
+        title:
+          type: string
+          enum:
+          - Not Found
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/404
+        title: Not Found
+        status: 404
     Zuplo.ApiKeys.BucketUpdateBody:
       type: object
       properties:
@@ -287,6 +390,32 @@ components:
           x-example:
             foo: baz
       example:
+        description: Bucket for zuplo consumers
+        tags:
+          foo: bar
+    Zuplo.ApiKeys.BucketCreateBody:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          pattern: ^[a-z0-9-]{5,128}$
+          description: A friendly name for the bucket.
+          x-example: my-bucket
+        description:
+          type: string
+          description: A description of the bucket.
+          x-example: Bucket for zuplo consumers
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+          description: Key value pairs to associate with the bucket.
+          x-example:
+            foo: baz
+      example:
+        name: my-bucket
         description: Bucket for zuplo consumers
         tags:
           foo: bar
@@ -352,150 +481,21 @@ components:
           isRetrievable: true
           tags:
             foo: bar
-    Zuplo.ApiKeys.Bucket:
-      type: object
-      required:
-      - createdOn
-      - updatedOn
-      - id
-      - name
-      properties:
-        createdOn:
-          type: string
-          format: date-time
-          description: When the item was created.
-          example: '2023-04-18T05:54:34.408Z'
-          readOnly: true
-        updatedOn:
-          type: string
-          format: date-time
-          description: When the item was last updated.
-          example: '2023-04-20T05:54:34.408Z'
-          readOnly: true
-        id:
-          type: string
-          x-example: bckt_pCcNMjERFSoh5xIQir7o99Z6KDoLp36e
-          readOnly: true
-        isRetrievable:
-          type: boolean
-          description: Whether the API keys stored in the bucket are retrievable
-          x-example: true
-        name:
-          type: string
-          pattern: ^[a-z0-9-]{5,128}$
-          description: A friendly name for the bucket.
-          x-example: my-bucket
-        description:
-          type: string
-          description: A description of the bucket.
-          x-example: Bucket for zuplo consumers
-        tags:
-          type: object
-          additionalProperties:
-            type: string
-          description: Key value pairs to associate with the bucket.
-          x-example:
-            foo: baz
-      description: Top level group for API key mangement. A bucket could be used with a single Zuplo environment or shared among multiple environments or projects. By default a Zuplo API Gateway project will be created with several buckets that map to production, preview, and working copy environments.
-      example:
-        id: bckt_pCcNMjERFSoh5xIQir7o99Z6KDoLp36e
-        name: my-bucket
-        createdOn: '2023-07-24T19:26:36.000Z'
-        updatedOn: '2023-07-24T19:26:36.000Z'
-        description: Bucket for zuplo consumers
-        isRetrievable: true
-        tags:
-          foo: bar
-    Zuplo.HttpProblemDetails.NotFoundProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/404
-        title:
-          type: string
-          enum:
-          - Not Found
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/404
-        title: Not Found
-        status: 404
-    Zuplo.ApiKeys.BucketCreateBody:
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-          pattern: ^[a-z0-9-]{5,128}$
-          description: A friendly name for the bucket.
-          x-example: my-bucket
-        description:
-          type: string
-          description: A description of the bucket.
-          x-example: Bucket for zuplo consumers
-        tags:
-          type: object
-          additionalProperties:
-            type: string
-          description: Key value pairs to associate with the bucket.
-          x-example:
-            foo: baz
-      example:
-        name: my-bucket
-        description: Bucket for zuplo consumers
-        tags:
-          foo: bar
-    Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/500
-        title:
-          type: string
-          enum:
-          - Internal Server Error
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/500
-        title: Internal Server Error
-        status: 500
+  parameters:
+    Zuplo.ApiKeys.BucketParams.bucketName:
+      name: bucketName
+      in: path
+      required: true
+      description: The name of the bucket. Zuplo automatically creates a bucket for your project. You can find it in youe Zuplo Portal under Settings > Project Information.
+      schema:
+        type: string
+    Zuplo.Common.AccountParams:
+      name: accountName
+      in: path
+      required: true
+      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
+      schema:
+        type: string
   responses:
     RateLimitWithRetryAfter:
       description: Rate Limiting Response
