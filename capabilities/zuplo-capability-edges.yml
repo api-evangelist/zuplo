@@ -1,0 +1,47 @@
+slug: zuplo
+provider: Zuplo
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 3
+edges:
+- tag: API Keys - Keys
+  spec_file: zuplo-api-keys-keys-api-openapi.yml
+  capability_id: BC-4270.40
+  capability_id_l1: BC-4270
+  capability_name: Developer Identity & Credential Management
+  confidence: 0.85
+  evidence: POST .../consumers/{consumerName}/keys  ApiKeyKeysService_create  'Creates an API Key'; 'Creates
+    Multiple API Keys'
+  reason: Direct CRUD over API keys issued to API consumers — issuance and lifecycle of developer credentials
+    for the platform's public APIs.
+- tag: API Keys - Consumers
+  spec_file: zuplo-api-keys-consumers-api-openapi.yml
+  capability_id: BC-4270.40
+  capability_id_l1: BC-4270
+  capability_name: Developer Identity & Credential Management
+  confidence: 0.78
+  evidence: POST /v1/accounts/{accountName}/key-buckets/{bucketName}/consumers 'Creates a Consumer'; 'Roll
+    Consumer Keys'; schema Zuplo.ApiKeys.ApiKey
+  reason: Operations manage API-key consumers (the external developer/app identities holding keys) including
+    key rolling, which is issuance and stewardship of developer credentials on an API platform. Not customer
+    master data — the objects live inside key buckets alongside ApiKey schemas.
+- tag: Deployments
+  spec_file: zuplo-deployments-api-openapi.yml
+  capability_id: BC-4210.40
+  capability_id_l1: BC-4210
+  capability_name: Deployment Orchestration
+  confidence: 0.75
+  evidence: POST /v1/deployments/sources 'Upload Deployment Source'; POST /v1/deployments/{deploymentName}/deploy
+    'Re-deploy a Deployment'; 'Gets a Deployment Status'
+  reason: Operations upload build sources, deploy/redeploy, list and check deployment status — delivery
+    of software changes to the running environment. Deployment orchestration is the closest fit; some
+    ambiguity with release engineering.
