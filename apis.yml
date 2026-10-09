@@ -729,6 +729,8 @@ common:
   description: 'null'
 - type: LlmsText
   url: https://zuplo.com/llms.txt
+- type: SpectralRules
+  url: https://github.com/zuplo/rate-my-openapi/blob/24819fbe7576e2811b3be2750312e2cea64bcf14/rulesets/.spectral.yaml
 created: '2025-01-08'
 modified: '2026-05-19'
 position: Consuming
