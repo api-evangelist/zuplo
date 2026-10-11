@@ -1,12 +1,28 @@
-generated: '2026-10-04'
+generated: '2026-09-25'
 method: probed
-source:
-  - url: https://zuplo.com/.well-known/mcp/com.zuplo-platform-server-card.json
-  - description: fetched MCP server card
+source: https://dev.zuplo.com/mcp/docs
+status: published
+server:
+  name: zuplo
+  transport: http
+  url: https://dev.zuplo.com/mcp/docs
 deployment:
   mode: remote
-  endpoint: https://dev.zuplo.com/mcp
-  install: null
-  package: null
-  auth: oauth
+  endpoint: https://dev.zuplo.com/mcp/docs
   verified: probed
+  probe: live
+  checked: '2026-09-25'
+  source: 'docs-check 2026-09-25 (first-party, on the provider''s own domain: named in llms.txt (https://zuplo.com/docs/llms.txt);
+    probed with JSON-RPC initialize; roadmap#590 #721)'
+  probe_why: 'initialize answered: serverInfo com.zuplo/docs 1.0.0'
+  server_info:
+    name: com.zuplo/docs
+    title: Zuplo Docs MCP Server
+    version: 1.0.0
+  protocol_version: '2025-06-18'
+  found_via: named in llms.txt (https://zuplo.com/docs/llms.txt)
+tools_note: No tool list captured. This manifest records a PROBED, reachable endpoint only; anonymous
+  tools/list was auth-gated or the server requires an initialize handshake this reachability probe does
+  not perform. Run signals/audit_mcp_authorship.py --probe to enumerate tools and settle platform-vs-provider
+  authorship. Do NOT derive a tool list from the OpenAPI and store it here -- that is a candidate manifest,
+  and it belongs under an X-MCPServerCandidate pointer.
