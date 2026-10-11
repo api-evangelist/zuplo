@@ -6,6 +6,7 @@ specification: FinOps Framework
 specificationVersion: '1.0'
 provider: Zuplo
 providerId: zuplo
+name: Zuplo API FinOps
 publisherName: Zuplo
 serviceCategory: API
 created: '2026-05-04'

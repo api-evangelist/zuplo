@@ -80,6 +80,11 @@ maintainers:
 specificationVersion: '0.23'
 
 common:
+- type: CapabilityMap
+  url: capabilities/zuplo-capability-edges.yml
+  name: Zuplo Business Capability Map
+- type: SpectralRules
+  url: https://github.com/zuplo/rate-my-openapi/blob/24819fbe7576e2811b3be2750312e2cea64bcf14/rulesets/.spectral.yaml
 - type: FinOps
   url: finops/zuplo-finops.yml
 - type: RateLimits
