@@ -1,0 +1,32 @@
+generated: '2026-10-04'
+method: searched
+generator: extract-docs-artifacts.py (local)
+source: https://zuplo.com/docs/articles/security
+sources:
+- https://zuplo.com/docs/articles/security
+standards:
+- id: soc2
+  conforms: true
+  evidence: See our Trust & Compliance Report for details on compliance including our SOC2 Type II accreditation status.
+- id: openapi-3.0
+  conforms: true
+  evidence: the document declares 3.0.0
+- id: openapi-3.2
+  conforms: true
+  evidence: the document declares 3.2.0
+- id: oauth2
+  conforms: false
+  evidence: 'securitySchemes: ApiKeyAuth (apiKey)'
+- id: rfc9457
+  conforms: false
+  evidence: no response declares application/problem+json
+- id: idempotency
+  conforms: false
+  evidence: no idempotency key parameter on mutating operations
+- id: pagination
+  conforms: true
+  evidence: list operations take limit, offset
+- id: ratelimit-headers
+  conforms: true
+  evidence: responses declare retry-after
+docs: https://zuplo.com/docs/articles/security

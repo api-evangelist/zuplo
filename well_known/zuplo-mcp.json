@@ -1,0 +1,10 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "description": "Exposes the public Zuplo Developer API operations as MCP tools.",
+  "icons": [{"mimeType":"image/svg+xml","sizes":["any"],"src":"https://cdn.zuplo.com/www/favicon.svg"}],
+  "name": "com.zuplo/platform",
+  "remotes":[{"headers":[{"description":"Bearer credential for the Zuplo Platform MCP Server.","isRequired":true,"isSecret":true,"name":"Authorization"}],"type":"streamable-http","url":"https://dev.zuplo.com/mcp"}],
+  "title": "Zuplo Platform MCP Server",
+  "version": "1.0.0",
+  "websiteUrl": "https://zuplo.com/docs/api"
+}

@@ -1,0 +1,22 @@
+generated: '2026-10-04'
+method: probed
+generator: harvest-packages.py
+source: registry metadata endpoints (registry.npmjs.org, pypi.org, rubygems.org, api.nuget.org, packagist.org, crates.io)
+ownership_rule: 'official: true only when the registry metadata (homepage, repository, author, URLs) names the provider''s domain (agentic-access/zuplo-agentic-access.yml,
+  arazzo/zuplo-add-consumer-manager-workflow.yml, arazzo/zuplo-bulk-issue-consumer-keys-workflow.yml, arazzo/zuplo-create-consumer-and-key-workflow.yml,
+  arazzo/zuplo-deactivate-consumer-key-workflow.yml, arazzo/zuplo-discover-account-and-buckets-workflow.yml, arazzo/zuplo-find-and-update-bucket-workflow.yml,
+  arazzo/zuplo-find-consumer-update-metadata-workflow.yml, arazzo/zuplo-find-then-delete-consumer-workflow.yml, arazzo/zuplo-map-custom-domain-workflow.yml,
+  arazzo/zuplo-onboard-consumer-with-key-workflow.yml, arazzo/zuplo-provision-api-key-bucket-workflow.yml, arazzo/zuplo-provision-tunnel-workflow.yml,
+  arazzo/zuplo-redeploy-project-deployment-workflow.yml, arazzo/zuplo-repoint-custom-domain-workflow.yml, arazzo/zuplo-rotate-consumer-key-workflow.yml,
+  arazzo/zuplo-rotate-tunnel-token-workflow.yml, arazzo/zuplo-set-variable-and-redeploy-workflow.yml, arazzo/zuplo-update-variable-and-redeploy-workflow.yml,
+  authentication/zuplo-authentication.yml, discord.com, linkedin.com, postman.com, security/zuplo-domain-security.yml, vendor-facets/zuplo-vendor-facets.yml,
+  x.com, zuplo.com) or its accepted GitHub org.'
+packages:
+- name: zuplo
+  registry: npm
+  url: https://www.npmjs.com/package/zuplo
+  language: JavaScript
+  official: true
+  version: 7.9.8
+  published: '2026-10-04'
+  evidence: metadata names zuplo.com

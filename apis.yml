@@ -11,6 +11,17 @@ tags:
 - Platform
 - API Gateway
 - MCP Gateway
+- Authentication
+- Rate Limiting
+- Spend Management
+- Developer Tools
+tags_raw:
+- AI Gateway
+- API Management
+- Gateways
+- Platform
+- API Gateway
+- MCP Gateway
 - Auth
 - Rate Limiting
 - Spend Management
@@ -726,6 +737,8 @@ apis:
   humanURL: https://zuplo.com/docs/articles/developer-api
   baseURL: https://dev.zuplo.com
   tags:
+  - OpenAPI
+  tags_raw:
   - Open API
   properties:
   - type: OpenAPI

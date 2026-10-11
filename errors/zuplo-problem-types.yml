@@ -1,0 +1,59 @@
+generated: '2026-10-04'
+method: derived
+generator: derive-problem-types.py
+source:
+- openapi/zuplo-api-keys-buckets-api-openapi.yml
+- openapi/zuplo-api-keys-consumers-api-openapi.yml
+- openapi/zuplo-api-keys-keys-api-openapi.yml
+- openapi/zuplo-api-keys-managers-api-openapi.yml
+- openapi/zuplo-audit-logs-api-openapi.yml
+- openapi/zuplo-custom-domains-api-openapi.yml
+- openapi/zuplo-deployments-api-openapi.yml
+- openapi/zuplo-mcp-servers-api-openapi.yml
+- openapi/zuplo-open-api-api-openapi.yml
+- openapi/zuplo-tunnel-services-api-openapi.yml
+- openapi/zuplo-tunnels-api-openapi.yml
+- openapi/zuplo-variables-api-openapi.yml
+format: custom
+envelope:
+  media_type: application/json
+  schema: Zuplo.HttpProblemDetails.BadRequestProblemResponse
+coverage:
+  operations: 45
+  statuses_declared: 5
+problems:
+- status: 400
+  title: Bad Request
+  description: The server could not understand the request due to invalid syntax.
+  operations: 43
+  media_types:
+  - application/json
+  schema: Zuplo.HttpProblemDetails.BadRequestProblemResponse
+- status: 401
+  title: Unauthorized
+  description: Access is unauthorized.
+  operations: 43
+  media_types:
+  - application/json
+  schema: Zuplo.HttpProblemDetails.UnauthorizedProblemResponse
+- status: 404
+  title: Not Found
+  description: The server cannot find the requested resource.
+  operations: 16
+  media_types:
+  - application/json
+  schema: Zuplo.HttpProblemDetails.NotFoundProblemResponse
+- status: 429
+  title: Too Many Requests
+  description: Rate Limiting Response
+  operations: 20
+  media_types:
+  - application/json
+  schema: null
+- status: 500
+  title: Internal Server Error
+  description: Server error
+  operations: 43
+  media_types:
+  - application/json
+  schema: Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse

@@ -1,0 +1,27 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://zuplo.com/.well-known/api-catalog",
+      "item": [
+        {
+          "href": "https://dev.zuplo.com/"
+        }
+      ]
+    },
+    {
+      "anchor": "https://dev.zuplo.com/",
+      "service-desc": [
+        {
+          "href": "https://zuplo.com/openapi.json",
+          "type": "application/json"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://zuplo.com/docs/api",
+          "type": "text/html"
+        }
+      ]
+    }
+  ]
+}

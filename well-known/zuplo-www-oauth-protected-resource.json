@@ -1,0 +1,10 @@
+{
+  "resource": "https://zuplo.com",
+  "authorization_servers": ["https://auth.zuplo.com/"],
+  "bearer_methods_supported": ["header"],
+  "scopes_supported": ["openid", "profile", "email", "offline_access"],
+  "resource_name": "Zuplo",
+  "resource_documentation": "https://zuplo.com/docs/api",
+  "resource_tos_uri": "https://zuplo.com/legal/terms",
+  "resource_policy_uri": "https://zuplo.com/legal/privacy-policy"
+}

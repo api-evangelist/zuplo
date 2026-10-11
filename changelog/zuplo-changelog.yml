@@ -1,0 +1,64 @@
+generated: '2026-10-04'
+method: searched
+generator: extract-docs-artifacts.py (local)
+source: https://zuplo.com/changelog/llms.txt
+sources:
+- https://zuplo.com/changelog/llms.txt
+- https://zuplo.com/changelog/rss.xml
+- https://zuplo.com/docs/mcp-server/configuration-migration-guide
+entries:
+- breaking: false
+  highlights:
+  - Restrict routes by client IP address and configure CDN caching separately from browser caching with two new Zuplo policies.
+  date: '2026-09-22'
+- breaking: false
+  highlights:
+  - AI Gateway adds cache-aware cost tracking, per-user budgets, Smart Router, prompt injection protection, and native AWS, Azure, and Google
+    Cloud support.
+  date: '2026-09-22'
+- breaking: false
+  highlights:
+  - The MCP Gateway exposes a read-only MCP Server Registry API generated from its live routes, giving clients a standard endpoint for server
+    discovery.
+  date: '2026-08-20'
+- breaking: false
+  highlights:
+  - The latest AI Gateway release adds spend limits for gateways, teams, and apps, sensitive-data scanning, source-controlled projects, and more
+    provider options.
+  date: '2026-08-19'
+- breaking: false
+  highlights:
+  - Zuplo CLI v7 requires Node.js 24. Update the Node version in your local environment and in your CI/CD pipelines.
+  date: '2026-08-04'
+- breaking: false
+  highlights:
+  - 'Zuplo Portal now has built-in OpenTelemetry tracing views: waterfall spans for every request, policy and upstream timing, and trace search,
+    with no external collector required.'
+  date: '2026-06-17'
+- breaking: false
+  highlights:
+  - GraphQL Support
+  date: '2026-06-12'
+- breaking: false
+  highlights:
+  - MCP Gateway Public Beta
+  date: '2026-06-02'
+- breaking: false
+  highlights:
+  - 'API Monetization: Now in Public Beta'
+  date: '2026-03-26'
+- breaking: false
+  highlights:
+  - Introducing Audit Logs
+  date: '2025-09-22'
+- breaking: false
+  highlights:
+  - Managed DDoS Protection
+  date: '2025-09-01'
+- breaking: false
+  highlights:
+  - Enhanced Single Sign-On (SSO) Security Controls
+  date: '2025-08-01'
+current_version: '2026-09-22'
+note: Versioning scheme uses date-based releases.
+docs: https://zuplo.com/changelog/llms.txt

@@ -1,0 +1,226 @@
+generated: '2026-10-04'
+method: derived
+generator: derive-data-model.py
+source:
+- openapi/zuplo-api-keys-buckets-api-openapi.yml
+- openapi/zuplo-api-keys-consumers-api-openapi.yml
+- openapi/zuplo-api-keys-keys-api-openapi.yml
+- openapi/zuplo-api-keys-managers-api-openapi.yml
+- openapi/zuplo-audit-logs-api-openapi.yml
+- openapi/zuplo-custom-domains-api-openapi.yml
+- openapi/zuplo-deployments-api-openapi.yml
+- openapi/zuplo-mcp-servers-api-openapi.yml
+- openapi/zuplo-open-api-api-openapi.yml
+- openapi/zuplo-tunnel-services-api-openapi.yml
+- openapi/zuplo-tunnels-api-openapi.yml
+- openapi/zuplo-variables-api-openapi.yml
+notation: has_one = property $ref; has_many = array of $ref; belongs_to = <entity>_id field
+summary:
+  entities: 51
+  entities_in_spec: 51
+  relationships: 18
+entities:
+- name: Zuplo.ApiKeys.ApiKey
+  fields: 6
+  description: 'A Consumer can have any number of API keys associated with it. Each API Key shares the same identity
+    (i.e. Consumer) when authenticating with this service. Keys can have their own description to note '
+- name: Zuplo.ApiKeys.ApiKeyCreateOrUpdateBody
+  fields: 3
+- name: Zuplo.ApiKeys.ApiKeys
+  fields: 4
+- name: Zuplo.ApiKeys.Bucket
+  fields: 7
+  description: 'Top level group for API key mangement. A bucket could be used with a single Zuplo environment or
+    shared among multiple environments or projects. By default a Zuplo API Gateway project will be created '
+- name: Zuplo.ApiKeys.BucketCreateBody
+  fields: 3
+- name: Zuplo.ApiKeys.BucketUpdateBody
+  fields: 2
+- name: Zuplo.ApiKeys.Buckets
+  fields: 4
+- name: Zuplo.ApiKeys.Consumer
+  fields: 8
+  description: Consumers are the core of the API Key service. The consumer is the 'identity' of any API Keys that
+    are created.
+- name: Zuplo.ApiKeys.ConsumerCreateBody
+  fields: 6
+- name: Zuplo.ApiKeys.ConsumerUpdateBody
+  fields: 3
+- name: Zuplo.ApiKeys.Consumers
+  fields: 4
+- name: Zuplo.ApiKeys.Manager
+  fields: 2
+  description: Managers are users that have access to a consumer. Managers can be added directly to a consumer (using
+    email and sub) or invited (using only email) to a consumer.
+- name: Zuplo.ApiKeys.ManagerCreateBody
+  fields: 2
+- name: Zuplo.ApiKeys.Managers
+  fields: 4
+- name: Zuplo.AuditLogs.ActingAs
+  fields: 2
+  description: Details about the user being impersonated, if applicable
+- name: Zuplo.AuditLogs.Actor
+  fields: 6
+  description: Details about the actor who performed the action
+- name: Zuplo.AuditLogs.AuditLog
+  fields: 10
+  description: An audit log entry representing an action performed in the system
+- name: Zuplo.AuditLogs.AuditLogsPagination
+  fields: 4
+  description: Pagination information for audit logs
+- name: Zuplo.AuditLogs.AuditLogsResponse
+  fields: 2
+  description: Response containing a list of audit logs with pagination
+- name: Zuplo.AuditLogs.Context
+  fields: 8
+  description: Contextual information about where and how the action was performed
+- name: Zuplo.AuditLogs.Resource
+  fields: 3
+  description: A resource affected by the action
+- name: Zuplo.AuditLogs.Route
+  fields: 3
+  description: Information about the API route that triggered this audit event
+- name: Zuplo.Common.ExpiresOnField
+  fields: 1
+- name: Zuplo.CustomDomains.CustomDomain
+  fields: 6
+  description: A custom domain configured for an account.
+- name: Zuplo.CustomDomains.CustomDomainCreateBody
+  fields: 5
+  description: Request body for creating a custom domain.
+- name: Zuplo.CustomDomains.CustomDomainDeployment
+  fields: 6
+  description: A deployment bound to a custom domain.
+- name: Zuplo.CustomDomains.CustomDomainMutationResult
+  fields: 5
+  description: The result of creating or updating a custom domain.
+- name: Zuplo.CustomDomains.CustomDomainUpdateBody
+  fields: 3
+  description: Request body for updating a custom domain.
+- name: Zuplo.CustomDomains.CustomDomainsList
+  fields: 3
+  description: Response containing a paginated list of custom domains.
+- name: Zuplo.CustomDomains.OwnershipVerification
+  fields: 3
+  description: DNS record details used to verify domain ownership.
+- name: Zuplo.DeploymentStatus.DeploymentStatus
+  fields: 4
+  description: Status of a Zuplo project deployment, including the status, build results, and a URL to view more
+    details.
+- name: Zuplo.Deployments.Deployment
+  fields: 13
+  description: A single deployment of a Zup.
+- name: Zuplo.Deployments.DeploymentsList
+  fields: 1
+- name: Zuplo.Deploys.DeploymentResponse
+  fields: 1
+- name: Zuplo.Deploys.SourceCreateBody
+  fields: 3
+- name: Zuplo.HttpProblemDetails.BadRequestProblemResponse
+  fields: 2
+- name: Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse
+  fields: 2
+- name: Zuplo.HttpProblemDetails.NotFoundProblemResponse
+  fields: 2
+- name: Zuplo.HttpProblemDetails.UnauthorizedProblemResponse
+  fields: 2
+- name: Zuplo.Sources.Source
+  fields: 1
+- name: Zuplo.Tunnels.Tunnel
+  fields: 3
+  description: Tunnels allow you to expose services running on bare metal, on-premises, or other non-cloud providers
+    to the Zuplo platform. [Further reading](https://zuplo.com/docs/articles/secure-tunnel).
+- name: Zuplo.Tunnels.TunnelList
+  fields: 4
+- name: Zuplo.Tunnels.TunnelListItem
+  fields: 2
+- name: Zuplo.Tunnels.TunnelTeardownOperation
+  fields: 4
+- name: Zuplo.Tunnels.TunneledServiceConfiguration
+  fields: 3
+  description: Tunnel service configuration.
+- name: Zuplo.Tunnels.TunneledServicesConfiguration
+  fields: 2
+- name: Zuplo.Tunnels.TunneledServicesProvisioningOperation
+  fields: 4
+- name: Zuplo.Variables.Variable
+  fields: 6
+- name: Zuplo.Variables.VariableCreateBody
+  fields: 3
+- name: Zuplo.Variables.VariableUpdateBody
+  fields: 1
+- name: Zuplo.WhoAmI.WhoAmI
+  fields: 3
+relationships:
+- from: Zuplo.ApiKeys.Buckets
+  to: Zuplo.ApiKeys.Bucket
+  type: has_many
+  via: data
+- from: Zuplo.ApiKeys.Consumers
+  to: Zuplo.ApiKeys.Consumer
+  type: has_many
+  via: data
+- from: Zuplo.ApiKeys.Consumer
+  to: Zuplo.ApiKeys.ApiKey
+  type: has_many
+  via: apiKeys
+- from: Zuplo.ApiKeys.ConsumerCreateBody
+  to: Zuplo.ApiKeys.ApiKey
+  type: has_many
+  via: apiKeys
+- from: Zuplo.ApiKeys.ApiKeys
+  to: Zuplo.ApiKeys.ApiKey
+  type: has_many
+  via: data
+- from: Zuplo.ApiKeys.Managers
+  to: Zuplo.ApiKeys.Manager
+  type: has_many
+  via: data
+- from: Zuplo.AuditLogs.AuditLogsResponse
+  to: Zuplo.AuditLogs.AuditLog
+  type: has_many
+  via: data
+- from: Zuplo.AuditLogs.AuditLogsResponse
+  to: Zuplo.AuditLogs.AuditLogsPagination
+  type: has_one
+  via: pagination
+- from: Zuplo.AuditLogs.AuditLog
+  to: Zuplo.AuditLogs.Actor
+  type: has_one
+  via: actor
+- from: Zuplo.AuditLogs.AuditLog
+  to: Zuplo.AuditLogs.Context
+  type: has_one
+  via: context
+- from: Zuplo.AuditLogs.AuditLog
+  to: Zuplo.AuditLogs.Route
+  type: has_one
+  via: route
+- from: Zuplo.AuditLogs.Actor
+  to: Zuplo.AuditLogs.ActingAs
+  type: has_one
+  via: actingAs
+- from: Zuplo.CustomDomains.CustomDomainMutationResult
+  to: Zuplo.CustomDomains.OwnershipVerification
+  type: has_one
+  via: ownershipVerification
+- from: Zuplo.CustomDomains.CustomDomainsList
+  to: Zuplo.CustomDomains.CustomDomain
+  type: has_many
+  via: data
+- from: Zuplo.CustomDomains.CustomDomain
+  to: Zuplo.CustomDomains.CustomDomainDeployment
+  type: has_many
+  via: deployments
+- from: Zuplo.Deployments.DeploymentsList
+  to: Zuplo.Deployments.Deployment
+  type: has_many
+  via: data
+- from: Zuplo.Tunnels.TunneledServicesConfiguration
+  to: Zuplo.Tunnels.TunneledServiceConfiguration
+  type: has_many
+  via: services
+- from: Zuplo.Tunnels.TunnelList
+  to: Zuplo.Tunnels.TunnelListItem
+  type: has_many
+  via: data

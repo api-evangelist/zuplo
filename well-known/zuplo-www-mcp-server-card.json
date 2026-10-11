@@ -1,0 +1,23 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "description": "Public Streamable HTTP MCP server for Zuplo documentation tools and stable agent resources.",
+  "icons": [
+    {
+      "mimeType": "image/svg+xml",
+      "sizes": [
+        "any"
+      ],
+      "src": "https://cdn.zuplo.com/www/favicon.svg"
+    }
+  ],
+  "name": "com.zuplo/docs",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://dev.zuplo.com/mcp/docs"
+    }
+  ],
+  "title": "Docs MCP Server",
+  "version": "1.0.0",
+  "websiteUrl": "https://zuplo.com/docs/api"
+}

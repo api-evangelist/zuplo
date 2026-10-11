@@ -1,0 +1,38 @@
+generated: '2026-10-04'
+method: generated
+generator: extract-docs-artifacts.py skills (local)
+source: openapi/zuplo-api-keys-consumers-api-openapi.yml
+skills:
+- file: skills/zuplo-create-consumer.md
+  name: zuplo-create-consumer
+  api: openapi/zuplo-api-keys-consumers-api-openapi.yml
+  operations:
+  - ApiKeyConsumersService_create
+  - ApiKeyConsumersService_read
+  - ApiKeyConsumersService_rollKey
+- file: skills/zuplo-agent-skill-manage-api-keys-managers.md
+  name: zuplo-agent-skill-manage-api-keys-managers
+  api: openapi/zuplo-api-keys-managers-api-openapi.yml
+  operations:
+  - ApiKeyConsumerManagers_list
+  - ApiKeyConsumerManagers_create
+  - ApiKeyConsumerManagers_delete
+- file: skills/zuplo-redeploy-deployment.md
+  name: zuplo-redeploy-deployment
+  api: openapi/zuplo-deployments-api-openapi.yml
+  operations:
+  - DeploymentsService_read
+  - DeployService_redeploy
+  - V1_deploymentStatus
+- file: skills/zuplo-tunnel-create-and-list.md
+  name: zuplo-tunnel-create-and-list
+  api: openapi/zuplo-tunnels-api-openapi.yml
+  operations:
+  - TunnelService_create
+  - TunnelService_list
+- file: skills/zuplo-variables-create-update.md
+  name: zuplo-variables-create-update
+  api: openapi/zuplo-variables-api-openapi.yml
+  operations:
+  - VariablesService_create
+  - VariablesService_update
