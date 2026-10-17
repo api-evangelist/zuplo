@@ -109,7 +109,174 @@ paths:
             schema:
               $ref: '#/components/schemas/Zuplo.Variables.VariableUpdateBody'
 components:
+  parameters:
+    Zuplo.Common.VariableParams:
+      name: variableName
+      in: path
+      required: true
+      description: The name of the environment variable.
+      schema:
+        type: string
+    Zuplo.Common.BranchParams:
+      name: branchName
+      in: path
+      required: true
+      description: The name of the branch in your source control provider.
+      schema:
+        type: string
+    Zuplo.Common.AccountProjectParams.projectName:
+      name: projectName
+      in: path
+      required: true
+      description: The name of the project. You can find this in your Zuplo Portal under Settings > Project Information.
+      schema:
+        type: string
+    Zuplo.Common.AccountParams:
+      name: accountName
+      in: path
+      required: true
+      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
+      schema:
+        type: string
   schemas:
+    Zuplo.Variables.VariableCreateBody:
+      type: object
+      required:
+      - name
+      - isSecret
+      - value
+      properties:
+        name:
+          type: string
+          description: The name of the variable. Must be named in SCREAMING_SNAKE_CASE.
+          example: APP_ENVIRONMENT_KEY
+        isSecret:
+          type: boolean
+          description: Whether the variable is a secret.
+          example: true
+        value:
+          type: string
+          description: The value of the variable.
+      example:
+        name: PORTAL_ID
+        isSecret: false
+        value: '89333'
+    Zuplo.Variables.Variable:
+      type: object
+      required:
+      - branch
+      - createdOn
+      - updatedOn
+      - name
+      - isSecret
+      - value
+      properties:
+        branch:
+          type: string
+          example: preview
+          readOnly: true
+        createdOn:
+          type: string
+          format: date-time
+          description: When the item was created.
+          example: '2023-04-18T05:54:34.408Z'
+          readOnly: true
+        updatedOn:
+          type: string
+          format: date-time
+          description: When the item was last updated.
+          example: '2023-04-20T05:54:34.408Z'
+          readOnly: true
+        name:
+          type: string
+          description: The name of the variable. Must be named in SCREAMING_SNAKE_CASE.
+          example: APP_ENVIRONMENT_KEY
+        isSecret:
+          type: boolean
+          description: Whether the variable is a secret.
+          example: true
+        value:
+          type: string
+          description: The value of the variable.
+      example:
+        name: PORTAL_ID
+        isSecret: false
+        value: '89333'
+        branch: main
+        createdOn: '2023-04-18T05:54:34.408Z'
+        updatedOn: '2023-04-20T05:54:34.408Z'
+    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/401
+        title:
+          type: string
+          enum:
+          - Unauthorized
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/401
+        title: Unauthorized
+        status: 401
+    Zuplo.HttpProblemDetails.NotFoundProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/404
+        title:
+          type: string
+          enum:
+          - Not Found
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/404
+        title: Not Found
+        status: 404
+    Zuplo.Variables.VariableUpdateBody:
+      type: object
+      properties:
+        value:
+          type: string
+          description: The value of the variable.
+      example:
+        value: '89333'
     Zuplo.HttpProblemDetails.InternalServerErrorProblemResponse:
       type: object
       required:
@@ -174,173 +341,6 @@ components:
         type: https://httpproblems.com/http-status/400
         title: Bad Request
         status: 400
-    Zuplo.Variables.Variable:
-      type: object
-      required:
-      - branch
-      - createdOn
-      - updatedOn
-      - name
-      - isSecret
-      - value
-      properties:
-        branch:
-          type: string
-          example: preview
-          readOnly: true
-        createdOn:
-          type: string
-          format: date-time
-          description: When the item was created.
-          example: '2023-04-18T05:54:34.408Z'
-          readOnly: true
-        updatedOn:
-          type: string
-          format: date-time
-          description: When the item was last updated.
-          example: '2023-04-20T05:54:34.408Z'
-          readOnly: true
-        name:
-          type: string
-          description: The name of the variable. Must be named in SCREAMING_SNAKE_CASE.
-          example: APP_ENVIRONMENT_KEY
-        isSecret:
-          type: boolean
-          description: Whether the variable is a secret.
-          example: true
-        value:
-          type: string
-          description: The value of the variable.
-      example:
-        name: PORTAL_ID
-        isSecret: false
-        value: '89333'
-        branch: main
-        createdOn: '2023-04-18T05:54:34.408Z'
-        updatedOn: '2023-04-20T05:54:34.408Z'
-    Zuplo.HttpProblemDetails.NotFoundProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/404
-        title:
-          type: string
-          enum:
-          - Not Found
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/404
-        title: Not Found
-        status: 404
-    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/401
-        title:
-          type: string
-          enum:
-          - Unauthorized
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/401
-        title: Unauthorized
-        status: 401
-    Zuplo.Variables.VariableCreateBody:
-      type: object
-      required:
-      - name
-      - isSecret
-      - value
-      properties:
-        name:
-          type: string
-          description: The name of the variable. Must be named in SCREAMING_SNAKE_CASE.
-          example: APP_ENVIRONMENT_KEY
-        isSecret:
-          type: boolean
-          description: Whether the variable is a secret.
-          example: true
-        value:
-          type: string
-          description: The value of the variable.
-      example:
-        name: PORTAL_ID
-        isSecret: false
-        value: '89333'
-    Zuplo.Variables.VariableUpdateBody:
-      type: object
-      properties:
-        value:
-          type: string
-          description: The value of the variable.
-      example:
-        value: '89333'
-  parameters:
-    Zuplo.Common.AccountProjectParams.projectName:
-      name: projectName
-      in: path
-      required: true
-      description: The name of the project. You can find this in your Zuplo Portal under Settings > Project Information.
-      schema:
-        type: string
-    Zuplo.Common.AccountParams:
-      name: accountName
-      in: path
-      required: true
-      description: The name of the account. You can find this in your Zuplo Portal under Settings > Project Information.
-      schema:
-        type: string
-    Zuplo.Common.VariableParams:
-      name: variableName
-      in: path
-      required: true
-      description: The name of the environment variable.
-      schema:
-        type: string
-    Zuplo.Common.BranchParams:
-      name: branchName
-      in: path
-      required: true
-      description: The name of the branch in your source control provider.
-      schema:
-        type: string
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

@@ -130,6 +130,102 @@ paths:
               $ref: '#/components/schemas/Zuplo.Tunnels.TunneledServicesConfiguration'
 components:
   schemas:
+    Zuplo.Tunnels.TunneledServiceConfiguration:
+      type: object
+      required:
+      - name
+      - endpoint
+      - configurations
+      properties:
+        name:
+          type: string
+          pattern: ^[a-zA-Z0-9-]{3,24}$
+          description: A friendly name for the service. This name needs to be unique across all your tunneled services. Changing this will invalidate existing services with the name.
+          example: authservice
+        endpoint:
+          type: string
+          description: The URL of the service that the tunnel will forward to, e.g, http://localhost:3000
+          example: https://localhost:3000
+        configurations:
+          type: array
+          items:
+            type: object
+            properties:
+              project:
+                type: string
+                description: The name the project.
+                example: alpha-beta-gamma
+              accessibleBy:
+                type: array
+                items:
+                  type: string
+                  enum:
+                  - working-copy
+                  - preview
+                  - production
+                description: The environments of the project that should have acess to this tunneled service.
+                example:
+                - preview
+                - production
+            required:
+            - project
+            - accessibleBy
+          description: A list of projects that should have access to this tunneled service under the service://name URL scheme.
+      description: Tunnel service configuration.
+    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
+      type: object
+      required:
+      - type
+      - title
+      properties:
+        type:
+          type: string
+          enum:
+          - https://httpproblems.com/http-status/401
+        title:
+          type: string
+          enum:
+          - Unauthorized
+      allOf:
+      - type: object
+        required:
+        - type
+        - title
+        properties:
+          type:
+            type: string
+          title:
+            type: string
+          detail:
+            type: string
+          instance:
+            type: string
+      example:
+        type: https://httpproblems.com/http-status/401
+        title: Unauthorized
+        status: 401
+    Zuplo.Tunnels.TunneledServicesProvisioningOperation:
+      type: object
+      required:
+      - id
+      - status
+      properties:
+        id:
+          type: string
+          example: pst_ezMUOh0xFqRWg84DPH5jVwgO
+          readOnly: true
+        status:
+          type: string
+          enum:
+          - in-progress
+          - success
+          - error
+          example: success
+        message:
+          type: string
+          example: Successfully provisioned services.
+        details:
+          type: string
     Zuplo.Tunnels.TunneledServicesConfiguration:
       type: object
       required:
@@ -210,103 +306,14 @@ components:
         type: https://httpproblems.com/http-status/400
         title: Bad Request
         status: 400
-    Zuplo.Tunnels.TunneledServicesProvisioningOperation:
-      type: object
-      required:
-      - id
-      - status
-      properties:
-        id:
-          type: string
-          example: pst_ezMUOh0xFqRWg84DPH5jVwgO
-          readOnly: true
-        status:
-          type: string
-          enum:
-          - in-progress
-          - success
-          - error
-          example: success
-        message:
-          type: string
-          example: Successfully provisioned services.
-        details:
-          type: string
-    Zuplo.HttpProblemDetails.UnauthorizedProblemResponse:
-      type: object
-      required:
-      - type
-      - title
-      properties:
-        type:
-          type: string
-          enum:
-          - https://httpproblems.com/http-status/401
-        title:
-          type: string
-          enum:
-          - Unauthorized
-      allOf:
-      - type: object
-        required:
-        - type
-        - title
-        properties:
-          type:
-            type: string
-          title:
-            type: string
-          detail:
-            type: string
-          instance:
-            type: string
-      example:
-        type: https://httpproblems.com/http-status/401
-        title: Unauthorized
-        status: 401
-    Zuplo.Tunnels.TunneledServiceConfiguration:
-      type: object
-      required:
-      - name
-      - endpoint
-      - configurations
-      properties:
-        name:
-          type: string
-          pattern: ^[a-zA-Z0-9-]{3,24}$
-          description: A friendly name for the service. This name needs to be unique across all your tunneled services. Changing this will invalidate existing services with the name.
-          example: authservice
-        endpoint:
-          type: string
-          description: The URL of the service that the tunnel will forward to, e.g, http://localhost:3000
-          example: https://localhost:3000
-        configurations:
-          type: array
-          items:
-            type: object
-            properties:
-              project:
-                type: string
-                description: The name the project.
-                example: alpha-beta-gamma
-              accessibleBy:
-                type: array
-                items:
-                  type: string
-                  enum:
-                  - working-copy
-                  - preview
-                  - production
-                description: The environments of the project that should have acess to this tunneled service.
-                example:
-                - preview
-                - production
-            required:
-            - project
-            - accessibleBy
-          description: A list of projects that should have access to this tunneled service under the service://name URL scheme.
-      description: Tunnel service configuration.
   parameters:
+    Zuplo.Tunnels.TunnelIdParam:
+      name: tunnelId
+      in: path
+      required: true
+      description: The ID of the tunnel.
+      schema:
+        type: string
     Zuplo.Common.AccountParams:
       name: accountName
       in: path
@@ -319,13 +326,6 @@ components:
       in: path
       required: true
       description: The ID of the operation.
-      schema:
-        type: string
-    Zuplo.Tunnels.TunnelIdParam:
-      name: tunnelId
-      in: path
-      required: true
-      description: The ID of the tunnel.
       schema:
         type: string
   securitySchemes:
