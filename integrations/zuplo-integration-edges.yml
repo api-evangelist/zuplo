@@ -3,13 +3,8 @@ method: searched
 checked:
 - https://api.nuget.org/v3
 - https://azuremarketplace.microsoft.com/
-- https://cdn.winget.microsoft.com/cache
 - https://crates.io/api/v1
 - https://focus.finops.org/data-generators/
-- https://formulae.brew.sh/api/cask.json
-- https://formulae.brew.sh/api/formula.json
-- https://github.com/ScoopInstaller/Extras
-- https://github.com/ScoopInstaller/Main
 - https://github.com/cncf/k8s-conformance
 - https://github.com/cncf/landscape
 - https://github.com/marketplace?type=actions
@@ -18,6 +13,18 @@ checked:
 - https://registry.npmjs.org
 - https://repo1.maven.org/maven2
 - https://rubygems.org/api/v1
+- https://cdn.winget.microsoft.com/cache
+- https://formulae.brew.sh/api/cask.json
+- https://formulae.brew.sh/api/formula.json
+- https://github.com/ScoopInstaller/Extras
+- https://github.com/ScoopInstaller/Main
+- https://directory.github.partners/sitemap.xml
+- https://docs.github.com/en/apps/github-marketplace/github-marketplace-overview/about-marketplace-badges
+- https://docs.github.com/en/code-security/reference/secret-security/supported-secret-scanning-patterns
+- https://docs.github.com/en/code-security/tutorials/secret-scanning-partner-program
+- https://github.com/marketplace?type=apps
+- https://github.com/partners/technology-partners
+- https://partner.github.com/
 marketplace_apps: []
 edges:
 - partner_name: Microsoft Azure Marketplace
@@ -144,5 +151,39 @@ edges:
     detected: '2026-10-20'
   detected_by: sweep-official-clis.py
   first_seen: '2026-10-20'
+- partner_name: GitHub secret scanning partner program
+  partner: github
+  partner_match: register-name
+  type: register
+  channel: standard-directory
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://docs.github.com/en/code-security/reference/secret-security/supported-secret-scanning-patterns#supported-provider-patterns
+  category: GitHub platform partnership (security)
+  contract_reference:
+    register: GitHub secret scanning partner program (docs.github.com supported-secret-scanning-patterns, 'Partner'
+      column = isPublic in the page's own pattern data)
+    standard: GitHub secret scanning partner program
+    spec_file: null
+    role: secret-scanning-partner
+    registered_name: Zuplo
+    register_id: https://docs.github.com/en/code-security/reference/secret-security/supported-secret-scanning-patterns#supported-provider-patterns
+    matched_domain: null
+    matched_by: register-name
+    register_name_note: register-name 'zuplo' = zuplo; no wikidata P856
+    token_types:
+    - zuplo_consumer_api_key
+    context:
+      push_protection: 1
+      validity_check: 1
+    signal_note: 'participation only: GitHub notifies the provider when its token leaks publicly (the provider runs
+      a verification endpoint for the programme); token types and counts are context, never counted'
+    detected_by: sweep-github-marketplace.py
+    detected: '2026-10-21'
+    identity_source: register-name
+    identity_note: register gave only the name; exact normalised match to the repo's apis.yml name, one repo, Wikidata
+      P856 not contradicting (Kin 2026-10-20 decision 2)
+  detected_by: sweep-github-marketplace.py
+  first_seen: '2026-10-21'
 source:
 - https://github.com/marketplace?type=actions

@@ -10,7 +10,9 @@
   use_case: On push to main, fetch the OpenAPI document from a GitHub repo and trigger a Zuplo deployment so the
     edge gateway tracks source-of-truth in Git.
   source: curated
-  status: pending-generation
+  status: not-a-workflow
+  evidence: https://docs.github.com/en/code-security/reference/secret-security/supported-secret-scanning-patterns#supported-provider-patterns
+  type: register
   arazzo: null
 - slug: zuplo-auth0
   label: Bind Zuplo API key consumers to Auth0 users
