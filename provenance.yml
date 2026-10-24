@@ -13,61 +13,67 @@ artifacts:
     method: unknown
     evidence: no authorship recorded
   arazzo/zuplo-add-consumer-manager-workflow.yml:
-    method: unknown
-    evidence: no authorship recorded
+    method: derived
+    evidence: Arazzo whose sourceDescriptions are our split specs (../openapi/)
   arazzo/zuplo-bulk-issue-consumer-keys-workflow.yml:
-    method: unknown
-    evidence: no authorship recorded
+    method: derived
+    evidence: Arazzo whose sourceDescriptions are our split specs (../openapi/)
   arazzo/zuplo-create-consumer-and-key-workflow.yml:
-    method: unknown
-    evidence: no authorship recorded
+    method: derived
+    evidence: Arazzo whose sourceDescriptions are our split specs (../openapi/)
   arazzo/zuplo-deactivate-consumer-key-workflow.yml:
-    method: unknown
-    evidence: no authorship recorded
+    method: derived
+    evidence: Arazzo whose sourceDescriptions are our split specs (../openapi/)
   arazzo/zuplo-discover-account-and-buckets-workflow.yml:
-    method: unknown
-    evidence: no authorship recorded
+    method: derived
+    evidence: Arazzo whose sourceDescriptions are our split specs (../openapi/)
   arazzo/zuplo-find-and-update-bucket-workflow.yml:
-    method: unknown
-    evidence: no authorship recorded
+    method: derived
+    evidence: Arazzo whose sourceDescriptions are our split specs (../openapi/)
   arazzo/zuplo-find-consumer-update-metadata-workflow.yml:
-    method: unknown
-    evidence: no authorship recorded
+    method: derived
+    evidence: Arazzo whose sourceDescriptions are our split specs (../openapi/)
   arazzo/zuplo-find-then-delete-consumer-workflow.yml:
-    method: unknown
-    evidence: no authorship recorded
+    method: derived
+    evidence: Arazzo whose sourceDescriptions are our split specs (../openapi/)
   arazzo/zuplo-map-custom-domain-workflow.yml:
-    method: unknown
-    evidence: no authorship recorded
+    method: derived
+    evidence: Arazzo whose sourceDescriptions are our split specs (../openapi/)
   arazzo/zuplo-onboard-consumer-with-key-workflow.yml:
-    method: unknown
-    evidence: no authorship recorded
+    method: derived
+    evidence: Arazzo whose sourceDescriptions are our split specs (../openapi/)
   arazzo/zuplo-provision-api-key-bucket-workflow.yml:
-    method: unknown
-    evidence: no authorship recorded
+    method: derived
+    evidence: Arazzo whose sourceDescriptions are our split specs (../openapi/)
   arazzo/zuplo-provision-tunnel-workflow.yml:
-    method: unknown
-    evidence: no authorship recorded
+    method: derived
+    evidence: Arazzo whose sourceDescriptions are our split specs (../openapi/)
   arazzo/zuplo-redeploy-project-deployment-workflow.yml:
-    method: unknown
-    evidence: no authorship recorded
+    method: derived
+    evidence: Arazzo whose sourceDescriptions are our split specs (../openapi/)
   arazzo/zuplo-repoint-custom-domain-workflow.yml:
-    method: unknown
-    evidence: no authorship recorded
+    method: derived
+    evidence: Arazzo whose sourceDescriptions are our split specs (../openapi/)
   arazzo/zuplo-rotate-consumer-key-workflow.yml:
-    method: unknown
-    evidence: no authorship recorded
+    method: derived
+    evidence: Arazzo whose sourceDescriptions are our split specs (../openapi/)
   arazzo/zuplo-rotate-tunnel-token-workflow.yml:
-    method: unknown
-    evidence: no authorship recorded
+    method: derived
+    evidence: Arazzo whose sourceDescriptions are our split specs (../openapi/)
   arazzo/zuplo-set-variable-and-redeploy-workflow.yml:
-    method: unknown
-    evidence: no authorship recorded
+    method: derived
+    evidence: Arazzo whose sourceDescriptions are our split specs (../openapi/)
   arazzo/zuplo-update-variable-and-redeploy-workflow.yml:
-    method: unknown
-    evidence: no authorship recorded
+    method: derived
+    evidence: Arazzo whose sourceDescriptions are our split specs (../openapi/)
   authentication/zuplo-authentication.yml:
     method: derived
+    evidence: declared in the artifact
+  capabilities/zuplo-capability-edges.yml:
+    method: unknown
+    evidence: no authorship recorded
+  changelog/zuplo-changelog.yml:
+    method: searched
     evidence: declared in the artifact
   collections/zuplo-api-keys-buckets-api.opencollection.json:
     method: derived
@@ -153,6 +159,15 @@ artifacts:
   collections/zuplo.postman_collection.json:
     method: derived
     evidence: openapi/zuplo
+  conformance/zuplo-conformance.yml:
+    method: searched
+    evidence: declared in the artifact
+  data-model/zuplo-data-model.yml:
+    method: derived
+    evidence: declared in the artifact
+  errors/zuplo-problem-types.yml:
+    method: derived
+    evidence: declared in the artifact
   examples/zuplo-create-api-key-example.json:
     method: unknown
     evidence: no authorship recorded
@@ -168,9 +183,12 @@ artifacts:
   front-door-ai/2026-09-17.yml:
     method: unknown
     evidence: no authorship recorded
+  hosts/zuplo-hosts.yml:
+    method: derived
+    evidence: declared in the artifact
   integrations/_index.yml:
-    method: unknown
-    evidence: no authorship recorded
+    method: generated
+    evidence: carries an API Evangelist house phrase
   integrations/zuplo-anthropic.yaml:
     method: unknown
     evidence: no authorship recorded
@@ -195,6 +213,9 @@ artifacts:
   integrations/zuplo-graphql-upstream.yaml:
     method: unknown
     evidence: no authorship recorded
+  integrations/zuplo-integration-edges.yml:
+    method: searched
+    evidence: declared in the artifact
   integrations/zuplo-okta.yaml:
     method: unknown
     evidence: no authorship recorded
@@ -234,127 +255,7 @@ artifacts:
   json-structure/zuplo-deployment-structure.json:
     method: unknown
     evidence: no authorship recorded
-  kin/checks-2026-09-24T161608.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-25T125852.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-25T133943.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-25T143147.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-25T154045.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-26T215308.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T094438.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T103455.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T123021.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T132314.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T140727.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-28T221322.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-29T213958.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-29T230545.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-30T203505.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-30T220315.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-31T223420.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-01T063623.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-01T210448.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-01T222808.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-02T211804.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-02T224043.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-03T161828.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-03T174231.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-04T062714.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-04T212454.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-04T224856.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T055819.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T072335.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T144739.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T195450.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T211839.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-06T011047.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-06T211804.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-06T224210.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-07T200636.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-07T213054.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-08T214843.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-08T232836.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-10T204815.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-10T222408.yml:
+  kin/checks-2026-10-11T110117.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   kin/score-2026-09-12T062655.yml:
@@ -438,6 +339,24 @@ artifacts:
   kin/score-2026-09-24T161608.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-25T210408.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-25T232841.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-03T000835.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-03T024842.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-11T110117.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  llms/zuplo-llms-provenance.yml:
+    method: searched
+    evidence: 'derive-llms-provenance.py: harvested'
   llms/zuplo-llms.txt:
     method: searched
     evidence: 'derive-llms-provenance.py: harvested'
@@ -496,6 +415,9 @@ artifacts:
   openapi/zuplo-whoami-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
+  packages/zuplo-packages.yml:
+    method: unknown
+    evidence: no authorship recorded
   plans/zuplo-plans-pricing.yml:
     method: generated
     evidence: declared in the artifact
@@ -508,15 +430,93 @@ artifacts:
   rules/zuplo-jsonschema-spectral-rules.yml:
     method: generated
     evidence: declared in the artifact
+  rules/zuplo-rate-my-openapi-spectral-rules.yml:
+    method: harvested
+    evidence: https://github.com/zuplo/rate-my-openapi/blob/24819fbe7576e2811b3be2750312e2cea64bcf14/rulesets/.spectral.yaml
   rules/zuplo-rules.yml:
     method: unknown
     evidence: no authorship recorded
   security/zuplo-domain-security.yml:
     method: unknown
     evidence: no authorship recorded
+  skills/_index.yml:
+    method: generated
+    evidence: declared in the artifact
+  skills/zuplo-agent-skill-manage-api-keys-managers.md:
+    method: generated
+    evidence: declared in the artifact
+  skills/zuplo-create-consumer.md:
+    method: generated
+    evidence: declared in the artifact
+  skills/zuplo-redeploy-deployment.md:
+    method: generated
+    evidence: declared in the artifact
+  skills/zuplo-tunnel-create-and-list.md:
+    method: generated
+    evidence: declared in the artifact
+  skills/zuplo-variables-create-update.md:
+    method: generated
+    evidence: declared in the artifact
   vendor-facets/zuplo-vendor-facets.yml:
     method: unknown
     evidence: no authorship recorded
+  vendors/zuplo-vendors.yml:
+    method: unknown
+    evidence: no authorship recorded
   vocabulary/zuplo-vocabulary.yml:
+    method: unknown
+    evidence: no authorship recorded
+  well-known/zuplo-api-catalog.json:
+    method: unknown
+    evidence: no authorship recorded
+  well-known/zuplo-auth-oauth-authorization-server.json:
+    method: unknown
+    evidence: no authorship recorded
+  well-known/zuplo-auth-openid-configuration.json:
+    method: unknown
+    evidence: no authorship recorded
+  well-known/zuplo-dev-oauth-protected-resource.json:
+    method: unknown
+    evidence: no authorship recorded
+  well-known/zuplo-docs-api-catalog.json:
+    method: unknown
+    evidence: no authorship recorded
+  well-known/zuplo-docs-mcp-server-card.json:
+    method: unknown
+    evidence: no authorship recorded
+  well-known/zuplo-help-security.txt:
+    method: unknown
+    evidence: no authorship recorded
+  well-known/zuplo-mcp-server-card.json:
+    method: unknown
+    evidence: no authorship recorded
+  well-known/zuplo-oauth-authorization-server.json:
+    method: unknown
+    evidence: no authorship recorded
+  well-known/zuplo-oauth-protected-resource.json:
+    method: unknown
+    evidence: no authorship recorded
+  well-known/zuplo-openid-configuration.json:
+    method: unknown
+    evidence: no authorship recorded
+  well-known/zuplo-well-known.yml:
+    method: unknown
+    evidence: no authorship recorded
+  well-known/zuplo-www-api-catalog.json:
+    method: unknown
+    evidence: no authorship recorded
+  well-known/zuplo-www-mcp-server-card.json:
+    method: unknown
+    evidence: no authorship recorded
+  well-known/zuplo-www-oauth-authorization-server.json:
+    method: unknown
+    evidence: no authorship recorded
+  well-known/zuplo-www-oauth-protected-resource.json:
+    method: unknown
+    evidence: no authorship recorded
+  well-known/zuplo-www-openid-configuration.json:
+    method: unknown
+    evidence: no authorship recorded
+  well_known/zuplo-mcp.json:
     method: unknown
     evidence: no authorship recorded
